@@ -6,7 +6,74 @@
 <title>Státnicová otázka – FreeRTOS</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+  a { color: inherit; }
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    backdrop-filter: blur(12px);
+    background: rgba(250, 250, 248, 0.9);
+    border-bottom: 1px solid rgba(26, 74, 138, 0.12);
+  }
+  .topbar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    color: #1a4a8a;
+  }
+  .brand strong { font-size: 16px; }
+  .brand span { font-size: 12px; color: #666; }
+  .nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(26, 74, 138, 0.18);
+    border-radius: 14px;
+    background: #fff;
+    color: #1a4a8a;
+    cursor: pointer;
+  }
+  .nav-toggle span,
+  .nav-toggle span::before,
+  .nav-toggle span::after {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 999px;
+    position: relative;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .nav-toggle span::before,
+  .nav-toggle span::after { content: ""; position: absolute; left: 0; }
+  .nav-toggle span::before { top: -6px; }
+  .nav-toggle span::after { top: 6px; }
+  .nav-links { display: flex; align-items: center; gap: 10px; }
+  .nav-links a {
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a4a8a;
+    padding: 10px 14px;
+    border-radius: 999px;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .nav-links a:hover { background: rgba(26, 74, 138, 0.08); color: #12345f; }
   .page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
   h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
   .subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
@@ -50,10 +117,53 @@
   .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
   .fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
   .farr { font-size: 20px; color: #888; }
+  .question-footer { margin-top: 28px; padding-top: 18px; border-top: 1px solid #e8eef8; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .question-footer a { text-decoration: none; color: #1a4a8a; font-weight: 700; }
+  .question-footer a:hover { text-decoration: underline; }
+  .question-footer span { color: #666; font-size: 14px; }
+  @media (max-width: 760px) {
+    .topbar-inner { flex-wrap: wrap; align-items: flex-start; }
+    .nav-toggle { display: inline-flex; }
+    .nav-links {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+      padding-top: 8px;
+    }
+    .topbar.is-open .nav-links { display: flex; }
+    .topbar.is-open .nav-toggle span { transform: rotate(45deg); }
+    .topbar.is-open .nav-toggle span::before { top: 0; opacity: 0; }
+    .topbar.is-open .nav-toggle span::after { top: 0; transform: rotate(-90deg); }
+    .nav-links a {
+      background: #fff;
+      border: 1px solid rgba(26, 74, 138, 0.12);
+      border-radius: 16px;
+    }
+    .page { padding: 28px 18px; }
+    .diagram-wrap svg, .diagram-wrap img { max-width: 100%; }
+  }
   @media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }
 </style>
 </head>
 <body>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Hlavní stránka">
+      <strong>Státnicové otázky</strong>
+      <span>FreeRTOS a další vypracované otázky</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="index.html">Main</a>
+      <a href="index.html#otazky">Otázky</a>
+      <a href="statnice_freertos.html">FreeRTOS</a>
+    </nav>
+  </div>
+</header>
 <div class="page">
 
 <h1>FreeRTOS</h1>
@@ -398,6 +508,27 @@ xQueueReceive(q, &received, portMAX_DELAY);</code></pre>
   </p>
 </div>
 
+<div class="question-footer">
+  <span>Chceš pokračovat na přehled ostatních otázek nebo zpět na hlavní stránku?</span>
+  <div>
+    <a href="index.html">Zpět na Main</a> · <a href="index.html#otazky">Seznam otázek</a>
+  </div>
 </div>
+
+</div>
+<script>
+  const topbar = document.getElementById('topbar');
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.querySelectorAll('#site-nav a');
+
+  function setMenu(open) {
+    topbar.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+  }
+
+  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
+  navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
+</script>
 </body>
 </html>

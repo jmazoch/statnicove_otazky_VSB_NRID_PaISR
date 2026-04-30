@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Státnicové otázky</title>
+<style>
+  :root {
+    --bg: #f6f1e8;
+    --bg-alt: #ebe3d4;
+    --surface: rgba(255, 252, 246, 0.92);
+    --surface-strong: #fffdf8;
+    --text: #1f241f;
+    --muted: #5f665c;
+    --line: rgba(31, 36, 31, 0.12);
+    --brand: #25533b;
+    --brand-strong: #173627;
+    --accent: #c26d2c;
+    --shadow: 0 18px 55px rgba(39, 52, 43, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(194, 109, 44, 0.16), transparent 34%),
+      radial-gradient(circle at right 20%, rgba(37, 83, 59, 0.12), transparent 28%),
+      linear-gradient(180deg, var(--bg), var(--bg-alt));
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+  a { color: inherit; }
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    backdrop-filter: blur(14px);
+    background: rgba(246, 241, 232, 0.82);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--brand-strong);
+  }
+  .brand strong { font-size: 18px; letter-spacing: 0.02em; }
+  .brand span { font-size: 12px; color: var(--muted); }
+  .nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface-strong);
+    color: var(--brand-strong);
+    cursor: pointer;
+  }
+  .nav-toggle span,
+  .nav-toggle span::before,
+  .nav-toggle span::after {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 999px;
+    position: relative;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .nav-toggle span::before,
+  .nav-toggle span::after { content: ""; position: absolute; left: 0; }
+  .nav-toggle span::before { top: -6px; }
+  .nav-toggle span::after { top: 6px; }
+  .nav-links { display: flex; align-items: center; gap: 10px; }
+  .nav-links a {
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--brand-strong);
+    padding: 10px 14px;
+    border-radius: 999px;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .nav-links a:hover { background: rgba(37, 83, 59, 0.08); color: var(--brand); transform: translateY(-1px); }
+  .shell { max-width: 1180px; margin: 0 auto; padding: 30px 20px 60px; }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 36px;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(255, 253, 248, 0.94), rgba(255, 248, 237, 0.9));
+    box-shadow: var(--shadow);
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -8% -35% auto;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(194, 109, 44, 0.18), transparent 66%);
+    pointer-events: none;
+  }
+  .kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(37, 83, 59, 0.08);
+    color: var(--brand);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin-top: 16px;
+    font-size: clamp(36px, 6vw, 68px);
+    line-height: 0.97;
+    letter-spacing: -0.04em;
+    color: var(--brand-strong);
+    max-width: 9ch;
+  }
+  .lead { max-width: 760px; margin-top: 18px; font-size: 18px; color: var(--muted); }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+  .button.primary { background: var(--brand-strong); color: #fffdf8; }
+  .button.secondary { background: transparent; color: var(--brand-strong); border-color: var(--line); }
+  .meta-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 24px; }
+  .meta { padding: 16px 18px; border-radius: 18px; background: rgba(255, 255, 255, 0.7); border: 1px solid var(--line); }
+  .meta span { display: block; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .meta strong { display: block; margin-top: 6px; color: var(--brand-strong); font-size: 16px; }
+  .section { margin-top: 28px; padding: 30px 0 0; }
+  .section-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 16px; }
+  .section-head h2 { font-size: 28px; color: var(--brand-strong); letter-spacing: -0.02em; }
+  .section-head p { color: var(--muted); max-width: 620px; }
+  .readme { display: grid; gap: 18px; padding: 22px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .readme p { font-size: 16px; color: var(--text); }
+  .readme-note { padding: 16px 18px; border-left: 4px solid var(--accent); border-radius: 16px; background: rgba(194, 109, 44, 0.08); color: #6c3a13; }
+  .question-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .question-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 22px;
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .question-card:hover { transform: translateY(-3px); box-shadow: 0 22px 50px rgba(39, 52, 43, 0.16); }
+  .question-card .tag { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: 0.06em; }
+  .question-card h3 { font-size: 20px; color: var(--brand-strong); }
+  .question-card p { color: var(--muted); }
+  .footer { margin-top: 26px; color: var(--muted); font-size: 14px; text-align: center; }
+  @media (max-width: 820px) {
+    .topbar-inner { align-items: flex-start; flex-wrap: wrap; }
+    .nav-toggle { display: inline-flex; }
+    .nav-links { display: none; width: 100%; padding: 10px 0 4px; flex-direction: column; align-items: stretch; gap: 6px; }
+    .topbar.is-open .nav-links { display: flex; }
+    .topbar.is-open .nav-toggle span { transform: rotate(45deg); }
+    .topbar.is-open .nav-toggle span::before { top: 0; transform: rotate(0deg); opacity: 0; }
+    .topbar.is-open .nav-toggle span::after { top: 0; transform: rotate(-90deg); }
+    .nav-links a { padding: 12px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.72); border: 1px solid var(--line); }
+    .hero { padding: 24px; border-radius: 22px; }
+    .meta-grid { grid-template-columns: 1fr; }
+    .section-head { align-items: flex-start; flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Hlavní stránka">
+      <strong>Státnicové otázky</strong>
+      <span>README a přehled vypracovaných HTML otázek</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="index.html">Main</a>
+      <a href="#otazky">Otázky</a>
+      <a href="statnice_freertos.html">FreeRTOS</a>
+    </nav>
+  </div>
+</header>
+<main class="shell" id="main">
+  <section class="hero">
+    <span class="kicker">Main</span>
+    <h1>Jedno místo pro státnicové otázky</h1>
+    <p class="lead">Repozitář slouží jako osobní studijní podpora. Na hlavní stránce je shrnutý README a přehled HTML souborů s vypracovanými otázkami. Teď je k dispozici jedna otázka, další lze doplňovat stejným způsobem.</p>
+    <div class="hero-actions">
+      <a class="button primary" href="#otazky">Zobrazit otázky</a>
+      <a class="button secondary" href="statnice_freertos.html">Otevřít FreeRTOS</a>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><span>README</span><strong>Studijní pomůcka k přípravě na státnice</strong></div>
+      <div class="meta"><span>Formát</span><strong>HTML otázky v jednom přehledu</strong></div>
+      <div class="meta"><span>Aktuální stav</span><strong>1 připravený soubor</strong></div>
+    </div>
+  </section>
+  <section class="section" id="readme">
+    <div class="section-head">
+      <h2>README</h2>
+      <p>Krátký přepis úvodu z repozitáře, aby bylo hned jasné, k čemu tenhle projekt slouží.</p>
+    </div>
+    <div class="readme">
+      <p><strong>Vypracované státnicové otázky</strong> jsou osobní studijní materiál k přípravě na státní závěrečné zkoušky. Cílem je mít jednotlivé otázky přehledně a poctivě zpracované podle dostupných podkladů ze studia.</p>
+      <p>Obsah se má postupně rozšiřovat o další předměty ve formátu HTML a případně i o podpůrné soubory.</p>
+      <div class="readme-note">Materiály mohou obsahovat chyby nebo neúplnosti, takže je lepší je brát jako studijní podporu a ověřovat je v přednáškách, skriptech a oficiálních podkladech.</div>
+      <p>Pokud najdeš chybu nebo chceš něco vylepšit, repo je na to připravené.</p>
+    </div>
+  </section>
+  <section class="section" id="otazky">
+    <div class="section-head">
+      <h2>Otázky</h2>
+      <p>Každá státnicová otázka je samostatný HTML soubor. Zatím je tu jen FreeRTOS, ale tenhle seznam je připravený růst.</p>
+    </div>
+    <div class="question-list">
+      <a class="question-card" href="statnice_freertos.html">
+        <span class="tag">Otázka 1</span>
+        <h3>FreeRTOS</h3>
+        <p>Vypracovaná otázka o scheduleru, úlohách, synchronizaci, časovačích a kontextovém přepínání.</p>
+      </a>
+    </div>
+  </section>
+  <p class="footer">Až přidáš další HTML soubory, stačí je doplnit do sekce Otázky a do menu.</p>
+</main>
+<script>
+  const topbar = document.getElementById('topbar');
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.querySelectorAll('#site-nav a');
+  function setMenu(open) {
+    topbar.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+  }
+  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
+  navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
+</script>
+</body>
+</html>
