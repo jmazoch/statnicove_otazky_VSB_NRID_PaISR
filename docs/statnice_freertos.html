@@ -63,7 +63,8 @@
   .nav-toggle span::before { top: -6px; }
   .nav-toggle span::after { top: 6px; }
   .nav-links { display: flex; align-items: center; gap: 10px; }
-  .nav-links a {
+  .nav-item { position: relative; display: flex; align-items: center; }
+  .nav-links a, .nav-item > a {
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -72,8 +73,22 @@
     padding: 10px 14px;
     border-radius: 999px;
     transition: background 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
-  .nav-links a:hover { background: rgba(26, 74, 138, 0.08); color: #12345f; }
+  .nav-links a:hover, .nav-item > a:hover { background: rgba(26, 74, 138, 0.08); color: #12345f; }
+  .nav-dropdown { position: absolute; top: 100%; left: 0; background: rgba(255, 252, 246, 0.92); min-width: 220px; border-radius: 12px; border: 1px solid rgba(31, 36, 31, 0.12); box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: none; flex-direction: column; gap: 0; z-index: 999; }
+  .nav-item:hover .nav-dropdown { display: flex; }
+  .nav-item.is-open .nav-dropdown { display: flex; }
+  .nav-dropdown a { padding: 10px 14px; border-radius: 0; background: transparent; margin: 0; font-size: 13px; border-bottom: 1px solid rgba(31, 36, 31, 0.12); }
+  .nav-dropdown a:last-child { border-bottom: none; }
+  .nav-dropdown a:hover { background: rgba(26, 74, 138, 0.08); }
+  .nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s ease; }
+  .nav-links a.nav-disabled { color: #999; opacity: 0.7; pointer-events: none; }
+  @media (min-width: 761px) {
+    .nav-item > a .nav-chevron { display: none; }
+  }
   .page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
   h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
   .subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
@@ -160,7 +175,53 @@
     <nav class="nav-links" id="site-nav">
       <a href="index.html">Main</a>
       <a href="index.html#otazky">Otázky</a>
-      <a href="statnice_freertos.html">FreeRTOS</a>
+      
+      <div class="nav-item" id="nav-rs">
+        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="index.html#rs" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="index.html#rs" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="index.html#rs" class="nav-disabled">3. Stavová regulace</a>
+          <a href="index.html#rs" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="index.html#rs" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="index.html#rs" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="index.html#rs" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-pmzs">
+        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="index.html#pmzs" class="nav-disabled">9. Analýzy diskrétního signálu</a>
+          <a href="index.html#pmzs" class="nav-disabled">10. Frekvenční spektra...</a>
+          <a href="index.html#pmzs" class="nav-disabled">11. Amplitudové modulace...</a>
+          <a href="index.html#pmzs" class="nav-disabled">12. Systémy pro zpracování...</a>
+          <a href="index.html#pmzs" class="nav-disabled">13. Převod analogové...</a>
+          <a href="index.html#pmzs" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-ms">
+        <a href="index.html#ms" class="nav-disabled">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="index.html#ms" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="index.html#ms" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="index.html#ms" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="index.html#ms" class="nav-disabled">18. Statické a dynamické...</a>
+          <a href="index.html#ms" class="nav-disabled">19. Drátové a bezdrátové...</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-paisr">
+        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="index.html#paisr" class="nav-disabled">SWI</a>
+          <a href="index.html#paisr" class="nav-disabled">Android</a>
+        </div>
+      </div>
     </nav>
   </div>
 </header>

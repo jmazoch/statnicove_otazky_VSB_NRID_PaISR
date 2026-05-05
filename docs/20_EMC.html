@@ -6,6 +6,7 @@
     <title>Státnicová otázka: EMC a kvalita měřicího signálu</title>
     <style>
         /* === INLINE CSS ŠABLONA === */
+        :root{--bg:#f6f1e8;--bg-alt:#ebe3d4;--surface:rgba(255,252,246,0.92);--line:rgba(31,36,31,0.12);--brand:#25533b;--brand-strong:#173627;--muted:#5f665c}
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -13,8 +14,20 @@
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #ffffff;
+            background-color: var(--bg);
         }
+        /* Navbar dropdown styles */
+        .topbar{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(250,250,248,0.9);border-bottom:1px solid var(--line)}
+        .topbar-inner{max-width:1120px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+        .brand{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--brand-strong)}
+        .nav-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid rgba(26,74,138,0.18);border-radius:14px;background:#fff;cursor:pointer}
+        .nav-links{display:flex;align-items:center;gap:10px}
+        .nav-item{position:relative;display:flex;align-items:center}
+        .nav-links a,.nav-item> a{font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;color:var(--brand-strong);padding:10px 14px;border-radius:999px;display:flex;align-items:center;gap:6px;text-decoration:none}
+        .nav-dropdown{position:absolute;top:100%;left:0;background:var(--surface);min-width:220px;border-radius:12px;border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,0.12);display:none;flex-direction:column;z-index:999}
+        .nav-item:hover .nav-dropdown,.nav-item.is-open .nav-dropdown{display:flex}
+        .nav-dropdown a{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--line);background:transparent}
+        .nav-links a.nav-disabled{color:var(--muted);opacity:0.7;pointer-events:none}
         h1 {
             color: #1a237e;
             border-bottom: 3px solid #3f51b5;
@@ -163,6 +176,65 @@
     </style>
 </head>
 <body>
+
+<header class="topbar" id="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="index.html" aria-label="Hlavní stránka">
+            <strong>Státnicové otázky</strong>
+            <span>EMC a měřicí systémy</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+            <span aria-hidden="true"></span>
+        </button>
+        <nav class="nav-links" id="site-nav">
+            <a href="index.html">Main</a>
+            <a href="index.html#otazky">Otázky</a>
+            <div class="nav-item" id="nav-rs">
+                <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+                <div class="nav-dropdown">
+                    <a href="index.html#rs" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+                    <a href="index.html#rs" class="nav-disabled">2. Praktické aspekty PID...</a>
+                    <a href="index.html#rs" class="nav-disabled">3. Stavová regulace</a>
+                    <a href="index.html#rs" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+                    <a href="index.html#rs" class="nav-disabled">5. Syntéza nelineárních...</a>
+                    <a href="index.html#rs" class="nav-disabled">6. Statická optimalizace</a>
+                    <a href="index.html#rs" class="nav-disabled">7. Dynamická optimalizace</a>
+                </div>
+            </div>
+            <div class="nav-item" id="nav-pmzs">
+                <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+                <div class="nav-dropdown">
+                    <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+                    <a href="index.html#pmzs" class="nav-disabled">9. Analýzy diskrétního signálu</a>
+                    <a href="index.html#pmzs" class="nav-disabled">10. Frekvenční spektra...</a>
+                    <a href="index.html#pmzs" class="nav-disabled">11. Amplitudové modulace...</a>
+                    <a href="index.html#pmzs" class="nav-disabled">12. Systémy pro zpracování...</a>
+                    <a href="index.html#pmzs" class="nav-disabled">13. Převod analogové...</a>
+                    <a href="index.html#pmzs" class="nav-disabled">14. Digitální modulace</a>
+                </div>
+            </div>
+            <div class="nav-item" id="nav-ms">
+                <a href="index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+                <div class="nav-dropdown">
+                    <a href="#">15. Vlastnosti měřicího systému</a>
+                    <a href="#">16. Příčiny chyb...</a>
+                    <a href="#">17. Statistické parametry...</a>
+                    <a href="#">18. Statické a dynamické...</a>
+                    <a href="#">19. Drátové a bezdrátové...</a>
+                    <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+                </div>
+            </div>
+            <div class="nav-item" id="nav-paisr">
+                <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+                <div class="nav-dropdown">
+                    <a href="statnice_freertos.html">FreeRTOS</a>
+                    <a href="index.html#paisr" class="nav-disabled">SWI</a>
+                    <a href="index.html#paisr" class="nav-disabled">Android</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
 
     <h1>20. EMC a její vliv na kvalitu měřicího signálu</h1>
     <p><strong>Obor:</strong> NMgr. Řídicí a informační systémy 2026</p>
