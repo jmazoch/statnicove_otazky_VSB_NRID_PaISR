@@ -85,7 +85,8 @@
   .nav-toggle span::before { top: -6px; }
   .nav-toggle span::after { top: 6px; }
   .nav-links { display: flex; align-items: center; gap: 10px; }
-  .nav-links a {
+  .nav-item { position: relative; display: flex; align-items: center; }
+  .nav-links a, .nav-item > a {
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
@@ -94,8 +95,24 @@
     padding: 10px 14px;
     border-radius: 999px;
     transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
-  .nav-links a:hover { background: rgba(37, 83, 59, 0.08); color: var(--brand); transform: translateY(-1px); }
+  .nav-links a:hover, .nav-item > a:hover { background: rgba(37, 83, 59, 0.08); color: var(--brand); transform: translateY(-1px); }
+  .nav-dropdown { position: absolute; top: 100%; left: 0; background: var(--surface-strong); min-width: 220px; border-radius: 12px; border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: none; flex-direction: column; gap: 0; z-index: 999; }
+  .nav-item:hover .nav-dropdown { display: flex; }
+  .nav-item.is-open .nav-dropdown { display: flex; }
+  .nav-dropdown a { padding: 10px 14px; border-radius: 0; background: transparent; margin: 0; font-size: 13px; border-bottom: 1px solid var(--line); }
+  .nav-dropdown a:last-child { border-bottom: none; }
+  .nav-dropdown a:hover { background: rgba(37, 83, 59, 0.08); }
+  .nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s ease; }
+  @media (min-width: 821px) {
+    .nav-item > a .nav-chevron { display: none; }
+  }
+  @media (max-width: 820px) {
+    .nav-dropdown { position: static; border: none; box-shadow: none; background: rgba(37, 83, 59, 0.04); display: none; margin-top: 0; }
+  }
   .shell { max-width: 1180px; margin: 0 auto; padding: 30px 20px 60px; }
   .hero {
     position: relative;
@@ -179,6 +196,9 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .question-card:hover { transform: translateY(-3px); box-shadow: 0 22px 50px rgba(39, 52, 43, 0.16); }
+  .question-card.disabled { opacity: 0.5; filter: grayscale(30%); cursor: default; }
+  .question-card.disabled:hover { transform: none; box-shadow: none; }
+  .nav-links a.nav-disabled { color: var(--muted); opacity: 0.7; pointer-events: none; }
   .question-card .tag { font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: 0.06em; }
   .question-card h3 { font-size: 20px; color: var(--brand-strong); }
   .question-card p { color: var(--muted); }
@@ -191,7 +211,12 @@
     .topbar.is-open .nav-toggle span { transform: rotate(45deg); }
     .topbar.is-open .nav-toggle span::before { top: 0; transform: rotate(0deg); opacity: 0; }
     .topbar.is-open .nav-toggle span::after { top: 0; transform: rotate(-90deg); }
-    .nav-links a { padding: 12px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.72); border: 1px solid var(--line); }
+    .nav-links a, .nav-item > a { padding: 12px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.72); border: 1px solid var(--line); }
+    .nav-item { flex-direction: column; align-items: stretch; }
+    .nav-item > a { border-radius: 16px; margin: 0; }
+    .nav-dropdown a { padding: 10px 14px; border-radius: 0; }
+    .nav-dropdown a:first-child { border-radius: 0 0 0 0; }
+    .nav-dropdown a:last-child { border-radius: 0 0 16px 16px; }
     .hero { padding: 24px; border-radius: 22px; }
     .meta-grid { grid-template-columns: 1fr; }
     .section-head { align-items: flex-start; flex-direction: column; }
@@ -211,7 +236,53 @@
     <nav class="nav-links" id="site-nav">
       <a href="index.html">Main</a>
       <a href="#otazky">Otázky</a>
-      <a href="statnice_freertos.html">FreeRTOS</a>
+      
+      <div class="nav-item" id="nav-rs">
+        <a href="#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="#" class="nav-disabled">3. Stavová regulace</a>
+          <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="#" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-pmzs">
+        <a href="#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="#" class="nav-disabled">9. Analýzy diskrétního signálu</a>
+          <a href="#" class="nav-disabled">10. Frekvenční spektra...</a>
+          <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
+          <a href="#" class="nav-disabled">12. Systémy pro zpracování...</a>
+          <a href="#" class="nav-disabled">13. Převod analogové...</a>
+          <a href="#" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-ms">
+        <a href="#ms" class="nav-disabled">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="#" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="#" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="#" class="nav-disabled">18. Statické a dynamické...</a>
+          <a href="#" class="nav-disabled">19. Drátové a bezdrátové...</a>
+          <a href="#" class="nav-disabled">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-paisr">
+        <a href="#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="#" class="nav-disabled">SWI</a>
+          <a href="#" class="nav-disabled">Android</a>
+        </div>
+      </div>
     </nav>
   </div>
 </header>
@@ -227,7 +298,101 @@
     <div class="meta-grid">
       <div class="meta"><span>README</span><strong>Studijní pomůcka k přípravě na státnice</strong></div>
       <div class="meta"><span>Formát</span><strong>HTML otázky v jednom přehledu</strong></div>
-      <div class="meta"><span>Aktuální stav</span><strong>1 připravený soubor</strong></div>
+      <div class="meta"><span>Aktuální stav</span><strong>2 připravené soubory</strong></div>
+    </div>
+  </section>
+  <section class="section" id="kybernetika">
+    <div class="section-head">
+      <h2>Řídicí a informační systémy — Kybernetika</h2>
+      <p>Přehled tematických okruhů a jednotlivých otázek k předmětu Kybernetika.</p>
+    </div>
+    <div class="readme">
+      <p><strong>Struktura témat:</strong></p>
+      <ul>
+        <li><strong>Regulační systémy</strong> – č. 1–7</li>
+        <li><strong>Pokročilé metody zpracování signálů</strong> – č. 8–14</li>
+        <li><strong>Měřicí systémy</strong> – č. 15–20</li>
+      </ul>
+
+      <h3 id="rs">Regulační systémy (RS 1–7)</h3>
+      <div class="question-list">
+        <div class="question-card disabled">
+          <span class="tag">RS 1–7</span>
+          <h3>Nezpracováno</h3>
+          <p>Dosud nejsou vypracované jednotlivé otázky z této skupiny.</p>
+        </div>
+      </div>
+
+      <h3 id="pmzs">Pokročilé metody zpracování signálů (PMZS 8–14)</h3>
+      <div class="question-list">
+        <a class="question-card" href="8_statnice_okenni_funkce.html">
+          <span class="tag">Otázka 8</span>
+          <h3>Váhové okenní funkce signálu</h3>
+          <p>Zakreslení zpracovaného diskrétního signálu v časové a frekvenční oblasti; průměrování a překrývání spekter.</p>
+        </a>
+      </div>
+
+      <h3 id="ms">Měřicí systémy (MS 15–20)</h3>
+      <div class="question-list">
+        <div class="question-card disabled">
+          <span class="tag">MS 15–20</span>
+          <h3>Nezpracováno</h3>
+          <p>V této skupině zatím nejsou žádné vypracované otázky.</p>
+        </div>
+      </div>
+
+      <h3 id="paisr">PaISR — Předměty pro specializaci</h3>
+      <div class="question-list">
+        <a class="question-card" href="statnice_freertos.html">
+          <span class="tag">PaISR</span>
+          <h3>FreeRTOS</h3>
+          <p>Vypracovaná otázka o scheduleru, úlohách, synchronizaci, časovačích a kontextovém přepínání.</p>
+        </a>
+        <div class="question-card disabled">
+          <span class="tag">PaISR</span>
+          <h3>SWI</h3>
+          <p>Plánováno: otázky k SWI budou přidány později.</p>
+        </div>
+        <div class="question-card disabled">
+          <span class="tag">PaISR</span>
+          <h3>Android</h3>
+          <p>Plánováno: materiály o mobilních platformách.</p>
+        </div>
+      </div>
+
+      <p class="readme-note">Zobrazeny jsou pouze vypracované položky — ostatní jsou šedé a neklikatelné. Po nahrání další otázky (např. č. 8) ji doplním sem jako klikatelnou kartu.</p>
+
+      <ol>
+        <li><strong>Syntéza spojitých regulačních obvodů.</strong> Striktní formulace návrhového problému jednoduché regulační PID smyčky: blokové schéma, přenosy, návrhové požadavky. Ukazatele kvality regulace. Klasifikace metod syntézy, obecné požadavky na efektivní metodu návrhu. Vybraná návrhová metoda – podrobný popis a vysvětlení postupu (Ziegler–Nichols, optimální modul, optimalizace na základě H∞ specifikace).</li>
+        <li><strong>Praktické aspekty aplikace PID regulátorů.</strong> Reálný PID regulátor. Filtrace derivační složky. Windup efekt a beznarázové připojení. PID regulátor se dvěma stupni volnosti. Komerční průmyslové regulátory, standardní (ISA) tvar přenosu PID regulátoru. Digitální implementace PID: metody diskretizace PID regulátoru, základní struktura regulačního obvodu se vzorkováním.</li>
+        <li><strong>Stavová regulace.</strong> Blokové schéma se stavovou zpětnou vazbou, úpravy pro použití pozorovatele stavů. Podmínky realizace (řiditelnost, pozorovatelnost). Metoda umístění pólů pro návrh stavového regulátoru. Luenbergerův pozorovatel a Kalmanův filtr: základní principy, příklady použití.</li>
+        <li><strong>Rozvětvené a vícerozměrné regulační obvody.</strong> Bloková schémata regulačních obvodů s pomocnou regulovanou/akční veličinou, s měřením poruchy a s modelem regulované soustavy. Vybraný rozvětvený obvod – podrobný popis a vysvětlení principu. Regulace vícerozměrných systémů: základní vlastnosti MIMO obvodů, eliminace vnitřních křížových vazeb.</li>
+        <li><strong>Syntéza nelineárních regulačních obvodů.</strong> Základní rozdíly oproti regulaci lineárních soustav. Reléový regulátor. Princip linearizace a algoritmy založené na linearizovaném modelu (v jednom i ve více pracovních bodech). Vybrané příklady nelineárních algoritmů.</li>
+        <li><strong>Statická optimalizace.</strong> Formulace a kategorizace statických optimalizačních úloh a základní metody jejich řešení. Analytické a numerické přístupy k řešení nelineárních optimalizačních úloh (NLP). Řešení úloh s rovnostními a nerovnostními omezeními. Převod úlohy s vázaným extrémem na úlohu hledání volného extrému.</li>
+        <li><strong>Dynamická optimalizace.</strong> Formulace a kategorizace úloh optimálního řízení podle cílové množiny a z pohledu ztrátové funkce. Otevřené a uzavřené optimální řízení. Přímé a nepřímé metody. Příklad úlohy dynamické optimalizace.</li>
+        <li><strong>Váhové okenní funkce signálu.</strong> Zakreslení zpracovaného diskrétního signálu v časové oblasti a ve frekvenční oblasti. Průměrování a překrývání frekvenčních spekter zpracovaného diskrétního signálu.</li>
+        <li><strong>Analýzy diskrétního signálu.</strong> Frekvenční analýza diskrétního signálu a oktávová analýza signálu.</li>
+        <li><strong>Frekvenční spektra nízkofrekvenčního signálu a vysokofrekvenčně modulovaného signálu.</strong> Magnitudové a fázové frekvenční spektrum, šířka frekvenčního pásma, Nyquistovy teorémy vzorkování signálu.</li>
+        <li><strong>Amplitudové a úhlové analogové modulace.</strong> Analýza modulovaného vysokofrekvenčního signálu v časové oblasti, frekvenční analýza a spektra modulovaného vysokofrekvenčního signálu, modulace (AM, DSB‑SC, SSB‑AM, QM, PM, FM).</li>
+        <li><strong>Systémy pro zpracování signálu.</strong> Způsoby zpracování signálu pomocí omezovače, směšovače, detektoru obálky, detektoru FM signálu, multiplikativního detektoru, přijímače.</li>
+        <li><strong>Metody převodu analogové a digitálního signálu.</strong> Principy zpracování a převodu signálu pomocí metod (PCM, PAM, PWM, PPM, PNM).</li>
+        <li><strong>Digitální modulace signálu.</strong> Princip, typy modulací (OOK, ASK, PSK, FSK, QAM, APSK, OFDM), matematický popis a analýza digitálního modulovaného signálu v časové a frekvenční oblasti, konstelace modulace.</li>
+        <li><strong>Obecné vlastnosti měřicího informačního systému.</strong> Základní schéma, model MIS s uvažováním rušení. Metody potlačení rušení.</li>
+        <li><strong>Příčiny vzniku chyb v měřicích informačních systémech.</strong> Ideální a reálný MIS. Nejistoty měření.</li>
+        <li><strong>Statistické parametry měřícího signálu.</strong> Signál jako náhodný proces. Funkce rozložení hustoty pravděpodobnosti, distribuční funkce a jejich parametry.</li>
+        <li><strong>Statické a dynamické vlastnosti měřicího informačního systému.</strong> Metody měření statických a dynamických vlastností MIS.</li>
+        <li><strong>Přehled základních typů drátových a bezdrátových sběrnic.</strong> Základní parametry, topologie sběrnicových systémů pro přenos dat.</li>
+        <li><strong>EMC a její vliv na kvalitu měřícího signálu.</strong> Způsoby přenosových vazeb rušivých signálů a základní způsoby omezení rušivých signálů.</li>
+      </ol>
+      <p><strong>Zaměření PISR — Předměty pro specializaci (Počítače a informační systémy v řízení):</strong></p>
+      <ul>
+        <li>Řídicí systémy s počítači</li>
+        <li>Programování v operačních systémech RČ</li>
+        <li>Mobilní informační technologie pro řízení</li>
+      </ul>
+      <p><strong>Softwarové inženýrství (doplnění témat):</strong> Analýza. Systémová specifikace. Význam modelování software. Životní cyklus software. Strukturované metody návrhu software. Objektově orientované metody návrhu. UML a popis struktury software, chování, interakce a času. Verzování software. Testování software. Návrhové vzory. Architektura klient/server.</p>
+      <p><strong>FreeRTOS (shrnutí základních témat):</strong> Základní vlastnosti operačního systému FreeRTOS, možnosti konfigurace. Úlohy (tasks) v prostředí FreeRTOS, kooperativní a preemptivní plánovač (scheduler), plánovací strategie FIFO a round robin, priorizace úloh. Komunikace mezi úlohami: event groups, queues, queue sets, obslužné rutiny přerušení (ISRs). Synchronizace a přístup ke sdíleným prostředkům: critical sections, semaphores, mutexy. Časování, časovače (timers) a časová základna OS.</p>
+      <p><strong>Mobilní platformy v průmyslu:</strong> Základní charakteristiky Android, přehled API, životní cyklus aktivity. Platformy a jazyky: Java, Kotlin, Flutter, .NET MAUI, React. Využití vestavěných senzorů (IMU, tlak, teplota, světlo), fotoaparátu a mikrofonu. Komunikace přes TCP, HTTP(S), MQTT, Bluetooth. Kyberbezpečnost mobilních platforem: oprávnění, šifrování, úložiště a publikace aplikací.</p>
     </div>
   </section>
   <section class="section" id="readme">
@@ -252,22 +417,47 @@
         <span class="tag">Otázka 1</span>
         <h3>FreeRTOS</h3>
         <p>Vypracovaná otázka o scheduleru, úlohách, synchronizaci, časovačích a kontextovém přepínání.</p>
-      </a>
-    </div>
+      </a>      <a class="question-card" href="8_statnice_okenni_funkce.html">
+        <span class="tag">Otázka 8</span>
+        <h3>Váhové okenní funkce signálu</h3>
+        <p>Zakreslení zpracovaného diskrétního signálu v časové a frekvenční oblasti; průměrování a překrývání spekter.</p>
+      </a>    </div>
   </section>
   <p class="footer">Až přidáš další HTML soubory, stačí je doplnit do sekce Otázky a do menu.</p>
 </main>
 <script>
   const topbar = document.getElementById('topbar');
   const navToggle = document.getElementById('navToggle');
-  const navLinks = document.querySelectorAll('#site-nav a');
+  const navItems = document.querySelectorAll('.nav-item');
+  const navLinks = document.querySelectorAll('#site-nav > a');
+  
   function setMenu(open) {
     topbar.classList.toggle('is-open', open);
     navToggle.setAttribute('aria-expanded', String(open));
     navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
   }
+  
   navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
   navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  
+  // Mobile dropdown toggle for nav items
+  navItems.forEach((item) => {
+    const link = item.querySelector('a:first-child');
+    link.addEventListener('click', (e) => {
+      // Only toggle dropdown on mobile and if link is disabled or has dropdown
+      if (window.innerWidth <= 820 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
+        e.preventDefault();
+        item.classList.toggle('is-open');
+      }
+    });
+  });
+  
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle')) {
+      navItems.forEach(item => item.classList.remove('is-open'));
+    }
+  });
 </script>
 </body>
 </html>
