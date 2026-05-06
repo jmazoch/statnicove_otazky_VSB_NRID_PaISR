@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otázka 9 – Frekvenční a oktávová analýza signálu</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+a { color: inherit; }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(12px);
+  background: rgba(250, 250, 248, 0.9);
+  border-bottom: 1px solid rgba(26, 74, 138, 0.12);
+}
+.topbar-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  color: #1a4a8a;
+}
+.brand strong { font-size: 16px; }
+.brand span { font-size: 12px; color: #666; }
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(26, 74, 138, 0.18);
+  border-radius: 14px;
+  background: #fff;
+  color: #1a4a8a;
+  cursor: pointer;
+}
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+  position: relative;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.nav-toggle span::before,
+.nav-toggle span::after { content: ""; position: absolute; left: 0; }
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+.nav-links { display: flex; align-items: center; gap: 10px; }
+.nav-item { position: relative; display: flex; align-items: center; }
+.nav-links a, .nav-item > a {
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a4a8a;
+  padding: 10px 14px;
+  border-radius: 999px;
+  transition: background 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-links a:hover, .nav-item > a:hover { background: rgba(26, 74, 138, 0.08); color: #12345f; }
+.nav-dropdown { position: absolute; top: 100%; left: 0; background: rgba(255, 252, 246, 0.92); min-width: 220px; border-radius: 12px; border: 1px solid rgba(31, 36, 31, 0.12); box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: none; flex-direction: column; gap: 0; z-index: 999; }
+.nav-item:hover .nav-dropdown { display: flex; }
+.nav-item.is-open .nav-dropdown { display: flex; }
+.nav-dropdown a { padding: 10px 14px; border-radius: 0; background: transparent; margin: 0; font-size: 13px; border-bottom: 1px solid rgba(31, 36, 31, 0.12); }
+.nav-dropdown a:last-child { border-bottom: none; }
+.nav-dropdown a:hover { background: rgba(26, 74, 138, 0.08); }
+.nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s ease; }
+.nav-links a.nav-disabled { color: #999; opacity: 0.7; pointer-events: none; }
+@media (min-width: 761px) {
+  .nav-item > a .nav-chevron { display: none; }
+}
+@media (max-width: 760px) {
+  .topbar-inner { padding: 12px 14px; }
+  .nav-toggle { display: inline-flex; }
+  .nav-links { display: none; width: 100%; flex-direction: column; align-items: stretch; padding: 12px 0 4px; }
+  .topbar.is-open .nav-links { display: flex; }
+  .nav-links a, .nav-item > a { width: 100%; justify-content: space-between; }
+  .nav-item { width: 100%; flex-direction: column; align-items: stretch; }
+  .nav-item > a { border-radius: 14px; }
+  .nav-dropdown { position: static; border: none; box-shadow: none; background: rgba(26, 74, 138, 0.04); display: none; margin-top: 0; }
+  .nav-dropdown a { border-radius: 0; }
+  .nav-item.is-open .nav-dropdown { display: flex; }
+}
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+.def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; font-style: italic; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+.note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.ok { background: #f1fff6; border-left: 4px solid #168a4a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.formula { background: #f8f0ff; border-left: 4px solid #6a1a8a; padding: 12px 20px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 15px; color: #3a1a5a; }
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 5px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f8ff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: #f5f8ff; border: 1px solid #c8d8f0; border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: #1a4a8a; margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+.toc { background: #f0f4fa; border: 1px solid #c0cfea; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+.toc h3 { color: #1a4a8a; margin-bottom: 10px; font-size: 14px; }
+.toc ol { font-size: 13px; }
+.toc li { margin-bottom: 3px; }
+.toc a { color: #1a4a8a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
+.farr { font-size: 20px; color: #888; }
+.diagram-wrap { text-align: center; margin: 18px 0; }
+.diagram-wrap svg { max-width: 100%; height: auto; }
+.diagram-label { font-size: 12px; color: #555; margin-top: 6px; font-style: italic; text-align: center; }
+hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
+.small { font-size: 13px; color: #444; }
+@media print { body{background:#fff;} .page{box-shadow:none;padding:24px 36px;} }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '\\[', right: '\\]', display: true},
+      {left: '\\(', right: '\\)', display: false}
+    ]
+  });"></script>
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <strong>Státnicové otázky</strong>
+      <span>Řídicí a informační systémy</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="index.html">Main</a>
+      <a href="#s1">Obsah</a>
+
+      <div class="nav-item" id="nav-rs">
+        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="#" class="nav-disabled">3. Stavová regulace</a>
+          <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="#" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-pmzs">
+        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
+          <a href="#" class="nav-disabled">12. Systémy pro zpracování...</a>
+          <a href="#" class="nav-disabled">13. Převod analogové...</a>
+          <a href="#" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-ms">
+        <a href="index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="#" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="#" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="#" class="nav-disabled">18. Statické a dynamické...</a>
+          <a href="#" class="nav-disabled">19. Drátové a bezdrátové...</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-paisr">
+        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="#" class="nav-disabled">SWI</a>
+          <a href="#" class="nav-disabled">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="page">
+
+<h1>Otázka 9 – Frekvenční a oktávová analýza diskrétního signálu</h1>
+<p class="subtitle">Frekvenční analýza diskrétního signálu · Oktávová analýza signálu<br>
+NMgr. Řídicí a informační systémy 2026 · Podklady: PMZS – Frekvenční analýza zvukového signálu</p>
+
+<div class="toc">
+  <h3>Obsah</h3>
+  <ol>
+    <li><a href="#s1">Frekvenční analýza — co a proč</a></li>
+    <li><a href="#s2b">DFT a IDFT — výpočetní základ</a></li>
+    <li><a href="#s2">Hladiny signálu — dB a SPL</a></li>
+    <li><a href="#s3">FFT spektrum — postup a klíčové parametry</a></li>
+    <li><a href="#s4">Amplitudové, fázové a výkonové spektrum</a></li>
+    <li><a href="#s5">Spektrogram — frekvenční analýza nestacionárních signálů</a></li>
+    <li><a href="#s6">Oktávová analýza — princip a definice</a></li>
+    <li><a href="#s7">Třetinooktávová analýza a standardní pásma</a></li>
+    <li><a href="#s8">Výpočet hladiny v pásmu — energetický součet</a></li>
+    <li><a href="#s9">Váhové filtry — dB(A), dB(B), dB(C)</a></li>
+    <li><a href="#s10">FFT vs. oktávová analýza — kdy co použít</a></li>
+    <li><a href="#s10b">Předzpracování signálu — smíchávání kanálů, SS složka, normalizace</a></li>
+    <li><a href="#s11">Co umět říct u státnic</a></li>
+  </ol>
+</div>
+
+<div class="note"><strong>Návaznost na otázku 8:</strong> Okenní funkce, průměrování a překrývání spekter navazují na otázku 8. V otázce 9 ale stručně zopakujeme i DFT/FFT, protože tvoří výpočetní jádro frekvenční analýzy diskrétního signálu — zkoušející může čekat, že DFT umíš říct i zde. Otázka 9 pak jde dál: interpretace spektra, hladiny v dB, oktávová analýza.</div>
+
+<!-- ================================================================ -->
+<h2 id="s1">1. Frekvenční analýza — co a proč</h2>
+
+<div class="def">Frekvenční analýza je proces převodu diskrétního signálu z časové oblasti do frekvenční oblasti. Výsledkem je spektrum — popis toho, z jakých frekvencí je signál složen a jak velká je energie na každé z nich.</div>
+
+<p>V časové oblasti vidíme, jak se hodnota signálu mění v čase. Ve frekvenční oblasti vidíme, <em>z čeho</em> je ten signál složen. Při použití celé komplexní DFT lze signál převést zpět do časové oblasti bez ztráty informace. Pokud ale zobrazíme pouze amplitudové spektrum, jednostranné spektrum nebo provedeme oktávovou agregaci, část informace — hlavně fáze a detailní frekvenční rozlišení — se ztrácí.</p>
+
+<div class="grid2">
+  <div class="card">
+    <h4>Časová oblast</h4>
+    <p>Vidíme průběh \(w[n]\) v čase. Zjistíme amplitudu, RMS, výkon, periodu. Nelze snadno identifikovat, z jakých frekvencí se signál skládá.</p>
+  </div>
+  <div class="card">
+    <h4>Frekvenční oblast</h4>
+    <p>Vidíme spektrum \(|W_k|\) vs. \(f\). Okamžitě identifikujeme dominantní frekvence, harmonické složky, šum nebo rušení. Nelze sledovat vývoj v čase.</p>
+  </div>
+</div>
+
+<h3>Typické aplikace frekvenční analýzy</h3>
+<table>
+  <tr><th>Oblast</th><th>Co hledáme ve spektru</th></tr>
+  <tr><td>Akustika a hluk</td><td>Dominantní frekvenční pásma, hladiny SPL, hodnocení hlučnosti v dB(A)</td></tr>
+  <tr><td>Vibrační diagnostika</td><td>Charakteristické frekvence závad ložisek, převodovek, nevývaha rotoru</td></tr>
+  <tr><td>Elektrotechnika</td><td>Harmonické zkreslení sítě, rušivé složky, THD</td></tr>
+  <tr><td>Biomedicínský signál</td><td>Frekvenční pásma EEG (delta, theta, alfa, beta), srdeční rytmus</td></tr>
+</table>
+
+<div class="flow">
+  <div class="fbox">Diskrétní signál \(w[n]\)</div><div class="farr">→</div>
+  <div class="fbox">Okenní funkce (Q8)</div><div class="farr">→</div>
+  <div class="fbox">DFT / FFT (Q8)</div><div class="farr">→</div>
+  <div class="fbox">Spektrum \(W_k\)</div><div class="farr">→</div>
+  <div class="fbox">Hladiny dB / oktávy</div><div class="farr">→</div>
+  <div class="fbox">Interpretace</div>
+</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s2">2. Hladiny signálu — dB a SPL</h2>
+
+<div class="def">Hladina signálu v decibelech (dB) je logaritmická míra poměru dvou výkonů nebo amplitud. V akustice se nejčastěji používá hladina akustického tlaku SPL (Sound Pressure Level) vztažená k referenčnímu tlaku \(p_0 = 20\,\mu\text{Pa}\). Princip vyjadřování v dB ale platí obecně pro jakýkoliv diskrétní signál — akustika je jen jedna z aplikací.</div>
+
+<h3>Hladina akustického tlaku (SPL)</h3>
+<div class="formula">\[ L_p = 20 \log_{10}\!\left(\frac{p}{p_0}\right) \quad [\text{dB}], \qquad p_0 = 20\,\mu\text{Pa} \]</div>
+
+<h3>Hladina výkonu</h3>
+<div class="formula">\[ L_P = 10 \log_{10}\!\left(\frac{P}{P_0}\right) \quad [\text{dB}] \]</div>
+
+<p>Faktor 20 u tlaku a 10 u výkonu vychází z toho, že výkon je úměrný kvadrátu tlaku: \(P \propto p^2\), tedy \(10\log(p^2/p_0^2) = 20\log(p/p_0)\).</p>
+
+<div class="danger"><strong>Klíčová past — sčítání dB:</strong> dB nelze aritmeticky sčítat. Dva zdroje po 60 dB nedají 120 dB, ale přibližně 63 dB. Správný postup je převést zpět na lineární výkon, sečíst a převést zpět:
+\[ L_{\text{celk}} = 10\log_{10}\!\left(\sum_i 10^{L_i/10}\right) \]
+</div>
+
+<h3>Orientační hladiny zvuku</h3>
+<table>
+  <tr><th>Situace</th><th>SPL [dB]</th></tr>
+  <tr><td>Práh slyšitelnosti</td><td>0 dB</td></tr>
+  <tr><td>Tiché prostředí (noční ložnice)</td><td>20–30 dB</td></tr>
+  <tr><td>Normální konverzace (1 m)</td><td>60–65 dB</td></tr>
+  <tr><td>Provoz u silnice</td><td>70–80 dB</td></tr>
+  <tr><td>Výrobní hala</td><td>85–100 dB</td></tr>
+  <tr><td>Práh bolesti</td><td>~120–130 dB</td></tr>
+</table>
+
+<div class="note"><strong>Ke zkoušce:</strong> Vždy zdůrazni referenční hodnotu — u akustického tlaku je to \(p_0 = 20\,\mu\text{Pa}\). Bez referenční hodnoty nemá dB v akustice smysl.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s2b">DFT a IDFT — výpočetní základ frekvenční analýzy</h2>
+
+<div class="def">DFT (Diskrétní Fourierova transformace) převede konečný počet \(N\) vzorků diskrétního signálu na \(N\) komplexních koeficientů spektra. Předpokládá periodické opakování analyzovaného úseku s periodou \(N\) vzorků.</div>
+
+<h3>Přímá DFT</h3>
+<div class="formula">\[ W_k = \sum_{n=0}^{N-1} w[n] \cdot e^{-j2\pi\frac{kn}{N}}, \qquad k = 0, 1, \dots, N-1 \]</div>
+
+<h3>Zpětná DFT (IDFT)</h3>
+<div class="formula">\[ w[n] = \frac{1}{N} \sum_{k=0}^{N-1} W_k \cdot e^{j2\pi\frac{kn}{N}}, \qquad n = 0, 1, \dots, N-1 \]</div>
+
+<p>Každý koeficient \(W_k\) je komplexní číslo. Jeho absolutní hodnota \(|W_k|\) dává amplitudu frekvenční složky na \(f_k = k \cdot f_s/N\). Jeho argument \(\angle W_k\) dává fázi dané složky.</p>
+
+<div class="note"><strong>FFT = efektivní výpočet DFT:</strong> FFT není jiná transformace — dává přesně stejný výsledek jako DFT, jen s \(N\log_2 N\) operacemi místo \(N^2\). Podmínka pro klasické FFT algoritmy: \(N = 2^m\). DFT předpokládá periodické opakování segmentu — pokud signál na okrajích nespojitě skáče, vzniká spektrální únik (řeší okenní funkce, viz otázka 8).</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s3">3. FFT spektrum — postup a klíčové parametry</h2>
+
+<div class="def">FFT (Fast Fourier Transform) je efektivní algoritmus pro výpočet DFT. Z \(N\) vzorků signálu \(w[n]\) vzorkovaného frekvencí \(f_s\) získáme \(N\) komplexních koeficientů \(W_k\), které popisují amplitudu a fázi na \(N\) diskrétních frekvencích.</div>
+
+<h3>Klíčové vztahy</h3>
+<table>
+  <tr><th>Veličina</th><th>Vzorec</th><th>Fyzikální smysl</th></tr>
+  <tr><td>Frekvenční rozlišení</td><td>\(\Delta f = f_s / N = 1/T\)</td><td>vzdálenost sousedních frekvenčních čar</td></tr>
+  <tr><td>Frekvence k-té čáry</td><td>\(f_k = k \cdot \Delta f = k \cdot f_s / N\)</td><td>frekvence odpovídající indexu \(k\)</td></tr>
+  <tr><td>Nyquistova frekvence</td><td>\(f_{Ny} = f_s / 2\)</td><td>nejvyšší smysluplná frekvence</td></tr>
+  <tr><td>Celkový čas záznamu</td><td>\(T = N \cdot T_s\)</td><td>délka analyzovaného úseku</td></tr>
+  <tr><td>Maximální frekvence dle skript</td><td>\(f_{MAX} = N / (2{,}56 \cdot T)\)</td><td>po antialiasingovém filtru 80 dB</td></tr>
+</table>
+
+<div class="note"><strong>Kompromis \(\Delta f\) vs. \(T\):</strong> Lepší frekvenční rozlišení (menší \(\Delta f\)) vyžaduje delší záznam \(T\). Pro \(\Delta f = 1\,\text{Hz}\) potřebujeme \(T = 1\,\text{s}\). Pro \(\Delta f = 0{,}1\,\text{Hz}\) potřebujeme \(T = 10\,\text{s}\). Nelze zlepšit rozlišení bez delšího záznamu.</div>
+
+<h3>Postup praktické FFT analýzy</h3>
+<ol>
+  <li>Vzorkovat signál s dostatečnou \(f_s\) (Nyquistovo kritérium: \(f_s > 2 f_{max}\))</li>
+  <li>Vybrat délku záznamu \(N\) tak, aby \(\Delta f = f_s/N\) odpovídalo požadovanému rozlišení</li>
+  <li>Aplikovat okenní funkci (nejčastěji Hanningova — viz otázka 8)</li>
+  <li>Vypočítat FFT, získat komplexní koeficienty \(W_k\)</li>
+  <li>Zobrazit jednostranné spektrum od 0 do \(f_s/2\)</li>
+  <li>Případně průměrovat více segmentů (Welchova metoda — viz otázka 8)</li>
+</ol>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="5" y="5" width="750" height="208" rx="8" fill="#fafafe" stroke="#c8d8f0" stroke-width="1.2"/>
+  <text x="380" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4a8a">Frekvenční rozlišení: vliv délky záznamu N</text>
+  <!-- Left panel: short record -->
+  <rect x="20" y="40" width="340" height="155" rx="5" fill="#fff8f8" stroke="#e0c0c0"/>
+  <text x="190" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#8a1a1a">Krátký záznam: N = 256, T = 0,5 s → Δf = 2 Hz</text>
+  <line x1="40" y1="165" x2="345" y2="165" stroke="#888" stroke-width="0.9"/>
+  <line x1="40" y1="75" x2="40" y2="170" stroke="#888" stroke-width="0.9"/>
+  <!-- Wide bars - poor resolution -->
+  <rect x="120" y="100" width="28" height="65" fill="#c04040" opacity="0.7"/>
+  <rect x="148" y="120" width="28" height="45" fill="#c04040" opacity="0.5"/>
+  <rect x="176" y="138" width="28" height="27" fill="#c04040" opacity="0.4"/>
+  <text x="190" y="184" text-anchor="middle" font-size="10" fill="#8a1a1a">Δf velké — složky se prolínají</text>
+  <!-- Right panel: long record -->
+  <rect x="380" y="40" width="360" height="155" rx="5" fill="#f8fff8" stroke="#c0e0c0"/>
+  <text x="560" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#0a6040">Dlouhý záznam: N = 4096, T = 8 s → Δf = 0,125 Hz</text>
+  <line x1="400" y1="165" x2="725" y2="165" stroke="#888" stroke-width="0.9"/>
+  <line x1="400" y1="75" x2="400" y2="170" stroke="#888" stroke-width="0.9"/>
+  <!-- Narrow spikes - good resolution -->
+  <line x1="500" y1="165" x2="500" y2="95"/><circle cx="500" cy="95" r="4" fill="none" stroke="#0a6040" stroke-width="1.5"/>
+  <line x1="512" y1="165" x2="512" y2="125"/><circle cx="512" cy="125" r="4" fill="none" stroke="#0a6040" stroke-width="1.5"/>
+  <line x1="524" y1="165" x2="524" y2="148"/><circle cx="524" cy="148" r="4" fill="none" stroke="#0a6040" stroke-width="1.5"/>
+  <text x="560" y="184" text-anchor="middle" font-size="10" fill="#0a6040">Δf malé — složky jasně odděleny</text>
+</svg>
+<p class="diagram-label">Se stejnou vzorkovací frekvencí: čím více vzorků N (delší záznam), tím menší Δf a tím lépe oddělené frekvenční složky.</p>
+</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s4">4. Amplitudové, fázové a výkonové spektrum</h2>
+
+<div class="def">Z komplexních koeficientů \(W_k\) DFT se počítají tři typy spektra. Amplitudové spektrum ukazuje velikost složek, fázové spektrum jejich časový posuv a výkonové spektrum rozložení výkonu po frekvencích.</div>
+
+<table>
+  <tr><th>Typ spektra</th><th>Vzorec</th><th>Vlastnosti</th></tr>
+  <tr>
+    <td><strong>Amplitudové</strong> \(|W_k|\)</td>
+    <td>\(|W_k| = \sqrt{\operatorname{Re}\{W_k\}^2 + \operatorname{Im}\{W_k\}^2}\)</td>
+    <td>Sudá funkce. Oboustranné → jednostranné: amplitudy na \(k \neq 0\) zdvojíme.</td>
+  </tr>
+  <tr>
+    <td><strong>Fázové</strong> \(\angle W_k\)</td>
+    <td>\(\angle W_k = \operatorname{atan2}\!\left(\operatorname{Im}\{W_k\},\; \operatorname{Re}\{W_k\}\right)\)</td>
+    <td>Lichá funkce. <code>atan2</code> správně určí kvadrant (na rozdíl od prostého arctg). Fáze reálné složky jsou ±π nebo 0.</td>
+  </tr>
+  <tr>
+    <td><strong>Výkonové</strong> \(|W_k|^2\)</td>
+    <td>\(P_k = |W_k|^2 = \operatorname{Re}\{W_k\}^2 + \operatorname{Im}\{W_k\}^2\)</td>
+    <td>Sudá funkce. Střední výkon: \(P = \frac{1}{N}\sum_k |W_k|^2\). Normalizační faktor závisí na konvenci DFT — vždy zkontroluj, zda je \(1/N\) v přímé nebo zpětné transformaci.</td>
+  </tr>
+</table>
+
+<h3>Vyjádření amplitudového spektra v dB</h3>
+<p>V praxi se spektrum často vykresluje v decibelech — logaritmická osa lépe zobrazí velký rozsah hodnot:</p>
+<div class="formula">\[ L_k = 20\log_{10}\!\left(\frac{|W_k|}{|W_{\text{ref}}|}\right) \quad [\text{dB}] \]</div>
+
+<div class="note"><strong>Oboustranné vs. jednostranné:</strong> DFT přirozeně vrací oboustranné spektrum (k = −N/2 až N/2). Pro reálný signál je spektrum symetrické (sudá funkce). V praxi zobrazujeme pouze jednostranné spektrum (k = 0 až N/2), ale amplitudy složek na \(k \neq 0\) musíme zdvojit, protože energie byla rozdělena na obě strany.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s5">5. Spektrogram — frekvenční analýza nestacionárních signálů</h2>
+
+<div class="def">Spektrogram je 2D zobrazení, kde osa x je čas, osa y je frekvence a barva (nebo výška) odpovídá amplitudě nebo výkonu. Získá se výpočtem FFT pro po sobě jdoucí krátké úseky (okna) signálu.</div>
+
+<p>FFT předpokládá, že signál je stacionární po celou dobu záznamu. U nestacionárních signálů — jako je řeč, hudba, přechodný jev nebo rozbíhající se stroj — se frekvenční obsah mění v čase. Spektrogram tento vývoj zachytí tím, že FFT spouští opakovaně na klouzavých oknech signálu.</p>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 760 240" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="5" y="5" width="750" height="228" rx="8" fill="#fafafe" stroke="#c8d8f0" stroke-width="1.2"/>
+  <text x="380" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4a8a">Princip výpočtu spektrogramu</text>
+
+  <!-- Time signal at top -->
+  <text x="30" y="52" font-size="11" fill="#444">w[n]</text>
+  <polyline points="60,65 90,50 120,68 150,45 180,72 210,55 240,40 270,62 300,48 330,72 360,58 390,42 420,66 450,50 480,38 510,60 540,78 570,65 580,70"
+    fill="none" stroke="#1a4a8a" stroke-width="1.8"/>
+  <line x1="60" y1="75" x2="590" y2="75" stroke="#bbb" stroke-width="0.7"/>
+
+  <!-- Windows on signal -->
+  <rect x="60" y="40" width="90" height="36" fill="rgba(200,80,80,0.12)" stroke="#c04040" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <rect x="110" y="40" width="90" height="36" fill="rgba(200,140,0,0.10)" stroke="#c8960c" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <rect x="160" y="40" width="90" height="36" fill="rgba(10,100,60,0.10)" stroke="#0a7040" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <rect x="210" y="40" width="90" height="36" fill="rgba(26,74,138,0.10)" stroke="#1a4a8a" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+  <text x="104" y="98" text-anchor="middle" font-size="10" fill="#c04040">okno 1</text>
+  <text x="154" y="98" text-anchor="middle" font-size="10" fill="#c8960c">okno 2</text>
+  <text x="204" y="98" text-anchor="middle" font-size="10" fill="#0a7040">okno 3</text>
+  <text x="254" y="98" text-anchor="middle" font-size="10" fill="#1a4a8a">okno 4</text>
+
+  <!-- Arrow -->
+  <text x="380" y="120" text-anchor="middle" font-size="22" fill="#aaa">↓ FFT pro každé okno</text>
+
+  <!-- Spectrogram representation -->
+  <text x="30" y="155" font-size="11" fill="#444">f [Hz]</text>
+  <rect x="60" y="140" width="520" height="80" rx="4" fill="#f0f4fa" stroke="#c8d8f0"/>
+  <!-- Colored cells representing spectrogram -->
+  <g>
+    <!-- Row 1 (high freq) -->
+    <rect x="60" y="140" width="52" height="20" fill="#e8eef8"/>
+    <rect x="112" y="140" width="52" height="20" fill="#d0dcf4"/>
+    <rect x="164" y="140" width="52" height="20" fill="#b8caf0"/>
+    <rect x="216" y="140" width="52" height="20" fill="#8aa8e8"/>
+    <rect x="268" y="140" width="52" height="20" fill="#6090e0"/>
+    <rect x="320" y="140" width="52" height="20" fill="#4478d8"/>
+    <rect x="372" y="140" width="52" height="20" fill="#3068d0"/>
+    <rect x="424" y="140" width="52" height="20" fill="#2058c8"/>
+    <rect x="476" y="140" width="52" height="20" fill="#1a4abf"/>
+    <rect x="528" y="140" width="52" height="20" fill="#1440b8"/>
+    <!-- Row 2 (mid freq) -->
+    <rect x="60" y="160" width="52" height="20" fill="#c8d8f0"/>
+    <rect x="112" y="160" width="52" height="20" fill="#f5c04a"/>
+    <rect x="164" y="160" width="52" height="20" fill="#f0a830"/>
+    <rect x="216" y="160" width="52" height="20" fill="#eb9018"/>
+    <rect x="268" y="160" width="52" height="20" fill="#e67800"/>
+    <rect x="320" y="160" width="52" height="20" fill="#d96000"/>
+    <rect x="372" y="160" width="52" height="20" fill="#c04040"/>
+    <rect x="424" y="160" width="52" height="20" fill="#d96000"/>
+    <rect x="476" y="160" width="52" height="20" fill="#e67800"/>
+    <rect x="528" y="160" width="52" height="20" fill="#c8d8f0"/>
+    <!-- Row 3 (low freq) -->
+    <rect x="60" y="180" width="52" height="20" fill="#7da8e0"/>
+    <rect x="112" y="180" width="52" height="20" fill="#9abbea"/>
+    <rect x="164" y="180" width="52" height="20" fill="#b0cdf2"/>
+    <rect x="216" y="180" width="52" height="20" fill="#c8d8f0"/>
+    <rect x="268" y="180" width="52" height="20" fill="#d8e4f5"/>
+    <rect x="320" y="180" width="52" height="20" fill="#e0ebf8"/>
+    <rect x="372" y="180" width="52" height="20" fill="#e8eef8"/>
+    <rect x="424" y="180" width="52" height="20" fill="#d8e4f5"/>
+    <rect x="476" y="180" width="52" height="20" fill="#c8d8f0"/>
+    <rect x="528" y="180" width="52" height="20" fill="#b0cdf2"/>
+  </g>
+  <text x="595" y="152" font-size="10" fill="#888">vysoká</text>
+  <text x="595" y="172" font-size="10" fill="#888">střední</text>
+  <text x="595" y="192" font-size="10" fill="#888">nízká</text>
+  <text x="380" y="230" text-anchor="middle" font-size="11" fill="#555">→ čas →</text>
+  <!-- Color legend -->
+  <rect x="60" y="225" width="12" height="8" fill="#1440b8"/>
+  <text x="75" y="232" font-size="10" fill="#555">nízká amplituda</text>
+  <rect x="200" y="225" width="12" height="8" fill="#c04040"/>
+  <text x="215" y="232" font-size="10" fill="#555">vysoká amplituda</text>
+</svg>
+<p class="diagram-label">Spektrogram: každý sloupec je FFT jednoho krátkého okna. Barva odpovídá amplitudě — teplé barvy = vysoká energie. Vidíme jak se dominantní frekvence (žluto-oranžový pruh) v čase mění.</p>
+</div>
+
+<div class="grid3">
+  <div class="card"><h4>Délka okna</h4><p>Kratší okno → lepší časové rozlišení, horší frekvenční. Delší okno → obráceně. Jde o nutný trade-off.</p></div>
+  <div class="card"><h4>Překryv oken</h4><p>Typicky 50–75 %. Zjemní časový průběh spektrogramu. Nutné pro Hannovo okno, viz otázka 8.</p></div>
+  <div class="card"><h4>Použití</h4><p>Řeč, hudba, vibrace při rozběhu stroje, seismika, radar — kdekoliv se frekvenční obsah mění v čase.</p></div>
+</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s6">6. Oktávová analýza — princip a definice</h2>
+
+<div class="def">Oktávová analýza seskupuje jemné FFT spektrum do širších logaritmických frekvenčních pásem — oktáv nebo třetin oktáv. Výsledkem je přehledné frekvenční hodnocení signálu v pásech, jejichž šířka roste s frekvencí (na logaritmické ose jsou stejně široká). Používá se hlavně v akustice a vibrační analýze.</div>
+
+<p>Lidské ucho vnímá frekvence přibližně logaritmicky — zdvojnásobení frekvence zní jako posun o jednu oktávu nahoru, bez ohledu na absolutní hodnotu. Proto dává logaritmická osa frekvencí v akustice přirozený smysl.</p>
+
+<h3>Definice oktávy</h3>
+<p>Oktávové pásmo je definováno konstantním poměrem mezních frekvencí:</p>
+<div class="formula">\[ f_2 = 2 \cdot f_1 \qquad \Rightarrow \qquad \frac{f_2}{f_1} = 2 \]</div>
+
+<h3>Střední frekvence oktávového pásma</h3>
+<p>Střední frekvence je geometrický průměr dolní a horní meze:</p>
+<div class="formula">\[ f_m = \sqrt{f_1 \cdot f_2} \]</div>
+
+<p>Z toho plyne vztah pro mezní frekvence, pokud známe střední frekvenci \(f_m\):</p>
+<div class="formula">\[ f_1 = \frac{f_m}{\sqrt{2}}, \qquad f_2 = f_m \cdot \sqrt{2} \]</div>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="5" y="5" width="750" height="218" rx="8" fill="#fafafe" stroke="#c8d8f0" stroke-width="1.2"/>
+  <text x="380" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4a8a">Oktávová pásma — logaritmická osa frekvencí</text>
+
+  <!-- Log freq axis -->
+  <line x1="50" y1="160" x2="720" y2="160" stroke="#777" stroke-width="1.2"/>
+  <!-- Positions for: 31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000 Hz on log scale -->
+  <!-- log10(31.5)=1.498, log10(8000)=3.903, range=2.405 -->
+  <!-- x = 50 + (log10(f)-1.498)/2.405 * 670 -->
+  <!-- 31.5: x=50, 63: x=128, 125: x=206, 250: x=284, 500: x=363, 1000: x=441, 2000: x=519, 4000: x=597, 8000: x=675 -->
+
+  <!-- Octave bands as colored rectangles -->
+  <rect x="50"  y="100" width="78"  height="60" fill="#dce8fb" stroke="#1a4a8a" stroke-width="1" opacity="0.8"/>
+  <rect x="128" y="90"  width="78"  height="70" fill="#c6d9f7" stroke="#1a4a8a" stroke-width="1" opacity="0.85"/>
+  <rect x="206" y="80"  width="78"  height="80" fill="#abc6f0" stroke="#1a4a8a" stroke-width="1" opacity="0.85"/>
+  <rect x="284" y="70"  width="79"  height="90" fill="#8aaee8" stroke="#1a4a8a" stroke-width="1" opacity="0.85"/>
+  <rect x="363" y="60"  width="78"  height="100" fill="#6090df" stroke="#1a4a8a" stroke-width="1" opacity="0.85"/>
+  <rect x="441" y="50"  width="78"  height="110" fill="#3a6dd5" stroke="#1a4a8a" stroke-width="1" opacity="0.85"/>
+  <rect x="519" y="60"  width="78"  height="100" fill="#6090df" stroke="#1a4a8a" stroke-width="1" opacity="0.85"/>
+  <rect x="597" y="70"  width="78"  height="90" fill="#8aaee8" stroke="#1a4a8a" stroke-width="1" opacity="0.85"/>
+
+  <!-- Tick marks and labels -->
+  <g font-size="11" text-anchor="middle" fill="#333">
+    <line x1="50"  y1="160" x2="50"  y2="167" stroke="#555"/><text x="50"  y="180">31,5</text>
+    <line x1="128" y1="160" x2="128" y2="167" stroke="#555"/><text x="128" y="180">63</text>
+    <line x1="206" y1="160" x2="206" y2="167" stroke="#555"/><text x="206" y="180">125</text>
+    <line x1="284" y1="160" x2="284" y2="167" stroke="#555"/><text x="284" y="180">250</text>
+    <line x1="363" y1="160" x2="363" y2="167" stroke="#555"/><text x="363" y="180">500</text>
+    <line x1="441" y1="160" x2="441" y2="167" stroke="#555"/><text x="441" y="180">1000</text>
+    <line x1="519" y1="160" x2="519" y2="167" stroke="#555"/><text x="519" y="180">2000</text>
+    <line x1="597" y1="160" x2="597" y2="167" stroke="#555"/><text x="597" y="180">4000</text>
+    <line x1="675" y1="160" x2="675" y2="167" stroke="#555"/><text x="675" y="180">8000</text>
+  </g>
+  <text x="720" y="164" font-size="11" fill="#555">Hz</text>
+  <text x="380" y="210" text-anchor="middle" font-size="11" fill="#555">Na logaritmické ose jsou pásma stejně široká — odpovídají vnímání lidského ucha</text>
+
+  <!-- fm label for 1kHz band -->
+  <text x="480" y="44" text-anchor="middle" font-size="11" font-weight="700" fill="#1a4a8a">f_m = 1000 Hz</text>
+  <text x="480" y="57" text-anchor="middle" font-size="10" fill="#1a4a8a">(referenční pásmo)</text>
+</svg>
+<p class="diagram-label">Oktávová pásma mají na lineární ose frekvencí různou šířku v Hz, ale na logaritmické ose jsou stejně velká. Pásmo 2000–4000 Hz má lineárně 2000 Hz šířky, ale pásmo 31,5–63 Hz jen 31,5 Hz — oboje je jedna oktáva.</p>
+</div>
+
+<div class="note"><strong>Klíčový princip:</strong> Oktávová pásma mají konstantní <em>poměr</em> mezních frekvencí (\(f_2/f_1 = 2\)), ne konstantní <em>šířku</em> v Hz. Proto se absolutní šířka pásma s rostoucí frekvencí zvětšuje, ale na logaritmické ose všechna pásma vypadají stejně.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s7">7. Třetinooktávová analýza a standardní pásma</h2>
+
+<div class="def">Třetinooktávová analýza rozdělí každou oktávu na tři logarithmicky stejná pásma. Je jemnější než oktávová analýza a lepší pro detailnější frekvenční hodnocení. Standardní třetinooktávová pásma jsou normalizována (IEC 61260, ISO 266).</div>
+
+<h3>Definice třetinooktávového pásma</h3>
+<div class="formula">\[ \frac{f_2}{f_1} = 2^{1/3} \approx 1{,}26 \]</div>
+
+<p>Pro třetinooktávové pásmo se střední frekvencí \(f_m\):</p>
+<div class="formula">\[ f_1 = \frac{f_m}{2^{1/6}}, \qquad f_2 = f_m \cdot 2^{1/6} \]</div>
+
+<h3>Standardní oktávová pásma — tabulka (podle přednášky)</h3>
+<table>
+  <tr>
+    <th>Číslo oktávy</th>
+    <th>Dolní mez \(f_1\) [Hz]</th>
+    <th>Střední freq. \(f_m\) [Hz]</th>
+    <th>Horní mez \(f_2\) [Hz]</th>
+  </tr>
+  <tr><td>1</td><td>22</td><td><strong>31,5</strong></td><td>44</td></tr>
+  <tr><td>2</td><td>44</td><td><strong>63</strong></td><td>88</td></tr>
+  <tr><td>3</td><td>88</td><td><strong>125</strong></td><td>176</td></tr>
+  <tr><td>4</td><td>176</td><td><strong>250</strong></td><td>353</td></tr>
+  <tr><td>5</td><td>353</td><td><strong>500</strong></td><td>707</td></tr>
+  <tr><td>6</td><td>707</td><td><strong>1 000</strong> ← referenční</td><td>1414</td></tr>
+  <tr><td>7</td><td>1414</td><td><strong>2 000</strong></td><td>2825</td></tr>
+  <tr><td>8</td><td>2825</td><td><strong>4 000</strong></td><td>5650</td></tr>
+  <tr><td>9</td><td>5650</td><td><strong>8 000</strong></td><td>11 300</td></tr>
+  <tr><td>10</td><td>11 300</td><td><strong>16 000</strong></td><td>22 600</td></tr>
+</table>
+
+<h3>Třetinooktávová pásma — detail 2. oktávy (příklad D/S/H)</h3>
+<p>Každá oktáva se dělí na tři třetiny. Příklad pro 2. oktávu (63 Hz) — podle přednášky:</p>
+<table>
+  <tr><th>Třetina</th><th>Dolní (D) [Hz]</th><th>Střední (S) [Hz]</th><th>Horní (H) [Hz]</th></tr>
+  <tr><td>1. třetina 2. oktávy</td><td>44</td><td>50</td><td>57</td></tr>
+  <tr><td>2. třetina 2. oktávy</td><td>57</td><td>63</td><td>71</td></tr>
+  <tr><td>3. třetina 2. oktávy</td><td>71</td><td>80</td><td>88</td></tr>
+</table>
+
+<div class="note"><strong>Ke zkoušce:</strong> Stačí vědět střední frekvence oktávových pásem: 31,5 — 63 — 125 — 250 — 500 — <strong>1000</strong> — 2000 — 4000 — 8000 — 16 000 Hz. Každá je přibližně dvojnásobkem předchozí. Referenční pásmo je 1000 Hz. Třetinooktávová analýza se měří pomocí filtrů — každé pásmo má svůj bandpass filtr.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s8">8. Výpočet hladiny v pásmu — energetický součet</h2>
+
+<div class="def">Hladina v oktávovém pásmu se vypočítá součtem energií (výkonů) všech FFT složek, které leží v daném frekvenčním rozsahu pásma. Výsledná hladina v dB se vypočítá energeticky — nelze aritmeticky sčítat hodnoty v dB.</div>
+
+<h3>Lineární výkon v pásmu</h3>
+<p>Nejdříve sečteme výkony všech FFT čar \(f_k\) ležících v rozsahu daného pásma \(\langle f_1, f_2 \rangle\):</p>
+<div class="formula">\[ P_{\text{band}} = \sum_{\substack{k:\, f_1 \leq f_k \leq f_2}} P_k = \sum_{\substack{k:\, f_1 \leq f_k \leq f_2}} |W_k|^2 \]</div>
+
+<h3>Hladina pásma v dB</h3>
+<p>Pokud jsou složky vyjádřeny jako hladiny \(L_k\) v dB, použijeme energetický součet:</p>
+<div class="formula">\[ L_{\text{band}} = 10 \log_{10}\!\left(\sum_{\substack{k:\, f_1 \leq f_k \leq f_2}} 10^{L_k / 10}\right) \quad [\text{dB}] \]</div>
+
+<div class="danger"><strong>Proč nelze dB jen sečíst:</strong> Pokud je v pásmu 10 složek po 60 dB, výsledek <em>není</em> 600 dB. Energetický součet: \(10\log_{10}(10 \cdot 10^{60/10}) = 10\log_{10}(10^7) = 70\,\text{dB}\). Přidání 10 stejných zdrojů = nárůst o 10 dB.</div>
+
+<h3>Postup výpočtu oktávové analýzy z FFT</h3>
+<ol>
+  <li>Vypočti FFT spektrum signálu → \(|W_k|\) pro každé \(k\)</li>
+  <li>Přiřaď každé složce \(k\) frekvenci \(f_k = k \cdot \Delta f\)</li>
+  <li>Pro každé oktávové pásmo \((f_1, f_2)\) najdi všechna \(k\), kde \(f_1 \leq f_k \leq f_2\)</li>
+  <li>Sečti výkony \(P_{\text{band}} = \sum |W_k|^2\)</li>
+  <li>Převeď na hladinu: \(L_{\text{band}} = 10\log_{10}(P_{\text{band}} / P_{\text{ref}})\)</li>
+  <li>Výsledkem je sloupcový graf hladiny vs. střední frekvence pásem</li>
+</ol>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 760 240" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="5" y="5" width="750" height="228" rx="8" fill="#fafafe" stroke="#c8d8f0" stroke-width="1.2"/>
+  <text x="380" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4a8a">Od FFT spektra k oktávové analýze</text>
+
+  <!-- FFT spectrum (left) -->
+  <text x="185" y="48" text-anchor="middle" font-size="11" fill="#1a4a8a">FFT spektrum (jemné čáry)</text>
+  <line x1="40" y1="180" x2="340" y2="180" stroke="#777" stroke-width="1"/>
+  <line x1="40" y1="55" x2="40" y2="185" stroke="#777" stroke-width="1"/>
+  <!-- Many narrow bars representing FFT lines -->
+  <g fill="#4a80c8" opacity="0.7">
+    <rect x="50" y="170" width="4" height="10"/>
+    <rect x="56" y="165" width="4" height="15"/>
+    <rect x="62" y="168" width="4" height="12"/>
+    <rect x="68" y="155" width="4" height="25"/>
+    <rect x="74" y="160" width="4" height="20"/>
+    <rect x="80" y="162" width="4" height="18"/>
+    <rect x="86" y="130" width="4" height="50"/>
+    <rect x="92" y="120" width="4" height="60"/>
+    <rect x="98" y="115" width="4" height="65"/>
+    <rect x="104" y="118" width="4" height="62"/>
+    <rect x="110" y="125" width="4" height="55"/>
+    <rect x="116" y="135" width="4" height="45"/>
+    <rect x="122" y="148" width="4" height="32"/>
+    <rect x="128" y="90" width="4" height="90"/>
+    <rect x="134" y="75" width="4" height="105"/>
+    <rect x="140" y="70" width="4" height="110"/>
+    <rect x="146" y="72" width="4" height="108"/>
+    <rect x="152" y="80" width="4" height="100"/>
+    <rect x="158" y="92" width="4" height="88"/>
+    <rect x="164" y="150" width="4" height="30"/>
+    <rect x="170" y="155" width="4" height="25"/>
+    <rect x="176" y="162" width="4" height="18"/>
+    <rect x="182" y="158" width="4" height="22"/>
+    <rect x="188" y="165" width="4" height="15"/>
+    <rect x="194" y="160" width="4" height="20"/>
+    <rect x="200" y="155" width="4" height="25"/>
+    <rect x="206" y="65" width="4" height="115"/>
+    <rect x="212" y="60" width="4" height="120"/>
+    <rect x="218" y="62" width="4" height="118"/>
+    <rect x="224" y="68" width="4" height="112"/>
+    <rect x="230" y="78" width="4" height="102"/>
+    <rect x="236" y="152" width="4" height="28"/>
+    <rect x="242" y="158" width="4" height="22"/>
+    <rect x="248" y="163" width="4" height="17"/>
+    <rect x="254" y="170" width="4" height="10"/>
+    <rect x="260" y="168" width="4" height="12"/>
+    <rect x="266" y="172" width="4" height="8"/>
+    <rect x="272" y="170" width="4" height="10"/>
+    <rect x="278" y="165" width="4" height="15"/>
+    <rect x="284" y="160" width="4" height="20"/>
+    <rect x="290" y="155" width="4" height="25"/>
+    <rect x="296" y="162" width="4" height="18"/>
+    <rect x="302" y="168" width="4" height="12"/>
+    <rect x="308" y="172" width="4" height="8"/>
+    <rect x="314" y="170" width="4" height="10"/>
+    <rect x="320" y="168" width="4" height="12"/>
+    <rect x="326" y="173" width="4" height="7"/>
+  </g>
+  <text x="185" y="200" text-anchor="middle" font-size="10" fill="#555">frekvence →</text>
+
+  <!-- Arrow -->
+  <text x="375" y="120" text-anchor="middle" font-size="28" fill="#aaa">→</text>
+  <text x="375" y="140" text-anchor="middle" font-size="10" fill="#888">součet</text>
+  <text x="375" y="153" text-anchor="middle" font-size="10" fill="#888">energie</text>
+  <text x="375" y="166" text-anchor="middle" font-size="10" fill="#888">v pásmu</text>
+
+  <!-- Octave bars (right) -->
+  <text x="580" y="48" text-anchor="middle" font-size="11" fill="#1a4a8a">Oktávové pásmo (dB)</text>
+  <line x1="415" y1="180" x2="725" y2="180" stroke="#777" stroke-width="1"/>
+  <line x1="415" y1="55" x2="415" y2="185" stroke="#777" stroke-width="1"/>
+  <g fill="#c04040" opacity="0.85">
+    <rect x="425" y="160" width="38" height="20"/><text x="444" y="198" text-anchor="middle" font-size="9" fill="#555">63</text>
+    <rect x="468" y="148" width="38" height="32"/><text x="487" y="198" text-anchor="middle" font-size="9" fill="#555">125</text>
+    <rect x="511" y="100" width="38" height="80"/><text x="530" y="198" text-anchor="middle" font-size="9" fill="#555">250</text>
+    <rect x="554" y="72"  width="38" height="108"/><text x="573" y="198" text-anchor="middle" font-size="9" fill="#555">500</text>
+    <rect x="597" y="85"  width="38" height="95"/><text x="616" y="198" text-anchor="middle" font-size="9" fill="#555">1k</text>
+    <rect x="640" y="138" width="38" height="42"/><text x="659" y="198" text-anchor="middle" font-size="9" fill="#555">2k</text>
+    <rect x="683" y="155" width="38" height="25"/><text x="702" y="198" text-anchor="middle" font-size="9" fill="#555">4k</text>
+  </g>
+  <text x="580" y="215" text-anchor="middle" font-size="10" fill="#555">střední frekvence pásma [Hz]</text>
+  <text x="415" y="175" font-size="9" fill="#555" text-anchor="middle">0</text>
+  <text x="415" y="100" font-size="9" fill="#555" text-anchor="middle">dB</text>
+</svg>
+<p class="diagram-label">Každý sloupcový graf oktávové analýzy (vpravo) vznikne součtem výkonů z odpovídajícího frekvenčního pásma FFT spektra (vlevo). Výsledkem je přehledné zobrazení energetického rozložení po oktávách.</p>
+</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s9">9. Váhové filtry — dB(A), dB(B), dB(C)</h2>
+
+<div class="def">Váhový filtr upravuje frekvenční spektrum frekvenčně závislou korekcí \(K(f)\), která simuluje citlivost lidského ucha (nebo jiného přijímače). Výsledná vážená hladina se zapisuje jako dB(A), dB(B) nebo dB(C) podle použitého filtru.</div>
+
+<p>Lidské ucho nevnímá všechny frekvence stejně hlasitě. Při nízkém a vysokém kmitočtu jsme méně citliví než v oblasti 1–4 kHz. A-vážení tuto nerovnoměrnost kompenzuje: před vyhodnocením hladiny každou frekvenční složku spektra vynásobíme korekčním koeficientem, který odpovídá frekvenční citlivosti ucha.</p>
+
+<h3>A-vážení — výpočet</h3>
+<div class="formula">\[ L_{pA}(f) = L_p(f) + K_A(f) \]</div>
+
+<p>kde \(K_A(f)\) je A-korekce [dB] pro danou frekvenci (záporná pro nízké a vysoké frekvence, blízká nule pro oblast 1–4 kHz).</p>
+
+<h3>Typické hodnoty A-korekce</h3>
+<table>
+  <tr><th>Frekvence [Hz]</th><th>A-korekce \(K_A\) [dB]</th><th>Interpretace</th></tr>
+  <tr><td>31,5</td><td>−39,4</td><td>Velmi silné potlačení nízkých frekvencí</td></tr>
+  <tr><td>63</td><td>−26,2</td><td>Silné potlačení</td></tr>
+  <tr><td>125</td><td>−16,1</td><td>Střední potlačení</td></tr>
+  <tr><td>250</td><td>−8,6</td><td>Mírné potlačení</td></tr>
+  <tr><td>500</td><td>−3,2</td><td>Malá korekce</td></tr>
+  <tr><td><strong>1 000</strong></td><td><strong>0,0</strong></td><td>Referenční bod — žádná korekce</td></tr>
+  <tr><td>2 000</td><td>+1,2</td><td>Mírné posílení (max. citlivost ucha)</td></tr>
+  <tr><td>4 000</td><td>+1,0</td><td>Oblast maximální citlivosti</td></tr>
+  <tr><td>8 000</td><td>−1,1</td><td>Malé potlačení</td></tr>
+  <tr><td>16 000</td><td>−6,6</td><td>Střední potlačení</td></tr>
+</table>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="5" y="5" width="750" height="198" rx="8" fill="#fafafe" stroke="#c8d8f0" stroke-width="1.2"/>
+  <text x="380" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4a8a">Frekvenční charakteristiky váhových filtrů A, B, C</text>
+  <line x1="80" y1="155" x2="700" y2="155" stroke="#777" stroke-width="1.2"/>
+  <line x1="80" y1="45" x2="80" y2="160" stroke="#777" stroke-width="1.2"/>
+  <!-- Grid lines -->
+  <line x1="80" y1="100" x2="700" y2="100" stroke="#eee" stroke-width="0.8"/>
+  <line x1="80" y1="70" x2="700" y2="70" stroke="#eee" stroke-width="0.8"/>
+  <line x1="80" y1="130" x2="700" y2="130" stroke="#eee" stroke-width="0.8"/>
+  <!-- dB axis labels -->
+  <text x="70" y="48" text-anchor="end" font-size="10" fill="#555">+5</text>
+  <text x="70" y="73" text-anchor="end" font-size="10" fill="#555">0</text>
+  <text x="70" y="103" text-anchor="end" font-size="10" fill="#555">−20</text>
+  <text x="70" y="133" text-anchor="end" font-size="10" fill="#555">−40</text>
+  <text x="70" y="158" text-anchor="end" font-size="10" fill="#555">−60</text>
+  <!-- Freq labels (log scale: 31.5→80, 100→180, 1k→440, 4k→570, 16k→695) -->
+  <g font-size="9" text-anchor="middle" fill="#555">
+    <text x="100" y="172">31,5</text>
+    <text x="180" y="172">100</text>
+    <text x="290" y="172">250</text>
+    <text x="390" y="172">500</text>
+    <text x="440" y="172">1k</text>
+    <text x="530" y="172">4k</text>
+    <text x="600" y="172">8k</text>
+    <text x="680" y="172">16k Hz</text>
+  </g>
+
+  <!-- C-weighting (nearly flat, gentle roll-off) -->
+  <polyline points="100,148 150,138 200,120 290,80 390,72 440,72 530,73 580,78 620,85 670,100 695,120"
+    fill="none" stroke="#0a6040" stroke-width="2" stroke-dasharray="8,4"/>
+
+  <!-- B-weighting (moderate) -->
+  <polyline points="100,152 150,142 200,125 290,85 390,73 440,71 530,72 580,78 620,90 670,112 695,135"
+    fill="none" stroke="#c8960c" stroke-width="2" stroke-dasharray="4,3"/>
+
+  <!-- A-weighting (steeper low-freq rolloff) -->
+  <polyline points="100,158 140,155 170,150 200,140 240,128 290,110 340,95 390,82 420,74 440,72 470,70 530,71 580,82 620,96 650,112 680,130 695,148"
+    fill="none" stroke="#c04040" stroke-width="2.5"/>
+
+  <!-- Reference line at 0 dB -->
+  <line x1="80" y1="72" x2="700" y2="72" stroke="#888" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+  <!-- Legend -->
+  <line x1="520" y1="35" x2="548" y2="35" stroke="#c04040" stroke-width="2.5"/><text x="555" y="39" font-size="11" fill="#c04040">A-vážení  dB(A)</text>
+  <line x1="520" y1="50" x2="548" y2="50" stroke="#c8960c" stroke-width="2" stroke-dasharray="4,3"/><text x="555" y="54" font-size="11" fill="#c8960c">B-vážení  dB(B)</text>
+  <line x1="520" y1="65" x2="548" y2="65" stroke="#0a6040" stroke-width="2" stroke-dasharray="8,4"/><text x="555" y="69" font-size="11" fill="#0a6040">C-vážení  dB(C)</text>
+</svg>
+<p class="diagram-label">A-vážení silně potlačuje nízké a velmi vysoké frekvence — odpovídá citlivosti ucha při nízké hlasitosti. C-vážení je téměř ploché — používá se pro měření vysokých hladin (rázové zvuky, výbušniny).</p>
+</div>
+
+<table>
+  <tr><th>Filtr</th><th>Charakteristika</th><th>Typické použití</th></tr>
+  <tr><td><strong>A-vážení</strong> dB(A)</td><td>Silné potlačení nízkých frekvencí, max. citlivost v 3–4 kHz</td><td>Hluk na pracovišti, dopravní hluk, limity expozice</td></tr>
+  <tr><td><strong>B-vážení</strong> dB(B)</td><td>Střední rolloff při nízkých frekvencích</td><td>Dnes málo používáno (historicky střední hladiny)</td></tr>
+  <tr><td><strong>C-vážení</strong> dB(C)</td><td>Téměř plochá charakteristika, malý rolloff na krajích</td><td>Rázové zvuky, výbušniny, impulzní hluk, špičkové hladiny</td></tr>
+</table>
+
+<div class="danger"><strong>Past — dB(A) ≠ dB:</strong> Pokud přidáte filtr A, dostanete dB(A). Nemůžete přímo porovnávat hodnoty v dB a dB(A) bez znalosti frekvenčního složení signálu. Při nízkofrekvečním signálu může být rozdíl klidně 30–40 dB.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s10">10. FFT vs. oktávová analýza — kdy co použít</h2>
+
+<table>
+  <tr><th>Vlastnost</th><th>FFT spektrum</th><th>Oktávová analýza</th></tr>
+  <tr><td>Frekvenční osa</td><td>Lineární, \(\Delta f = f_s/N\)</td><td>Logaritmická, konstantní poměr mezí</td></tr>
+  <tr><td>Počet pásem</td><td>\(N/2\) frekvenčních čar</td><td>Typicky 10–31 pásem</td></tr>
+  <tr><td>Šířka pásma</td><td>Konstantní \(\Delta f\) [Hz]</td><td>Roste s frekvencí</td></tr>
+  <tr><td>Přesnost identifikace frekvence</td><td>Vysoká (závisí na \(\Delta f\))</td><td>Pouze v rámci pásma</td></tr>
+  <tr><td>Shoda s vnímáním ucha</td><td>Ne</td><td>Ano (logaritmická osa)</td></tr>
+  <tr><td>Normy a hygienické limity</td><td>Ne přímo</td><td>Ano (ČSN, ISO, IEC)</td></tr>
+  <tr><td>Typické použití</td><td>Přesná diagnostika, hledání konkrétní frekvence závady</td><td>Hodnocení hlučnosti, hygienický posudek, akustický design</td></tr>
+  <tr><td>Implementace</td><td>Přímý výstup FFT</td><td>Agregace FFT do pásem</td></tr>
+</table>
+
+<div class="ok"><strong>Jak si vybrat:</strong> Pokud potřebuješ přesně identifikovat frekvenci poruchy nebo harmonické zkreslení → FFT. Pokud hodnotíš vliv hluku na člověka, plníš normativní požadavky nebo porovnáváš s hygienickými limity → oktávová nebo třetinooktávová analýza s A-vážením.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s10b">Předzpracování diskrétního signálu před analýzou</h2>
+
+<div class="def">Před frekvenční analýzou se signál typicky předzpracuje — smíchají se kanály (stereo→mono), odstraní se stejnosměrná složka a případně se provede normalizace amplitudy. Toto předzpracování zaručí správné výsledky FFT.</div>
+
+<h3>1. Smíchávání kanálů (stereo → mono)</h3>
+<p>Pokud měříme vícekanálový signál (např. stereo zvuk), pro frekvenční analýzu ho zprůměrujeme do jednoho kanálu:</p>
+<div class="formula">\[ y[n] = \frac{1}{K} \sum_{k=1}^{K} x_k[n] \]</div>
+<p>kde \(K\) je celkový počet kanálů a \(x_k[n]\) je signál k-tého kanálu. Výsledný signál \(y[n]\) je aritmetický průměr všech kanálů — sečteme a vydělíme počtem.</p>
+
+<div class="grid2">
+  <div class="card">
+    <h4>Proč průměrovat, ne sčítat?</h4>
+    <p>Sčítání by zdvojnásobilo amplitudu. Průměrování zachová původní amplitudové měřítko a odstraní nesouhlasné složky přítomné jen v jednom kanálu.</p>
+  </div>
+  <div class="card">
+    <h4>Stejnosměrná složka při průměrování</h4>
+    <p>Pokud mají oba kanály stejnou SS složku, ta zůstane zachována. Pokud jsou různé, průměrování je zprůměruje — proto se SS složka odstraňuje až po smíchání.</p>
+  </div>
+</div>
+
+<h3>2. Odstranění stejnosměrné (SS) složky</h3>
+<p>Stejnosměrná složka je průměrná hodnota signálu. Ve spektru se projeví jako špička v \(k = 0\) (DC složka). Pro vibrační a akustickou analýzu ji odstraníme, protože nás zajímá pouze střídavá část signálu:</p>
+<div class="formula">\[ y[n] = x[n] - \frac{1}{N}\sum_{n=0}^{N-1} x[n] \]</div>
+<p>Zjednodušeně (diferenční metoda — odečtení předchozího vzorku):</p>
+<div class="formula">\[ y[n] = x[n] - x[n-1] \]</div>
+<p>Diferenční metoda je rychlá, ale mění frekvenční charakteristiku signálu — potlačuje nízké frekvence jako derivace. Pro přesné odstranění SS složky je lepší odečíst skutečnou střední hodnotu (první vzorec).</p>
+
+<h3>3. Normalizace amplitudy</h3>
+<p>Normalizace přeškáluje signál tak, aby jeho maximální absolutní hodnota byla rovna 1:</p>
+<div class="formula">\[ y[n] = \frac{w[n]}{\max|w[n]|} \qquad \Rightarrow \qquad \max|y[n]| = 1 \]</div>
+<p>Normalizace se hodí pro srovnání signálů různých amplitud nebo před kompresí a uložením signálu. Po normalizaci je amplituda spektra také normalizovaná — absolutní hodnoty amplitud ztrácejí fyzikální smysl, ale relativní poměry zůstávají.</div>
+
+<div class="note"><strong>Správné pořadí předzpracování:</strong>
+<ol style="margin-top:6px;">
+  <li>Smíchání kanálů (stereo → mono)</li>
+  <li>Odstranění SS složky (odečtení průměru)</li>
+  <li>Normalizace (volitelně — podle účelu)</li>
+  <li>Okenní funkce (viz otázka 8)</li>
+  <li>FFT → spektrum</li>
+</ol>
+</div>
+
+<ul>
+  <li>Frekvenční analýza převádí diskrétní signál z časové oblasti do frekvenční. Výsledkem je spektrum — popis frekvenčního složení signálu.</li>
+  <li>Hladina akustického tlaku: \(L_p = 20\log_{10}(p/p_0)\), kde \(p_0 = 20\,\mu\text{Pa}\) je referenční tlak (práh slyšitelnosti).</li>
+  <li>Frekvenční rozlišení FFT: \(\Delta f = f_s/N = 1/T\). Chceme-li lepší rozlišení, potřebujeme delší záznam.</li>
+  <li>Spektrogram = FFT na klouzavých oknech signálu → 2D obraz (čas × frekvence) pro nestacionární signály.</li>
+  <li>Oktáva: \(f_2 = 2 \cdot f_1\), střední frekvence \(f_m = \sqrt{f_1 f_2}\), mezní frekvence: \(f_1 = f_m/\sqrt{2}\), \(f_2 = f_m\sqrt{2}\).</li>
+  <li>Třetinooktáva: \(f_2/f_1 = 2^{1/3} \approx 1{,}26\) — jemnější dělení pro detailnější analýzu.</li>
+  <li>Standardní střední frekvence oktávových pásem: 31,5 — 63 — 125 — 250 — 500 — <strong>1000</strong> — 2000 — 4000 — 8000 — 16 000 Hz.</li>
+  <li>Hladina v pásmu = energetický součet FFT složek: \(L_{\text{band}} = 10\log_{10}(\sum 10^{L_k/10})\). Nelze aritmeticky sčítat dB.</li>
+  <li>A-vážení: simuluje frekvenční citlivost ucha, silně potlačuje nízké frekvence, max. citlivost 3–4 kHz. Výsledek v dB(A).</li>
+  <li>dB(A) ≠ dB — jsou to různé veličiny a nelze je bez kontextu porovnávat.</li>
+  <li>Oktávová analýza na logaritmické ose je přirozená pro akustiku — ucho vnímá frekvence logaritmicky. FFT je lepší pro přesnou diagnostiku konkrétní frekvence.</li>
+</ul>
+
+<h3>Mini tahák vzorců</h3>
+<table>
+  <tr><th>Vztah</th><th>Vzorec</th></tr>
+  <tr><td>Hladina akustického tlaku</td><td>\(L_p = 20\log_{10}(p/p_0)\), \(p_0 = 20\,\mu\text{Pa}\)</td></tr>
+  <tr><td>Sčítání hladin v dB</td><td>\(L = 10\log_{10}(\sum_i 10^{L_i/10})\)</td></tr>
+  <tr><td>Frekvenční rozlišení</td><td>\(\Delta f = f_s/N = 1/T\)</td></tr>
+  <tr><td>Frekvence k-té čáry</td><td>\(f_k = k \cdot f_s/N\)</td></tr>
+  <tr><td>Nyquistova frekvence</td><td>\(f_{Ny} = f_s/2\)</td></tr>
+  <tr><td>Definice oktávy</td><td>\(f_2 = 2 f_1\)</td></tr>
+  <tr><td>Střední frekvence oktávy</td><td>\(f_m = \sqrt{f_1 f_2}\)</td></tr>
+  <tr><td>Meze oktávy z \(f_m\)</td><td>\(f_1 = f_m/\sqrt{2}\), \(f_2 = f_m\sqrt{2}\)</td></tr>
+  <tr><td>Třetinooktáva</td><td>\(f_2/f_1 = 2^{1/3}\), meze: \(f_1 = f_m/2^{1/6}\), \(f_2 = f_m \cdot 2^{1/6}\)</td></tr>
+  <tr><td>Hladina v pásmu</td><td>\(L_{\text{band}} = 10\log_{10}(\sum_{k \in \text{pásmo}} 10^{L_k/10})\)</td></tr>
+  <tr><td>A-vážení</td><td>\(L_{pA}(f) = L_p(f) + K_A(f)\)</td></tr>
+</table>
+
+<h3>Největší pasti</h3>
+<table>
+  <tr><th>Špatně</th><th>Správně</th></tr>
+  <tr><td>dB hodnoty lze aritmeticky sčítat</td><td>dB se sčítají energeticky přes \(10^{L/10}\)</td></tr>
+  <tr><td>dB(A) = dB</td><td>dB(A) je po aplikaci A-váhového filtru — různé veličiny</td></tr>
+  <tr><td>Oktávová pásma mají konstantní šířku v Hz</td><td>Konstantní je poměr \(f_2/f_1 = 2\), šířka v Hz roste</td></tr>
+  <tr><td>Spektrogram = FFT</td><td>Spektrogram = sada FFT na klouzavých oknech → 2D</td></tr>
+  <tr><td>Lepší rozlišení FFT → více vzorků N při stejném T</td><td>Lepší rozlišení → delší záznam T (více vzorků N při stejném \(f_s\))</td></tr>
+  <tr><td>Třetinooktáva = třetina oktávy v Hz</td><td>Třetinooktáva = \(f_2/f_1 = 2^{1/3}\), logaritmická třetina</td></tr>
+</table>
+
+<hr class="sec">
+<div style="background:#1a4a8a;color:white;padding:18px 24px;border-radius:8px;margin-top:24px;">
+  <p style="color:white;font-size:13px;margin:0;text-align:center;">
+    <strong>Otázka 9 – Frekvenční a oktávová analýza diskrétního signálu</strong><br>
+    NMgr. Řídicí a informační systémy 2026 · Podklady: PMZS – Frekvenční analýza zvukového signálu
+  </p>
+</div>
+
+</div>
+<script>
+  const topbar = document.getElementById('topbar');
+  const navToggle = document.getElementById('navToggle');
+  const navItems = document.querySelectorAll('.nav-item');
+  const navLinks = document.querySelectorAll('#site-nav > a');
+
+  function setMenu(open) {
+    topbar.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+  }
+
+  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
+  navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
+
+  navItems.forEach((item) => {
+    const link = item.querySelector('a:first-child');
+    link.addEventListener('click', (e) => {
+      if (window.innerWidth <= 760 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
+        e.preventDefault();
+        item.classList.toggle('is-open');
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle')) {
+      navItems.forEach(item => item.classList.remove('is-open'));
+    }
+  });
+</script>
+</body>
+</html>

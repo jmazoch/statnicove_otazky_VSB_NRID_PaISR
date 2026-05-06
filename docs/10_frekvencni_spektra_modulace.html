@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Otázka 10 – Spektra nízkofrekvenčního a modulovaného VF signálu</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+a { color: inherit; }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(12px);
+  background: rgba(250, 250, 248, 0.9);
+  border-bottom: 1px solid rgba(26, 74, 138, 0.12);
+}
+.topbar-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  color: #1a4a8a;
+}
+.brand strong { font-size: 16px; }
+.brand span { font-size: 12px; color: #666; }
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(26, 74, 138, 0.18);
+  border-radius: 14px;
+  background: #fff;
+  color: #1a4a8a;
+  cursor: pointer;
+}
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+  position: relative;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.nav-toggle span::before,
+.nav-toggle span::after { content: ""; position: absolute; left: 0; }
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+.nav-links { display: flex; align-items: center; gap: 10px; }
+.nav-item { position: relative; display: flex; align-items: center; }
+.nav-links a, .nav-item > a {
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a4a8a;
+  padding: 10px 14px;
+  border-radius: 999px;
+  transition: background 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-links a:hover, .nav-item > a:hover { background: rgba(26, 74, 138, 0.08); color: #12345f; }
+.nav-dropdown { position: absolute; top: 100%; left: 0; background: rgba(255, 252, 246, 0.92); min-width: 220px; border-radius: 12px; border: 1px solid rgba(31, 36, 31, 0.12); box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: none; flex-direction: column; gap: 0; z-index: 999; }
+.nav-item:hover .nav-dropdown { display: flex; }
+.nav-item.is-open .nav-dropdown { display: flex; }
+.nav-dropdown a { padding: 10px 14px; border-radius: 0; background: transparent; margin: 0; font-size: 13px; border-bottom: 1px solid rgba(31, 36, 31, 0.12); }
+.nav-dropdown a:last-child { border-bottom: none; }
+.nav-dropdown a:hover { background: rgba(26, 74, 138, 0.08); }
+.nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s ease; }
+.nav-links a.nav-disabled { color: #999; opacity: 0.7; pointer-events: none; }
+@media (min-width: 761px) {
+  .nav-item > a .nav-chevron { display: none; }
+}
+@media (max-width: 760px) {
+  .topbar-inner { padding: 12px 14px; }
+  .nav-toggle { display: inline-flex; }
+  .nav-links { display: none; width: 100%; flex-direction: column; align-items: stretch; padding: 12px 0 4px; }
+  .topbar.is-open .nav-links { display: flex; }
+  .nav-links a, .nav-item > a { width: 100%; justify-content: space-between; }
+  .nav-item { width: 100%; flex-direction: column; align-items: stretch; }
+  .nav-item > a { border-radius: 14px; }
+  .nav-dropdown { position: static; border: none; box-shadow: none; background: rgba(26, 74, 138, 0.04); display: none; margin-top: 0; }
+  .nav-dropdown a { border-radius: 0; }
+  .nav-item.is-open .nav-dropdown { display: flex; }
+}
+.page { max-width: 940px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 30px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+.def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; font-style: italic; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+.note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.ok { background: #f1fff6; border-left: 4px solid #168a4a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.formula { background: #f8f0ff; border-left: 4px solid #6a1a8a; padding: 12px 20px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 15px; color: #3a1a5a; overflow-x: auto; }
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 5px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f8ff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: #f5f8ff; border: 1px solid #c8d8f0; border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: #1a4a8a; margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+.toc { background: #f0f4fa; border: 1px solid #c0cfea; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+.toc h3 { color: #1a4a8a; margin-bottom: 10px; font-size: 14px; }
+.toc ol { font-size: 13px; }
+.toc li { margin-bottom: 3px; }
+.toc a { color: #1a4a8a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
+.farr { font-size: 20px; color: #888; }
+.diagram-wrap { text-align: center; margin: 18px 0; }
+.diagram-wrap svg { max-width: 100%; height: auto; }
+.diagram-label { font-size: 12px; color: #555; margin-top: 6px; font-style: italic; text-align: center; }
+hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
+.small { font-size: 13px; color: #444; }
+.pill { display: inline-block; background: #edf4ff; border: 1px solid #c8d8f0; color: #1a4a8a; border-radius: 999px; padding: 2px 9px; font-size: 12px; font-weight: 700; margin-right: 4px; }
+.warn-inline { color: #8a1a1a; font-weight: 700; }
+@media print { body{background:#fff;} .page{box-shadow:none;padding:24px 36px;} a{color:#1a1a1a;text-decoration:none;} }
+@media (max-width: 760px) { .page{padding:24px 22px;} .grid2,.grid3{grid-template-columns:1fr;} }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '\\[', right: '\\]', display: true},
+      {left: '\\(', right: '\\)', display: false}
+    ]
+  });"></script>
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <strong>Státnicové otázky</strong>
+      <span>Řídicí a informační systémy</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="index.html">Main</a>
+      <a href="#s1">Obsah</a>
+
+      <div class="nav-item" id="nav-rs">
+        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="#" class="nav-disabled">3. Stavová regulace</a>
+          <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="#" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-pmzs">
+        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
+          <a href="#" class="nav-disabled">12. Systémy pro zpracování...</a>
+          <a href="#" class="nav-disabled">13. Převod analogové...</a>
+          <a href="#" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-ms">
+        <a href="index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="#" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="#" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="#" class="nav-disabled">18. Statické a dynamické...</a>
+          <a href="#" class="nav-disabled">19. Drátové a bezdrátové...</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-paisr">
+        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="#" class="nav-disabled">SWI</a>
+          <a href="#" class="nav-disabled">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="page">
+
+<h1>Otázka 10 – Frekvenční spektra NF a VF modulovaného signálu</h1>
+<p class="subtitle">Frekvenční spektra nízkofrekvenčního signálu a vysokofrekvenčního modulovaného signálu · Magnitudové a fázové spektrum · Šířka frekvenčního pásma · Nyquistovy teorémy vzorkování signálu<br>
+NMgr. Řídicí a informační systémy 2026 · stručně, ale státnicově použitelně</p>
+
+<div class="toc">
+  <h3>Obsah otázky</h3>
+  <ol>
+    <li><a href="#s1">Co je potřeba u otázky říct</a></li>
+    <li><a href="#s2">Nízkofrekvenční signál a jeho spektrum</a></li>
+    <li><a href="#s3">Magnitudové a fázové frekvenční spektrum</a></li>
+    <li><a href="#s4">Vysokofrekvenční modulovaný signál</a></li>
+    <li><a href="#s5">Přesun spektra při modulaci</a></li>
+    <li><a href="#s6">Šířka frekvenčního pásma</a></li>
+    <li><a href="#s7">Nyquistův teorém pro základní pásmo</a></li>
+    <li><a href="#s8">Nyquistovy teorémy pro pásmový signál</a></li>
+    <li><a href="#s9">Příklad s čísly</a></li>
+    <li><a href="#s10">Shrnutí ke státnicím</a></li>
+  </ol>
+</div>
+
+<h2 id="s1">1. Co je potřeba u otázky říct</h2>
+
+<div class="def">
+Otázka řeší rozdíl mezi signálem v základním frekvenčním pásmu a vysokofrekvenčním modulovaným signálem. Hlavní pointa: modulace přesune spektrum informačního signálu z okolí nulové frekvence do okolí nosné frekvence, ale šířka obsazeného pásma závisí hlavně na modulačním signálu a typu modulace.
+</div>
+
+<div class="flow">
+  <div class="fbox">informační signál \(m(t)\)</div>
+  <div class="farr">→</div>
+  <div class="fbox">spektrum kolem 0 Hz</div>
+  <div class="farr">→</div>
+  <div class="fbox">modulace nosnou \(f_c\)</div>
+  <div class="farr">→</div>
+  <div class="fbox">pásmový signál \(v(t)\)</div>
+  <div class="farr">→</div>
+  <div class="fbox">spektrum kolem \(\pm f_c\)</div>
+</div>
+
+<p>U odpovědi je vhodné postupovat od jednoduchého signálu k modulovanému signálu. Nejdříve vysvětlit spektrum nízkofrekvenčního signálu, potom magnitudu a fázi, následně ukázat, co s tím udělá modulace, a nakonec přidat šířku pásma a vzorkování.</p>
+
+<div class="note"><strong>Pozor na slovník:</strong> vysoká nosná frekvence neznamená automaticky velkou šířku pásma. Nosná frekvence říká, kde signál na frekvenční ose leží. Šířka pásma říká, kolik místa na frekvenční ose zabírá.</div>
+
+<hr class="sec">
+
+<h2 id="s2">2. Nízkofrekvenční signál a jeho spektrum</h2>
+
+<div class="def">
+Nízkofrekvenční signál, často označovaný jako informační nebo modulační signál \(m(t)\), má frekvenční spektrum soustředěné kolem nulové frekvence. Proto se mu říká signál v základním frekvenčním pásmu.
+</div>
+
+<p>Typické příklady nízkofrekvenčních signálů jsou řeč, hudba, měřený fyzikální signál, regulační signál nebo datový signál před modulací. Jejich spektrum začíná obvykle od nízkých frekvencí a končí na nejvyšší významné frekvenci \(B\).</p>
+
+<div class="formula">
+\[
+M(f) = \mathcal{F}\{m(t)\}
+\]
+</div>
+
+<p>Pokud má signál významné frekvenční složky pouze v intervalu od \(0\) do \(B\), říkáme, že má šířku pásma \(B\). U reálného signálu se při oboustranném zobrazení spektrum objeví symetricky kolem nuly, tedy v intervalu \(-B\) až \(+B\).</p>
+
+<div class="diagram-wrap">
+<svg width="760" height="260" viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spektrum nízkofrekvenčního signálu kolem nuly">
+  <rect x="0" y="0" width="760" height="260" fill="#ffffff"/>
+  <line x1="70" y1="190" x2="700" y2="190" stroke="#333" stroke-width="1.5"/>
+  <line x1="380" y1="205" x2="380" y2="40" stroke="#333" stroke-width="1.5"/>
+  <text x="704" y="195" font-size="12" fill="#333">f</text>
+  <text x="388" y="50" font-size="12" fill="#333">|M(f)|</text>
+  <line x1="220" y1="190" x2="220" y2="198" stroke="#333"/>
+  <line x1="540" y1="190" x2="540" y2="198" stroke="#333"/>
+  <text x="220" y="218" text-anchor="middle" font-size="12" fill="#333">−B</text>
+  <text x="380" y="218" text-anchor="middle" font-size="12" fill="#333">0</text>
+  <text x="540" y="218" text-anchor="middle" font-size="12" fill="#333">+B</text>
+  <path d="M 220 190 C 250 150, 285 95, 330 82 C 350 76, 370 74, 380 74 C 390 74, 410 76, 430 82 C 475 95, 510 150, 540 190" fill="#dbe9ff" stroke="#1a4a8a" stroke-width="2"/>
+  <line x1="220" y1="190" x2="540" y2="190" stroke="#1a4a8a" stroke-width="4" opacity="0.35"/>
+  <text x="380" y="32" text-anchor="middle" font-size="14" font-weight="700" fill="#1a4a8a">nízkofrekvenční signál v základním pásmu</text>
+  <text x="380" y="242" text-anchor="middle" font-size="12" fill="#555">Spektrum je soustředěno kolem nulové frekvence.</text>
+</svg>
+<p class="diagram-label">Oboustranné magnitudové spektrum nízkofrekvenčního signálu. U reálného signálu se složky objevují symetricky pro kladné i záporné frekvence.</p>
+</div>
+
+<h3>Jednoduchý harmonický příklad</h3>
+<p>Pro harmonický signál</p>
+<div class="formula">
+\[
+m(t)=A_m\cos(2\pi f_m t + \varphi_m)
+\]
+</div>
+<p>má spektrum dvě čáry na frekvencích \(+f_m\) a \(-f_m\). Fáze těchto složek souvisí s posunem \(\varphi_m\).</p>
+
+<hr class="sec">
+
+<h2 id="s3">3. Magnitudové a fázové frekvenční spektrum</h2>
+
+<p>Fourierovo spektrum je obecně komplexní. Proto ho lze zapsat pomocí velikosti a fáze:</p>
+
+<div class="formula">
+\[
+M(f)=|M(f)|e^{j\varphi(f)}
+\]
+</div>
+
+<div class="grid2">
+  <div class="card">
+    <h4>Magnitudové spektrum \(|M(f)|\)</h4>
+    <p>Udává velikost jednotlivých frekvenčních složek. Prakticky odpovídá otázce: „Kolik dané frekvence v signálu je?“</p>
+  </div>
+  <div class="card">
+    <h4>Fázové spektrum \(\varphi(f)\)</h4>
+    <p>Udává fázový posun jednotlivých frekvenčních složek. Prakticky odpovídá otázce: „Jak jsou jednotlivé složky vůči sobě časově posunuté?“</p>
+  </div>
+</div>
+
+<div class="formula">
+\[
+|M(f)| = \sqrt{\operatorname{Re}\{M(f)\}^2 + \operatorname{Im}\{M(f)\}^2}
+\]
+\[
+\varphi(f)=\operatorname{atan2}\left(\operatorname{Im}\{M(f)\},\operatorname{Re}\{M(f)\}\right)
+\]
+</div>
+
+<div class="note"><strong>Ke zkoušce:</strong> Ve skriptech se často uvádí \(\arctan(\operatorname{Im}/\operatorname{Re})\). Prakticky je přesnější říct <code>atan2</code>, protože správně určí kvadrant fáze.</div>
+
+<div class="diagram-wrap">
+<svg width="760" height="290" viewBox="0 0 760 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Magnitudové a fázové spektrum harmonických složek">
+  <rect width="760" height="290" fill="#fff"/>
+  <text x="380" y="26" text-anchor="middle" font-size="14" font-weight="700" fill="#1a4a8a">magnitudové a fázové spektrum</text>
+
+  <line x1="70" y1="125" x2="700" y2="125" stroke="#333" stroke-width="1.3"/>
+  <line x1="380" y1="135" x2="380" y2="55" stroke="#333" stroke-width="1.3"/>
+  <text x="705" y="129" font-size="12">f</text>
+  <text x="388" y="63" font-size="12">|M(f)|</text>
+  <line x1="260" y1="125" x2="260" y2="78" stroke="#1a4a8a" stroke-width="4"/>
+  <circle cx="260" cy="78" r="5" fill="#1a4a8a"/>
+  <line x1="500" y1="125" x2="500" y2="78" stroke="#1a4a8a" stroke-width="4"/>
+  <circle cx="500" cy="78" r="5" fill="#1a4a8a"/>
+  <text x="260" y="148" text-anchor="middle" font-size="12">−f_m</text>
+  <text x="380" y="148" text-anchor="middle" font-size="12">0</text>
+  <text x="500" y="148" text-anchor="middle" font-size="12">+f_m</text>
+
+  <line x1="70" y1="235" x2="700" y2="235" stroke="#333" stroke-width="1.3"/>
+  <line x1="380" y1="260" x2="380" y2="175" stroke="#333" stroke-width="1.3"/>
+  <text x="705" y="239" font-size="12">f</text>
+  <text x="388" y="184" font-size="12">φ(f)</text>
+  <line x1="260" y1="235" x2="260" y2="254" stroke="#6a1a8a" stroke-width="4"/>
+  <circle cx="260" cy="254" r="5" fill="#6a1a8a"/>
+  <line x1="500" y1="235" x2="500" y2="205" stroke="#6a1a8a" stroke-width="4"/>
+  <circle cx="500" cy="205" r="5" fill="#6a1a8a"/>
+  <text x="260" y="276" text-anchor="middle" font-size="12">−f_m</text>
+  <text x="500" y="276" text-anchor="middle" font-size="12">+f_m</text>
+  <text x="552" y="207" font-size="11" fill="#6a1a8a">fáze +φ</text>
+  <text x="170" y="255" font-size="11" fill="#6a1a8a">fáze −φ</text>
+</svg>
+<p class="diagram-label">U reálného harmonického signálu je magnitudové spektrum symetrické. Fázové spektrum má opačné znaménko pro složky \(+f_m\) a \(-f_m\).</p>
+</div>
+
+<div class="danger"><strong>Nezapomeň:</strong> samotné magnitudové spektrum nestačí pro úplnou rekonstrukci signálu. Fáze nese informaci o vzájemném časovém posunu složek.</div>
+
+<hr class="sec">
+
+<h2 id="s4">4. Vysokofrekvenční modulovaný signál</h2>
+
+<div class="def">
+Vysokofrekvenční modulovaný signál je pásmový signál, jehož spektrum neleží kolem nulové frekvence, ale v omezeném intervalu kolem nosné frekvence \(f_c\). Informační signál se modulací „přenese“ na nosnou.
+</div>
+
+<p>Obecný modulovaný pásmový signál označíme \(v(t)\). V komunikačním systému se nejdříve vytvoří informační signál \(m(t)\), který je v základním pásmu. Modulací se tento signál převede do pásma vhodného pro přenos. Typicky jde o rádiový přenos, kde se informace nepřenáší přímo na nízké frekvenci, ale v okolí zvolené nosné frekvence.</p>
+
+<div class="grid3">
+  <div class="card">
+    <h4>\(m(t)\)</h4>
+    <p>informační nebo modulační signál v základním pásmu</p>
+  </div>
+  <div class="card">
+    <h4>\(c(t)\)</h4>
+    <p>nosná vlna, typicky \(A_c\cos(2\pi f_c t)\)</p>
+  </div>
+  <div class="card">
+    <h4>\(v(t)\)</h4>
+    <p>výsledný vysokofrekvenční modulovaný signál</p>
+  </div>
+</div>
+
+<div class="formula">
+\[
+c(t)=A_c\cos(2\pi f_c t)
+\]
+</div>
+
+<p>Nosná frekvence \(f_c\) určuje, kam se spektrum posune. Typ modulace určuje, jak přesně bude informace v nosné zakódovaná.</p>
+
+<table>
+  <tr><th>Typ signálu</th><th>Poloha spektra</th><th>Typický význam</th></tr>
+  <tr><td>Nízkofrekvenční signál \(m(t)\)</td><td>okolí \(0\) Hz</td><td>původní informace, základní pásmo</td></tr>
+  <tr><td>Pásmový VF signál \(v(t)\)</td><td>okolí \(\pm f_c\)</td><td>signál vhodný pro přenos komunikačním kanálem</td></tr>
+</table>
+
+<hr class="sec">
+
+<h2 id="s5">5. Přesun spektra při modulaci</h2>
+
+<p>Nejjednodušší ukázka je amplitudová modulace s potlačenou nosnou, tedy DSB-SC. Vznikne násobením informačního signálu nosnou:</p>
+
+<div class="formula">
+\[
+v(t)=A_c m(t)\cos(2\pi f_c t)
+\]
+</div>
+
+<p>Ve frekvenční oblasti platí, že násobení kosinem v čase způsobí posun spektra:</p>
+
+<div class="formula">
+\[
+V(f)=\frac{A_c}{2}\left[M(f-f_c)+M(f+f_c)\right]
+\]
+</div>
+
+<p>Tedy původní spektrum \(M(f)\) se zkopíruje do okolí \(+f_c\) a zároveň do okolí \(-f_c\). U reálných signálů je oboustranné spektrum přirozené, proto vidíme kladnou i zápornou část.</p>
+
+<div class="diagram-wrap">
+<svg width="760" height="360" viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Přesun spektra modulací">
+  <rect width="760" height="360" fill="#fff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1a4a8a">modulace jako přesun spektra</text>
+
+  <!-- baseband axis -->
+  <text x="90" y="62" font-size="13" font-weight="700" fill="#333">1) základní pásmo \(M(f)\)</text>
+  <line x1="85" y1="150" x2="700" y2="150" stroke="#333" stroke-width="1.2"/>
+  <line x1="390" y1="160" x2="390" y2="82" stroke="#333" stroke-width="1.2"/>
+  <path d="M 295 150 C 320 118, 350 92, 390 90 C 430 92, 460 118, 485 150" fill="#dbe9ff" stroke="#1a4a8a" stroke-width="2"/>
+  <line x1="295" y1="150" x2="485" y2="150" stroke="#1a4a8a" stroke-width="4" opacity="0.30"/>
+  <text x="295" y="172" text-anchor="middle" font-size="12">−B</text>
+  <text x="390" y="172" text-anchor="middle" font-size="12">0</text>
+  <text x="485" y="172" text-anchor="middle" font-size="12">+B</text>
+
+  <!-- arrow -->
+  <line x1="390" y1="190" x2="390" y2="220" stroke="#888" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="405" y="210" font-size="12" fill="#555">násobení nosnou \(\cos(2\pi f_c t)\)</text>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L6,3 z" fill="#888"/>
+    </marker>
+  </defs>
+
+  <!-- bandpass axis -->
+  <text x="90" y="238" font-size="13" font-weight="700" fill="#333">2) pásmový signál \(V(f)\)</text>
+  <line x1="85" y1="315" x2="700" y2="315" stroke="#333" stroke-width="1.2"/>
+  <line x1="390" y1="325" x2="390" y2="250" stroke="#333" stroke-width="1.2"/>
+
+  <path d="M 125 315 C 150 282, 180 260, 220 258 C 260 260, 290 282, 315 315" fill="#f3e4ff" stroke="#6a1a8a" stroke-width="2"/>
+  <line x1="125" y1="315" x2="315" y2="315" stroke="#6a1a8a" stroke-width="4" opacity="0.25"/>
+
+  <path d="M 465 315 C 490 282, 520 260, 560 258 C 600 260, 630 282, 655 315" fill="#f3e4ff" stroke="#6a1a8a" stroke-width="2"/>
+  <line x1="465" y1="315" x2="655" y2="315" stroke="#6a1a8a" stroke-width="4" opacity="0.25"/>
+
+  <line x1="220" y1="315" x2="220" y2="324" stroke="#333"/>
+  <line x1="560" y1="315" x2="560" y2="324" stroke="#333"/>
+  <text x="220" y="345" text-anchor="middle" font-size="12">−f_c</text>
+  <text x="390" y="345" text-anchor="middle" font-size="12">0</text>
+  <text x="560" y="345" text-anchor="middle" font-size="12">+f_c</text>
+  <text x="602" y="257" font-size="11" fill="#6a1a8a">kopie spektra</text>
+  <text x="130" y="257" font-size="11" fill="#6a1a8a">zrcadlová kopie</text>
+</svg>
+<p class="diagram-label">Násobení nosnou přesune spektrum signálu z okolí nuly do okolí nosné frekvence \(\pm f_c\).</p>
+</div>
+
+<h3>Klasická AM modulace</h3>
+<p>U klasické AM modulace se k modulačnímu signálu přidá stejnosměrná složka tak, aby vznikla obálka:</p>
+
+<div class="formula">
+\[
+v(t)=A_c\left[1+k_a m(t)\right]\cos(2\pi f_c t)
+\]
+</div>
+
+<p>Ve spektru potom vidíme nosnou složku na \(f_c\) a dvě postranní pásma. Pokud modulační signál obsahuje jednu harmonickou složku \(f_m\), objeví se složky:</p>
+
+<div class="formula">
+\[
+f_c-f_m, \qquad f_c, \qquad f_c+f_m
+\]
+</div>
+
+<div class="diagram-wrap">
+<svg width="760" height="250" viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AM spektrum pro jeden tón">
+  <rect width="760" height="250" fill="#fff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1a4a8a">AM spektrum pro jeden tón \(f_m\)</text>
+  <line x1="70" y1="185" x2="700" y2="185" stroke="#333" stroke-width="1.4"/>
+  <line x1="380" y1="195" x2="380" y2="65" stroke="#333" stroke-width="1.2"/>
+  <text x="705" y="189" font-size="12">f</text>
+  <text x="388" y="74" font-size="12">|V(f)|</text>
+  <line x1="300" y1="185" x2="300" y2="125" stroke="#1a4a8a" stroke-width="4"/>
+  <line x1="380" y1="185" x2="380" y2="75" stroke="#8a1a1a" stroke-width="5"/>
+  <line x1="460" y1="185" x2="460" y2="125" stroke="#1a4a8a" stroke-width="4"/>
+  <circle cx="300" cy="125" r="5" fill="#1a4a8a"/>
+  <circle cx="380" cy="75" r="5" fill="#8a1a1a"/>
+  <circle cx="460" cy="125" r="5" fill="#1a4a8a"/>
+  <text x="300" y="210" text-anchor="middle" font-size="12">\(f_c-f_m\)</text>
+  <text x="380" y="210" text-anchor="middle" font-size="12">\(f_c\)</text>
+  <text x="460" y="210" text-anchor="middle" font-size="12">\(f_c+f_m\)</text>
+  <text x="384" y="58" font-size="11" fill="#8a1a1a">nosná</text>
+  <text x="215" y="126" font-size="11" fill="#1a4a8a">dolní postranní složka</text>
+  <text x="470" y="126" font-size="11" fill="#1a4a8a">horní postranní složka</text>
+</svg>
+<p class="diagram-label">U klasické AM s jedním sinusovým modulačním signálem vzniká nosná a dvě postranní složky.</p>
+</div>
+
+<table>
+  <tr><th>Modulace</th><th>Co je ve spektru</th><th>Co si pamatovat</th></tr>
+  <tr><td>AM</td><td>nosná + horní a dolní postranní pásmo</td><td>jednoduchá demodulace obálkou, ale část výkonu je v nosné</td></tr>
+  <tr><td>DSB-SC</td><td>horní a dolní postranní pásmo, nosná potlačena</td><td>úspornější výkonově, ale vyžaduje synchronní demodulaci</td></tr>
+  <tr><td>SSB</td><td>jen jedno postranní pásmo</td><td>šetří šířku pásma</td></tr>
+  <tr><td>FM/PM</td><td>více postranních složek</td><td>šířka pásma se řeší přibližně, často Carsonovým pravidlem</td></tr>
+</table>
+
+<div class="note"><strong>Rozsah otázky:</strong> AM, DSB, SSB, FM a PM se detailně řeší v další otázce. Tady stačí ukázat princip spektra a šířky pásma. Nevyrábět si z toho modulační román na tři svazky.</div>
+
+<hr class="sec">
+
+<h2 id="s6">6. Šířka frekvenčního pásma</h2>
+
+<div class="def">
+Šířka frekvenčního pásma je interval frekvencí, ve kterém má signál významné spektrální složky. Pro pásmový signál je to rozdíl horní a dolní mezní frekvence.
+</div>
+
+<div class="formula">
+\[
+B_T=f_2-f_1
+\]
+</div>
+
+<p>Kde \(f_1\) je dolní mezní frekvence a \(f_2\) je horní mezní frekvence pásmového signálu. U signálu v základním pásmu se často používá označení \(B\), kde \(B\) odpovídá nejvyšší významné frekvenci modulačního signálu.</p>
+
+<div class="diagram-wrap">
+<svg width="760" height="250" viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Šířka frekvenčního pásma pásmového signálu">
+  <rect width="760" height="250" fill="#fff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1a4a8a">šířka frekvenčního pásma pásmového signálu</text>
+  <line x1="80" y1="180" x2="700" y2="180" stroke="#333" stroke-width="1.4"/>
+  <line x1="120" y1="190" x2="120" y2="80" stroke="#333" stroke-width="1.2"/>
+  <text x="705" y="184" font-size="12">f</text>
+  <text x="128" y="90" font-size="12">|V(f)|</text>
+  <path d="M 310 180 C 330 140, 360 92, 410 88 C 455 92, 492 140, 520 180" fill="#dbe9ff" stroke="#1a4a8a" stroke-width="2"/>
+  <line x1="310" y1="180" x2="520" y2="180" stroke="#1a4a8a" stroke-width="5" opacity="0.30"/>
+  <line x1="310" y1="180" x2="310" y2="194" stroke="#333"/>
+  <line x1="520" y1="180" x2="520" y2="194" stroke="#333"/>
+  <line x1="415" y1="180" x2="415" y2="194" stroke="#333"/>
+  <text x="310" y="215" text-anchor="middle" font-size="12">\(f_1\)</text>
+  <text x="415" y="215" text-anchor="middle" font-size="12">\(f_c\)</text>
+  <text x="520" y="215" text-anchor="middle" font-size="12">\(f_2\)</text>
+  <line x1="310" y1="142" x2="520" y2="142" stroke="#8a1a1a" stroke-width="2" marker-start="url(#arrStart)" marker-end="url(#arrEnd)"/>
+  <defs>
+    <marker id="arrEnd" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L6,3 z" fill="#8a1a1a"/></marker>
+    <marker id="arrStart" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M6,0 L6,6 L0,3 z" fill="#8a1a1a"/></marker>
+  </defs>
+  <text x="415" y="133" text-anchor="middle" font-size="12" font-weight="700" fill="#8a1a1a">\(B_T=f_2-f_1\)</text>
+</svg>
+<p class="diagram-label">Šířka pásma není poloha signálu na frekvenční ose. Je to rozdíl horní a dolní mezní frekvence.</p>
+</div>
+
+<h3>Šířka pásma podle typu modulace</h3>
+<table>
+  <tr><th>Signál/modulace</th><th>Poloha spektra</th><th>Šířka pásma</th></tr>
+  <tr><td>NF signál \(m(t)\)</td><td>kolem \(0\) Hz</td><td>\(B\)</td></tr>
+  <tr><td>AM</td><td>okolí \(f_c\), nosná + dvě postranní pásma</td><td>\(2B\)</td></tr>
+  <tr><td>DSB-SC</td><td>okolí \(f_c\), dvě postranní pásma bez nosné</td><td>\(2B\)</td></tr>
+  <tr><td>SSB</td><td>okolí \(f_c\), pouze jedno postranní pásmo</td><td>\(B\)</td></tr>
+  <tr><td>FM/PM</td><td>okolí \(f_c\), více postranních složek</td><td>přibližně podle Carsonova pravidla</td></tr>
+</table>
+
+<div class="formula">
+\[
+B_{AM}=2B, \qquad B_{DSB}=2B, \qquad B_{SSB}=B
+\]
+</div>
+
+<div class="danger"><strong>Typická past:</strong> signál na nosné \(f_c=100\,\text{MHz}\) může zabírat třeba jen \(200\,\text{kHz}\). Poloha spektra a šířka pásma jsou dvě různé věci.</div>
+
+<hr class="sec">
+
+<h2 id="s7">7. Nyquistův teorém pro základní pásmo</h2>
+
+<div class="def">
+Pro signál v základním pásmu platí Shannon-Kotelnikovův vzorkovací teorém: vzorkovací frekvence musí být větší než dvojnásobek nejvyšší frekvence obsažené ve spektru signálu.
+</div>
+
+<div class="formula">
+\[
+f_s > 2 f_{max}
+\]
+</div>
+
+<p>Pokud je signál omezený do pásma \(0\) až \(B\), potom:</p>
+
+<div class="formula">
+\[
+f_s > 2B
+\]
+</div>
+
+<p>Frekvence \(f_s/2\) se nazývá Nyquistova frekvence. Je to nejvyšší frekvence, kterou lze při dané vzorkovací frekvenci jednoznačně reprezentovat bez aliasingu.</p>
+
+<div class="grid2">
+  <div class="card">
+    <h4>Správné vzorkování</h4>
+    <p>Spektrální kopie vzniklé vzorkováním se nepřekrývají. Signál lze teoreticky rekonstruovat.</p>
+  </div>
+  <div class="card">
+    <h4>Aliasing</h4>
+    <p>Spektrální kopie se překryjí. Vyšší frekvence se tváří jako nižší frekvence a informace je ztracená.</p>
+  </div>
+</div>
+
+<div class="diagram-wrap">
+<svg width="760" height="300" viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vzorkování a aliasing">
+  <rect width="760" height="300" fill="#fff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1a4a8a">vzorkování signálu v základním pásmu</text>
+
+  <text x="90" y="58" font-size="13" font-weight="700" fill="#168a4a">bez aliasingu: \(f_s > 2B\)</text>
+  <line x1="80" y1="125" x2="700" y2="125" stroke="#333" stroke-width="1.2"/>
+  <path d="M 175 125 C 190 100, 215 80, 245 80 C 275 80, 300 100, 315 125" fill="#e6fff0" stroke="#168a4a" stroke-width="2"/>
+  <path d="M 350 125 C 365 100, 390 80, 420 80 C 450 80, 475 100, 490 125" fill="#e6fff0" stroke="#168a4a" stroke-width="2"/>
+  <path d="M 525 125 C 540 100, 565 80, 595 80 C 625 80, 650 100, 665 125" fill="#e6fff0" stroke="#168a4a" stroke-width="2"/>
+  <text x="245" y="148" text-anchor="middle" font-size="11">kopie</text>
+  <text x="420" y="148" text-anchor="middle" font-size="11">originál</text>
+  <text x="595" y="148" text-anchor="middle" font-size="11">kopie</text>
+
+  <text x="90" y="178" font-size="13" font-weight="700" fill="#8a1a1a">aliasing: \(f_s\) je příliš malé</text>
+  <line x1="80" y1="245" x2="700" y2="245" stroke="#333" stroke-width="1.2"/>
+  <path d="M 235 245 C 255 210, 290 190, 330 190 C 370 190, 405 210, 425 245" fill="#fff0f0" stroke="#8a1a1a" stroke-width="2"/>
+  <path d="M 335 245 C 355 210, 390 190, 430 190 C 470 190, 505 210, 525 245" fill="#fff0f0" stroke="#8a1a1a" stroke-width="2" opacity="0.75"/>
+  <text x="380" y="270" text-anchor="middle" font-size="12" fill="#8a1a1a">kopie spektra se překrývají, vzniká aliasing</text>
+</svg>
+<p class="diagram-label">Vzorkování způsobí periodické opakování spektra. Pokud je vzorkovací frekvence malá, kopie se překryjí.</p>
+</div>
+
+<p>Před A/D převodníkem se proto často používá <strong>antialiasing filtr</strong>, který odstraní frekvence nad použitelným pásmem.</p>
+
+<hr class="sec">
+
+<h2 id="s8">8. Nyquistovy teorémy pro pásmový signál</h2>
+
+<p>U vysokofrekvenčního pásmového signálu může být problém v tom, že nejvyšší frekvence \(f_{max}\) je velmi vysoká. Pokud bychom slepě použili základní vzorkovací teorém \(f_s > 2f_{max}\), potřebovali bychom extrémně vysokou vzorkovací frekvenci.</p>
+
+<div class="note"><strong>Myšlenka pásmového vzorkování:</strong> často není důležité vzorkovat každou periodu vysoké nosné. Důležité je zachovat informaci v obsazeném pásmu. Proto se u pásmového signálu řeší šířka pásma \(B_T\), ne pouze absolutní hodnota nosné frekvence.</div>
+
+<h3>První Nyquistův teorém pro pásmový signál</h3>
+<p>Pro reálný pásmový signál s nenulovým spektrem v intervalu \(f_1\) až \(f_2\) je šířka pásma:</p>
+
+<div class="formula">
+\[
+B_T=f_2-f_1
+\]
+</div>
+
+<p>Zjednodušeně se pro pásmové vzorkování uvádí podmínka:</p>
+
+<div class="formula">
+\[
+f_s > 2B_T
+\]
+</div>
+
+<p>Tato formulace říká, že pro obnovu pásmového signálu může být rozhodující šířka obsazeného pásma. V praxi ale musí být vzorkovací frekvence zvolena tak, aby se jednotlivé posunuté spektrální kopie po vzorkování nepřekrývaly.</p>
+
+<div class="danger"><strong>Důležité upřesnění:</strong> Nestačí bezmyšlenkovitě říct „vždy stačí \(2B_T\)“. Musí být splněno pásmové omezení signálu a správná poloha spektrálních kopií po vzorkování. Jinak aliasing přijde jak nezvaný host a sní chlebíčky.</div>
+
+<h3>Druhý Nyquistův teorém pro pásmový signál</h3>
+<p>Druhý teorém se vyjadřuje přes počet vzorků potřebný k popisu pásmového signálu v časovém intervalu \(T_0\):</p>
+
+<div class="formula">
+\[
+N=2B_TT_0
+\]
+</div>
+
+<ul>
+  <li>\(N\) je počet nezávislých vzorků,</li>
+  <li>\(B_T\) je šířka frekvenčního pásma,</li>
+  <li>\(T_0\) je délka časového intervalu měření.</li>
+</ul>
+
+<p>Význam je jednoduchý: čím širší pásmo sledujeme a čím delší časový interval chceme popsat, tím více vzorků potřebujeme.</p>
+
+<div class="diagram-wrap">
+<svg width="760" height="270" viewBox="0 0 760 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pásmové vzorkování">
+  <rect width="760" height="270" fill="#fff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1a4a8a">proč u pásmového signálu řešíme \(B_T\), ne jen \(f_c\)</text>
+  <line x1="70" y1="190" x2="700" y2="190" stroke="#333" stroke-width="1.4"/>
+  <text x="705" y="194" font-size="12">f</text>
+  <path d="M 430 190 C 450 145, 480 105, 525 105 C 570 105, 600 145, 620 190" fill="#dbe9ff" stroke="#1a4a8a" stroke-width="2"/>
+  <line x1="430" y1="190" x2="620" y2="190" stroke="#1a4a8a" stroke-width="5" opacity="0.28"/>
+  <line x1="525" y1="200" x2="525" y2="80" stroke="#8a1a1a" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <line x1="430" y1="190" x2="430" y2="205" stroke="#333"/>
+  <line x1="620" y1="190" x2="620" y2="205" stroke="#333"/>
+  <text x="430" y="226" text-anchor="middle" font-size="12">\(f_1\)</text>
+  <text x="525" y="226" text-anchor="middle" font-size="12">\(f_c\)</text>
+  <text x="620" y="226" text-anchor="middle" font-size="12">\(f_2\)</text>
+  <line x1="430" y1="140" x2="620" y2="140" stroke="#8a1a1a" stroke-width="2" marker-start="url(#arrStart2)" marker-end="url(#arrEnd2)"/>
+  <defs>
+    <marker id="arrEnd2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L6,3 z" fill="#8a1a1a"/></marker>
+    <marker id="arrStart2" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M6,0 L6,6 L0,3 z" fill="#8a1a1a"/></marker>
+  </defs>
+  <text x="525" y="132" text-anchor="middle" font-size="12" font-weight="700" fill="#8a1a1a">obsazené pásmo \(B_T\)</text>
+  <text x="230" y="102" text-anchor="middle" font-size="13" fill="#555">Nosná může být velmi vysoko.</text>
+  <text x="230" y="124" text-anchor="middle" font-size="13" fill="#555">Signál ale zabírá jen omezené pásmo.</text>
+  <path d="M 315 122 C 350 125, 380 140, 420 158" fill="none" stroke="#888" stroke-width="1.5" marker-end="url(#simpleArr)"/>
+  <marker id="simpleArr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L6,3 z" fill="#888"/></marker>
+</svg>
+<p class="diagram-label">U pásmového signálu je důležitá šířka obsazeného pásma \(B_T\). Vysoká nosná \(f_c\) sama o sobě neurčuje informační šířku pásma.</p>
+</div>
+
+<hr class="sec">
+
+<h2 id="s9">9. Příklad s čísly</h2>
+
+<p>Mějme modulační signál v základním pásmu s nejvyšší významnou frekvencí:</p>
+
+<div class="formula">
+\[
+B=5\,\text{kHz}
+\]
+</div>
+
+<p>Nosná frekvence je:</p>
+
+<div class="formula">
+\[
+f_c=1\,\text{MHz}
+\]
+</div>
+
+<h3>Vzorkování nízkofrekvenčního signálu</h3>
+<div class="formula">
+\[
+f_s > 2B = 10\,\text{kHz}
+\]
+</div>
+
+<h3>AM nebo DSB signál</h3>
+<p>AM nebo DSB má dvě postranní pásma, proto:</p>
+<div class="formula">
+\[
+B_T=2B=10\,\text{kHz}
+\]
+</div>
+
+<p>Spektrum leží přibližně od:</p>
+<div class="formula">
+\[
+f_c-B = 995\,\text{kHz}
+\quad \text{do} \quad
+f_c+B = 1005\,\text{kHz}
+\]
+</div>
+
+<p>Kdybychom použili klasické pravidlo podle nejvyšší frekvence, vyšlo by:</p>
+<div class="formula">
+\[
+f_s > 2f_{max}=2\cdot1005\,\text{kHz}=2010\,\text{kHz}
+\]
+</div>
+
+<p>To je výrazně více než samotná informační šířka pásma. Pásmové vzorkování využívá fakt, že signál zabírá jen omezený interval frekvencí, ne celý prostor od nuly po nosnou.</p>
+
+<div class="ok"><strong>Pointa příkladu:</strong> signál může ležet kolem 1 MHz, ale jeho informační pásmo může být jen 10 kHz. Proto je dobré rozlišovat nejvyšší frekvenci signálu a šířku obsazeného pásma.</div>
+
+<hr class="sec">
+
+<h2 id="s10">10. Shrnutí ke státnicím</h2>
+
+<div class="ok">
+<strong>Krátká odpověď:</strong> Nízkofrekvenční signál má spektrum soustředěné kolem nulové frekvence. Fourierovým popisem získáme komplexní spektrum, které lze rozdělit na magnitudové a fázové spektrum. Magnituda říká velikost jednotlivých frekvenčních složek, fáze jejich posunutí. Modulací se nízkofrekvenční signál přenese na vysokofrekvenční nosnou, což se ve frekvenční oblasti projeví přesunem spektra do okolí \(\pm f_c\). U AM vzniká nosná a dvě postranní pásma, u DSB-SC dvě postranní pásma bez nosné, u SSB pouze jedno postranní pásmo. Šířka pásma pásmového signálu je \(B_T=f_2-f_1\). Pro základní pásmo platí vzorkovací podmínka \(f_s>2f_{max}\), zatímco u pásmového signálu lze při splnění podmínek využít vzorkování podle obsazené šířky pásma, zjednodušeně \(f_s>2B_T\). Druhý Nyquistův teorém říká, že počet potřebných vzorků na intervalu \(T_0\) je \(N=2B_TT_0\).
+</div>
+
+<h3>Co si pamatovat v bodech</h3>
+<ul>
+  <li><span class="pill">NF</span> spektrum kolem \(0\) Hz, šířka pásma \(B\).</li>
+  <li><span class="pill">VF</span> modulovaný signál má spektrum kolem nosné \(f_c\).</li>
+  <li><span class="pill">magnituda</span> velikost frekvenčních složek.</li>
+  <li><span class="pill">fáze</span> posun frekvenčních složek.</li>
+  <li><span class="pill">AM/DSB</span> dvě postranní pásma, šířka \(2B\).</li>
+  <li><span class="pill">SSB</span> jedno postranní pásmo, šířka \(B\).</li>
+  <li><span class="pill">Nyquist základní pásmo</span> \(f_s>2f_{max}\).</li>
+  <li><span class="pill">Nyquist pásmový signál</span> zjednodušeně \(f_s>2B_T\), ale bez překryvu spektrálních kopií.</li>
+</ul>
+
+<h3>Typické chyby</h3>
+<table>
+  <tr><th>Chyba</th><th>Správně</th></tr>
+  <tr><td>„VF signál má velkou šířku pásma, protože má vysokou nosnou.“</td><td>Nosná určuje polohu spektra. Šířka pásma je \(f_2-f_1\).</td></tr>
+  <tr><td>„Magnitudové spektrum úplně popisuje signál.“</td><td>K úplnému popisu je potřeba komplexní spektrum, tedy magnituda i fáze.</td></tr>
+  <tr><td>„Pro pásmový signál vždy stačí \(f_s=2B_T\).“</td><td>Musí se zajistit, že se spektrální kopie po vzorkování nepřekryjí.</td></tr>
+  <tr><td>„AM, FM a PM mají stejnou šířku pásma.“</td><td>AM/DSB mají \(2B\), SSB má \(B\), FM/PM mají více postranních složek.</td></tr>
+</table>
+
+<h3>Mluvená verze na 2 minuty</h3>
+<p class="small">Nízkofrekvenční signál je informační signál v základním pásmu, takže jeho spektrum leží kolem nulové frekvence. Spektrum je obecně komplexní, proto se popisuje magnitudou a fází. Magnitudové spektrum ukazuje velikost jednotlivých frekvenčních složek, fázové spektrum jejich posun. Při modulaci se informační signál převede na nosnou frekvenci \(f_c\). Ve frekvenční oblasti to znamená přesun spektra z okolí nuly do okolí nosné frekvence. U AM vzniká nosná a dvě postranní pásma, u DSB-SC jsou dvě postranní pásma bez nosné a u SSB pouze jedno postranní pásmo. Šířka pásma pásmového signálu je rozdíl horní a dolní mezní frekvence \(B_T=f_2-f_1\). Pro vzorkování signálu v základním pásmu platí \(f_s>2f_{max}\). U pásmových signálů s vysokou nosnou by to bylo nepraktické, proto se využívá pásmové vzorkování, kde rozhoduje obsazená šířka pásma. Zjednodušeně platí \(f_s>2B_T\), pokud se spektrální kopie po vzorkování nepřekryjí.</p>
+
+</div>
+<script>
+  const topbar = document.getElementById('topbar');
+  const navToggle = document.getElementById('navToggle');
+  const navItems = document.querySelectorAll('.nav-item');
+  const navLinks = document.querySelectorAll('#site-nav > a');
+
+  function setMenu(open) {
+    topbar.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+  }
+
+  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
+  navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
+
+  navItems.forEach((item) => {
+    const link = item.querySelector('a:first-child');
+    link.addEventListener('click', (e) => {
+      if (window.innerWidth <= 760 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
+        e.preventDefault();
+        item.classList.toggle('is-open');
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle')) {
+      navItems.forEach(item => item.classList.remove('is-open'));
+    }
+  });
+</script>
+</body>
+</html>
