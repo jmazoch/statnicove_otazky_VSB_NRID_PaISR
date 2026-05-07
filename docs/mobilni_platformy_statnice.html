@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobilní platformy a jejich využití v řídicích a průmyslových aplikacích</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+.def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; font-style: italic; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+.note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.ok { background: #f1fff6; border-left: 4px solid #168a4a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 5px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f8ff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: #f5f8ff; border: 1px solid #c8d8f0; border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: #1a4a8a; margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+.toc { background: #f0f4fa; border: 1px solid #c0cfea; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+.toc h3 { color: #1a4a8a; margin-bottom: 10px; font-size: 14px; }
+.toc ol { font-size: 13px; }
+.toc li { margin-bottom: 3px; }
+.toc a { color: #1a4a8a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+pre { background:#0f172a; color:#e5e7eb; padding:12px 16px; border-radius:8px; overflow-x:auto; font-size:13px; line-height:1.5; margin:12px 0; }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; text-align: center; }
+.farr { font-size: 20px; color: #888; }
+.pill { display: inline-block; background: #edf4ff; border: 1px solid #c8d8f0; color: #1a4a8a; border-radius: 999px; padding: 2px 9px; font-size: 12px; font-weight: 700; margin-right: 4px; }
+.diagram-wrap { text-align: center; margin: 18px 0; }
+.diagram-wrap svg { max-width: 100%; height: auto; }
+.diagram-label { font-size: 12px; color: #555; margin-top: 6px; font-style: italic; text-align: center; }
+hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
+.lifecycle-seq { background: #f8f0ff; border: 1.5px solid #6a1a8a; border-radius: 8px; padding: 14px 20px; margin: 12px 0; font-family: 'Courier New', monospace; font-size: 13px; color: #3a1a5a; }
+.lifecycle-seq ol { margin-left: 20px; }
+.lifecycle-seq li { margin-bottom: 3px; }
+.lifecycle-seq .highlight { color: #c04040; font-weight: 700; }
+@media print { body{background:#fff;} .page{box-shadow:none;padding:24px 36px;} }
+@media (max-width: 760px) { .page{padding:24px 22px;} .grid2,.grid3{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>Mobilní platformy a jejich využití v řídicích a průmyslových aplikacích</h1>
+<p class="subtitle">NMgr. Řídicí a informační systémy 2026 · Zdroj: MITR_01–MITR_09 (materiál se 100 b ze zkoušky)</p>
+
+<div class="toc">
+  <h3>Obsah</h3>
+  <ol>
+    <li><a href="#s1">Charakteristiky OS Android — architektura, ART, sandbox</a></li>
+    <li><a href="#s2">API levely a kompatibilita verzí</a></li>
+    <li><a href="#s3">Životní cyklus aktivity — metody a rotační sekvence</a></li>
+    <li><a href="#s4">Platformy a programovací jazyky — Java, Kotlin, Flutter, .NET MAUI, React Native</a></li>
+    <li><a href="#s5">Vestavěné senzory (IMU, tlak, teplota, osvětlení) — průmyslové využití</a></li>
+    <li><a href="#s6">Fotoaparát — Camera2 API, zpracování obrazu v průmyslu</a></li>
+    <li><a href="#s7">Mikrofon — AudioRecord API, PCM, FFT analýza zvuku</a></li>
+    <li><a href="#s8">Komunikační protokoly — TCP, HTTP/S, MQTT, Bluetooth / BLE</a></li>
+    <li><a href="#s9">Kyberbezpečnost — oprávnění, šifrování, úložiště, publikace</a></li>
+    <li><a href="#s10">Co umět říct u státnic</a></li>
+  </ol>
+</div>
+
+<!-- ================================================================ -->
+<h2 id="s1">1. Charakteristiky OS Android</h2>
+
+<div class="def">Android je open-source operační systém založený na Linux kernelu, optimalizovaný pro nízkou spotřebu, omezené zdroje a mobilní hardware. Android není totéž jako klasická desktopová distribuce Linuxu.</div>
+
+<p>Klíčové odlišnosti od klasického Linuxu:</p>
+<ul>
+  <li>používá úsporný <strong>scheduler</strong></li>
+  <li>má vlastní systém řízení <strong>aktivit</strong>, ne procesů</li>
+  <li>každá aplikace běží v <strong>sandboxu</strong>, odděleně od ostatních</li>
+  <li>všechny aplikace jsou psané v <strong>bytecode (.dex)</strong>, který běží v <strong>ART</strong> (Android Runtime)</li>
+</ul>
+
+<h3>Android Runtime (ART)</h3>
+<p>ART je výkonný engine, který:</p>
+<ul>
+  <li>načítá DEX bytecode</li>
+  <li>provádí <strong>JIT</strong> (just-in-time) i <strong>AOT</strong> (ahead-of-time) kompilaci</li>
+  <li>používá garbage collector a optimalizovanou správu paměti</li>
+  <li>zajišťuje kompatibilitu mezi API verzemi</li>
+</ul>
+
+<h3>Architektura Androidu — vrstvy</h3>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 740 280" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+  <rect x="5" y="5" width="730" height="268" rx="8" fill="#fafafe" stroke="#c8d8f0" stroke-width="1.2"/>
+
+  <!-- Layer 4: Apps -->
+  <rect x="30" y="20" width="680" height="46" rx="6" fill="#eef4ff" stroke="#1a4a8a" stroke-width="1.5"/>
+  <text x="370" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4a8a">4. Aplikace</text>
+  <text x="370" y="57" text-anchor="middle" font-size="11" fill="#444">sandbox, vlastní UID (Linux user ID), permissions, intent systém</text>
+
+  <!-- Layer 3: Framework -->
+  <rect x="30" y="76" width="680" height="56" rx="6" fill="#e8f4ff" stroke="#1a4a8a" stroke-width="1.5"/>
+  <text x="370" y="95" text-anchor="middle" font-size="13" font-weight="700" fill="#1a4a8a">3. Android Framework (Java/Kotlin API)</text>
+  <text x="370" y="112" text-anchor="middle" font-size="10" fill="#555">Activity Manager · Window Manager · Content Providers · Sensor Manager · Location Manager</text>
+  <text x="370" y="126" text-anchor="middle" font-size="10" fill="#555">Notification Manager · Camera2 API · Audio stack · Bluetooth stack · WiFi stack</text>
+
+  <!-- Layer 2: ART + HAL -->
+  <rect x="30" y="142" width="330" height="50" rx="6" fill="#f0e8ff" stroke="#6a1a8a" stroke-width="1.5"/>
+  <text x="195" y="162" text-anchor="middle" font-size="13" font-weight="700" fill="#6a1a8a">ART (Android Runtime)</text>
+  <text x="195" y="180" text-anchor="middle" font-size="10" fill="#555">DEX bytecode · JIT/AOT · GC</text>
+
+  <rect x="380" y="142" width="330" height="50" rx="6" fill="#fff0e8" stroke="#c87010" stroke-width="1.5"/>
+  <text x="545" y="162" text-anchor="middle" font-size="13" font-weight="700" fill="#c87010">HAL — Hardware Abstraction Layer</text>
+  <text x="545" y="180" text-anchor="middle" font-size="10" fill="#555">Camera HAL · Bluetooth HAL · WiFi HAL</text>
+
+  <!-- Layer 1: Linux Kernel -->
+  <rect x="30" y="202" width="680" height="58" rx="6" fill="#e8f8e8" stroke="#168a4a" stroke-width="1.5"/>
+  <text x="370" y="222" text-anchor="middle" font-size="13" font-weight="700" fill="#168a4a">1. Linux Kernel</text>
+  <text x="370" y="240" text-anchor="middle" font-size="10" fill="#555">Plánování vláken · Správa paměti · I/O</text>
+  <text x="370" y="254" text-anchor="middle" font-size="10" fill="#555">Ovladače HW: kamera, BT, WiFi, senzory</text>
+</svg>
+<p class="diagram-label">Čtyřvrstvá architektura Androidu — od Linux kernelu přes HAL a ART/Framework až k samotným aplikacím.</p>
+</div>
+
+<div class="note"><strong>HAL — proč existuje:</strong> Android používá HAL (Hardware Abstraction Layer), aby sjednotil chování hardwaru — aplikace neřeší rozdíly mezi výrobci. Každý výrobce píše svůj HAL ovladač, ale API pro aplikace zůstává stejné.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s2">2. API Levely a kompatibilita verzí</h2>
+
+<div class="def">Každá verze Androidu má přidělen API level — číslo, které určuje, jaké funkce a třídy jsou dostupné. Vývojář nastavuje tři klíčová čísla, která řídí kompatibilitu aplikace.</div>
+
+<table>
+  <tr><th>Verze Androidu</th><th>API Level</th></tr>
+  <tr><td>Android 4.4</td><td>19</td></tr>
+  <tr><td>Android 5.0</td><td>21</td></tr>
+  <tr><td>Android 8.0</td><td>26</td></tr>
+  <tr><td>Android 10</td><td>29</td></tr>
+  <tr><td>Android 13</td><td>33</td></tr>
+</table>
+
+<h3>Tři klíčová čísla v projektu</h3>
+<div class="grid3">
+  <div class="card">
+    <h4>minSdkVersion</h4>
+    <p>Minimální verze OS, na které aplikace poběží.<br>
+    Např. <code>minSdk 21</code> = od Android 5 výše.</p>
+  </div>
+  <div class="card">
+    <h4>targetSdkVersion</h4>
+    <p>Verze, pro kterou aplikace deklaruje kompatibilitu.<br>
+    Google podle toho aplikuje bezpečnostní změny.</p>
+  </div>
+  <div class="card">
+    <h4>compileSdkVersion</h4>
+    <p>Verze API, proti které probíhá kompilace.<br>
+    Musí být vždy nejnovější.</p>
+  </div>
+</div>
+
+<div class="note"><strong>AndroidX knihovny</strong> nahrazují staré Support Library a přidávají zpětnou kompatibilitu — umožňují používat moderní API i na starších verzích Androidu.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s3">3. Životní cyklus aktivity</h2>
+
+<div class="def">Aktivita = jedna obrazovka aplikace, tvořená layoutem (XML) a logikou (Java/Kotlin). Android ji řídí pomocí přesně definované sady callback metod — životního cyklu.</div>
+
+<h3>Metody životního cyklu — pořadí</h3>
+
+<div class="lifecycle-seq">
+<ol>
+  <li><strong>onCreate()</strong> — vytvoření UI, inicializace, setContentView()</li>
+  <li><strong>onStart()</strong> — aktivita je viditelná, ale ještě ne v popředí</li>
+  <li><strong>onResume()</strong> — aktivita je v popředí, interaktivní</li>
+  <li><strong>onPause()</strong> — částečně zakrytá (dialog, jiná aktivita)</li>
+  <li><strong>onStop()</strong> — aktivita není vidět</li>
+  <li><strong>onDestroy()</strong> — vyčištění, ukončení</li>
+  <li><strong>onRestart()</strong> — návrat z pozadí (onStop → onRestart → onStart)</li>
+</ol>
+</div>
+
+<div class="diagram-wrap">
+  <img src="data:image/png;base64,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91p0WamymqM9kmaejvt1JHA+TfMOgioyNjax7JWN/jmjbcEd/crDQnr9HOpdcR5FkprWcTXv03MYXNe2KHqHRt9fEOQ79ljmJ0Z7de+2z7cVqYvNo8PzH54Om6UzVXUemcbnqW/Z79dszARzG47vnUmqp0PYi5gui/TuKyMYjuQUmdcwHcNcee39qtayYkRFcxCtOwREWNLDZ91V+Ut/UVMqGs+6q/KW/qKmVMAiIpBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREFQ6R/wCXaW/ruH/FW9VDpH/l2lv67h/xVvQEREBERAREQEREBERAREQFG3yBlYgT3wuA9fMKSWC5UhtBvWBwcw7tc07EFBp7HwTY+Cy+TWfCrf0n+ieTWfCrf0n+iiwxbHwTY+Cy+TWfCrf0n+ieTWfCrf0n+iWGLY+CbHwWXyaz4Vb+k/0Tyaz4Vb+k/wBEsMWx8E2Pgsvk1nwq39J/ovhxrACe1W/pP9EsPGx8Cvmx8FCdHvXZbS8d23ctulNmywnrPQyd7W+jwAVg8ms+FW/pP9EsMWx8F4lghmLTNBHIW+542A7LY8ms+FW/pP8ARPJrPhVv6T/RLDFsfBNj4LL5NZ8Kt/Sf6J5NZ8Kt/Sf6JYYtj4JsfBZfJrPhVv6T/RPJrPhVv6T/AESw1LXJ9Qek2W7D8xUytSDHwRzNmc6WV7R5pkdvw/kW2pBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERBUOkf+XaW/ruH/FW9VDpH/l2lv67h/wAVb0BERAREQEREBERAREQEREBERAREQEREBERAUfn8zicHQ7ZmMjWoVi4MEs8gY3iPcNz6VIKm9NGlotY9G2Xwr42PldCZIC5u/DI3m0j18tvzoI3oS1Pp7I6cixlDM0rF0WLchrxygv4DYkPFt4bEH866Ivzl/Aw0p1FDLavuVGxWJ39jgBjALWs93t/+R2//ABX6NQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERBUOkf+XaW/ruH/FW9VDpH/l2lv67h/xVvQEREBERAREQEREBERAREQFoZKxYbPHW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" alt="Životní cyklus aktivity Android" style="max-width:480px; width:100%; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.10);">
+</div>
+
+<h3>Rotační sekvence — extrémně důležitá (učitel se ptá!)</h3>
+
+<p>Při otočení obrazovky proběhne přesně toto pořadí:</p>
+
+<div class="lifecycle-seq">
+<ol>
+  <li class="highlight">onPause()</li>
+  <li class="highlight">onSaveInstanceState() ← uložení stavu před zničením</li>
+  <li class="highlight">onStop()</li>
+  <li class="highlight">onDestroy() ← aktivita je zničena!</li>
+  <li class="highlight">onCreate() ← nová instance</li>
+  <li class="highlight">onStart()</li>
+  <li class="highlight">onRestoreInstanceState() ← obnovení stavu</li>
+  <li class="highlight">onResume()</li>
+</ol>
+</div>
+
+<div class="danger"><strong>Proč je rotace destruktivní:</strong> Android při rotaci aktivitu kompletně znovu vytvoří. Pokud si data neulož v <code>onSaveInstanceState()</code>, po rotaci jsou ztracena. Moderní řešení: <strong>ViewModel</strong> přežije rotaci bez ztráty dat.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s4">4. Platformy a programovací jazyky</h2>
+
+<div class="def">Pro vývoj Android aplikací existuje několik platforem a jazyků — od nativního Java/Kotlin přes multiplatformní řešení Flutter a .NET MAUI až po React Native.</div>
+
+<table>
+  <tr><th>Platforma / jazyk</th><th>Klíčové vlastnosti</th><th>Výhody</th><th>Nevýhody</th></tr>
+  <tr>
+    <td><strong>Java</strong></td>
+    <td>Původní jazyk Androidu, velmi OOP, verbose, anonymní třídy pro eventy</td>
+    <td>Obrovské množství existujícího kódu, komunita</td>
+    <td>Verbose — více kódu pro stejný výsledek</td>
+  </tr>
+  <tr>
+    <td><strong>Kotlin</strong></td>
+    <td>Moderní náhrada Java, null safety, coroutines, méně kódu</td>
+    <td>Bezpečnější, stručnější, doporučený od Googlu</td>
+    <td>Menší komunita než Java (ale rychle roste)</td>
+  </tr>
+  <tr>
+    <td><strong>Flutter (Dart)</strong></td>
+    <td>Multiplatformní framework, UI z widgetů, rendering přes Skia engine</td>
+    <td>Rychlý, konzistentní UI na všech platformách</td>
+    <td>Větší APK, méně přístupu k nativnímu HW</td>
+  </tr>
+  <tr>
+    <td><strong>.NET MAUI</strong></td>
+    <td>Multiplatformní nad .NET, UI přes XAML</td>
+    <td>Populární pro enterprise aplikace, .NET ekosystém</td>
+    <td>Pomalejší start, závislost na .NET runtime</td>
+  </tr>
+  <tr>
+    <td><strong>React Native</strong></td>
+    <td>JavaScript / TypeScript, UI přes nativní komponenty</td>
+    <td>Velká komunita, sdílený kód s webem</td>
+    <td>„Bridge latency" — komunikace JS ↔ nativní kód</td>
+  </tr>
+</table>
+
+<div class="note"><strong>Pro průmyslové aplikace:</strong> Kotlin a Java mají nejlepší přístup k nativnímu HW (senzory, kamera, BLE). Flutter je vhodný pro dashboardy a monitoring. .NET MAUI pro enterprise integraci s existujícím .NET backendem.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s5">5. Vestavěné senzory — IMU, tlak, teplota, osvětlení</h2>
+
+<div class="def">Android Sensor API umožňuje přístup k fyzickým senzorům zařízení přes standardizované rozhraní <code>SensorManager</code> + <code>SensorEventListener</code>, bez závislosti na konkrétním HW výrobci.</div>
+
+<h3>Android Sensor API</h3>
+<pre>SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+Sensor accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+sensorManager.registerListener(new SensorEventListener() {
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float x = event.values[0];  // m/s²
+        float y = event.values[1];
+        float z = event.values[2];
+    }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+}, accel, SensorManager.SENSOR_DELAY_NORMAL);</pre>
+
+<h3>Typy senzorů a jejich vlastnosti</h3>
+<table>
+  <tr><th>Senzor</th><th>Měří</th><th>Problém / poznámka</th><th>Průmyslové využití</th></tr>
+  <tr>
+    <td><strong>Akcelerometr</strong></td>
+    <td>Zrychlení X/Y/Z [m/s²], cítí gravitaci → naklonění</td>
+    <td>Odstředivá síla „mate" výsledky při rotaci</td>
+    <td>Detekce vibrací, nárazů, pádu, naklonění</td>
+  </tr>
+  <tr>
+    <td><strong>Gyroskop</strong></td>
+    <td>Úhlová rychlost [rad/s]</td>
+    <td>Drift při integraci — nutná kompenzace</td>
+    <td>Stabilní měření orientace, navigace, robotika</td>
+  </tr>
+  <tr>
+    <td><strong>Magnetometr</strong></td>
+    <td>Zemské magnetické pole [μT]</td>
+    <td>Citlivý na kovové předměty v okolí</td>
+    <td>Světové strany, magnetické anomálie</td>
+  </tr>
+  <tr>
+    <td><strong>Barometr (tlak)</strong></td>
+    <td>Atmosférický tlak [hPa]</td>
+    <td>Teplotní drift</td>
+    <td>Výška nad mořem, HVAC monitoring, změna tlaku</td>
+  </tr>
+  <tr>
+    <td><strong>Teplotní senzor</strong></td>
+    <td>Teplota zařízení [°C]</td>
+    <td>Měří teplotu uvnitř telefonu, ne okolí</td>
+    <td>Monitoring přehřívání, teplotní kompenzace</td>
+  </tr>
+  <tr>
+    <td><strong>Světelný senzor</strong></td>
+    <td>Osvětlení [lux]</td>
+    <td>—</td>
+    <td>Monitoring osvětlení prostředí, úspora energie</td>
+  </tr>
+</table>
+
+<h3>IMU — Inerciální měřicí jednotka</h3>
+<p>IMU kombinuje akcelerometr + gyroskop (+ magnetometr). Pro průmyslové aplikace se fúzují data ze všech tří senzorů pomocí <strong>Kalmanového filtru</strong> nebo komplementárního filtru — výsledkem je stabilní odhad orientace a polohy bez kumulace chyb.</p>
+
+<div class="grid2">
+  <div class="card">
+    <h4>Průmyslové využití senzorů</h4>
+    <p>• Diagnostika vibrací motorů<br>
+    • Prediktivní údržba (predictive maintenance)<br>
+    • Sledování orientace robotických ramen<br>
+    • Monitoring prostředí (teplota, tlak, světlo)<br>
+    • Detekce kolizí a abnormálních stavů</p>
+  </div>
+  <div class="card">
+    <h4>SensorManager — frekvence měření</h4>
+    <p><code>SENSOR_DELAY_FASTEST</code> — max. rychlost (~1 ms)<br>
+    <code>SENSOR_DELAY_GAME</code> — ~20 ms<br>
+    <code>SENSOR_DELAY_UI</code> — ~60 ms<br>
+    <code>SENSOR_DELAY_NORMAL</code> — ~200 ms<br><br>
+    Pro průmyslové vibrace volíme FASTEST.</p>
+  </div>
+</div>
+
+<div class="danger"><strong>Akcelerometr vs. gyroskop:</strong> Akcelerometr cítí gravitaci i pohyb — při rotaci ho mate odstředivá síla. Gyroskop měří úhlovou rychlost přesně, ale integrací se hromadí drift. Ideální kombinace pro průmyslové aplikace je fúze obou senzorů.</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s6">6. Fotoaparát — Camera2 API a průmyslové zpracování obrazu</h2>
+
+<div class="def">Camera2 API umožňuje nízkoúrovňové řízení fotoaparátu — expozice, ISO, clona, fokus, sekvenční snímky. Pro průmyslové aplikace je to základ inspekce kvality, OCR, detekce vad nebo termodiagnostiky.</div>
+
+<h3>Průmyslové aplikace obrazu</h3>
+<ul>
+  <li><strong>Inspekce kvality</strong> — automatická detekce vad na výrobní lince</li>
+  <li><strong>OCR</strong> — čtení čárových kódů, QR kódů, štítků</li>
+  <li><strong>Detekce vad</strong> — praskliny, geometrie, barva produktu</li>
+  <li><strong>Měření rozměrů</strong> — kalibrovaný kamerový systém</li>
+  <li><strong>Termodiagnostika</strong> — pokud je k dispozici termokamera</li>
+</ul>
+
+<h3>Camera2 API — co lze řídit</h3>
+<div class="grid2">
+  <div class="card">
+    <h4>Parametry snímání</h4>
+    <p>• ISO (citlivost)<br>• Expozice (čas závěrky)<br>• Clona (f-stop)<br>• Fokus (manuální / AF)<br>• Sekvenční snímky (burst)</p>
+  </div>
+  <div class="card">
+    <h4>Formáty a zpracování</h4>
+    <p>• JPEG (komprimovaný výstup)<br>• RAW (surová data ze senzoru)<br>• YUV (pro real-time zpracování)<br>• BMP (bitová mapa)<br>• Převod do šedi: <code>0.30R + 0.59G + 0.11B</code></p>
+  </div>
+</div>
+
+<h3>Digitální zpracování obrazu</h3>
+<ul>
+  <li><strong>Konverze do šedi</strong>: <code>Y = 0.30·R + 0.59·G + 0.11·B</code></li>
+  <li><strong>Filtrace</strong>: blur (rozmazání šumu), sharpen (zvýraznění hran)</li>
+  <li><strong>FFT</strong> pro spektrální analýzu textur a vibrací zobrazených v obraze</li>
+  <li><strong>Prahování</strong> (thresholding) pro binární segmentaci</li>
+</ul>
+
+<pre>// Camera2 API – základní struktura
+CameraManager manager = (CameraManager) getSystemService(CAMERA_SERVICE);
+manager.openCamera(cameraId, new CameraDevice.StateCallback() {
+    @Override
+    public void onOpened(CameraDevice camera) {
+        // Nastavení parametrů a spuštění preview
+        CaptureRequest.Builder builder =
+            camera.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+        builder.set(CaptureRequest.SENSOR_SENSITIVITY, 800);   // ISO
+        builder.set(CaptureRequest.CONTROL_AF_MODE,
+            CaptureRequest.CONTROL_AF_MODE_AUTO);
+    }
+}, null);</pre>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s7">7. Mikrofon — AudioRecord API, PCM, FFT analýza</h2>
+
+<div class="def">Mikrofon mobilního zařízení je plnohodnotný senzor pro průmyslové akustické analýzy. Přes AudioRecord API lze získávat PCM vzorky v reálném čase a provádět FFT analýzu vibrací, monitorování ložisek nebo detekci anomálií zvuku.</div>
+
+<h3>Základy zvuku</h3>
+<ul>
+  <li>Slyšitelné pásmo: <strong>16 – 20 000 Hz</strong></li>
+  <li>Rychlost zvuku: <strong>340 m/s</strong></li>
+  <li>Intenzita se vyjadřuje v <strong>dB</strong> (dekadický logaritmus)</li>
+  <li>Křivky stejné hlasitosti (izofony) — různé frekvence jsou vnímány různě hlasitě při stejném tlaku</li>
+</ul>
+
+<h3>Typy mikrofonů</h3>
+<table>
+  <tr><th>Typ</th><th>Princip</th><th>Použití</th></tr>
+  <tr><td>Elektrodynamický</td><td>Membrána v magnetickém poli → indukuje napětí</td><td>Studiové mikrofony</td></tr>
+  <tr><td>Elektretový</td><td>Trvale nabitá folie → piezoelektrický efekt</td><td>Telefony, náhlavní soupravy</td></tr>
+  <tr><td>Kondenzátorový</td><td>Variabilní kapacita mezi membránou a elektrodou</td><td>Studijní záznamy, měřicí mikrofony</td></tr>
+  <tr><td>Piezoelektrický</td><td>Tlak → elektrické napětí</td><td>Průmyslové senzory vibrací</td></tr>
+</table>
+
+<h3>AudioRecord API — PCM vzorkování</h3>
+<pre>int sampleRate = 44100;  // Hz
+int bufferSize = AudioRecord.getMinBufferSize(
+    sampleRate,
+    AudioFormat.CHANNEL_IN_MONO,
+    AudioFormat.ENCODING_PCM_16BIT);
+
+AudioRecord recorder = new AudioRecord(
+    MediaRecorder.AudioSource.MIC,
+    sampleRate,
+    AudioFormat.CHANNEL_IN_MONO,
+    AudioFormat.ENCODING_PCM_16BIT,
+    bufferSize);
+
+recorder.startRecording();
+short[] buffer = new short[bufferSize];
+recorder.read(buffer, 0, bufferSize);  // PCM vzorky
+// → následuje FFT analýza</pre>
+
+<h3>PCM digitalizace zvuku</h3>
+<ul>
+  <li><strong>PCM_16BIT</strong> — 16bitová hloubka (65 536 úrovní), standardní</li>
+  <li><strong>PCM_FLOAT</strong> — 32bitová plovoucí desetinná čárka, vyšší přesnost</li>
+  <li>Vzorkovací frekvence: typicky 44 100 Hz nebo 48 000 Hz</li>
+</ul>
+
+<h3>Průmyslové využití mikrofonu</h3>
+<div class="grid2">
+  <div class="card">
+    <h4>Monitoring strojů pomocí FFT</h4>
+    <p>• Monitoring ložisek (charakteristické frekvence závad)<br>
+    • Diagnostika ventilátorů, motorů, čerpadel<br>
+    • Detekce kavitace, rezonancí<br>
+    • Prediktivní údržba — trend ve spektru</p>
+  </div>
+  <div class="card">
+    <h4>Streamování dat</h4>
+    <p>• Real-time FFT přímo v telefonu<br>
+    • Streaming přes <strong>TCP</strong> (persistentní stream)<br>
+    • Streaming přes <strong>HTTP</strong> (REST API)<br>
+    • Streamování přes <strong>MQTT</strong> (IoT broker)</p>
+  </div>
+</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s8">8. Komunikační protokoly — TCP, HTTP/S, MQTT, Bluetooth</h2>
+
+<div class="def">Mobilní platforma komunikuje s průmyslovými systémy přes standardní protokoly. Volba protokolu závisí na požadavcích na spolehlivost, latenci, šířku pásma a energetickou náročnost.</div>
+
+<h3>8.1 TCP</h3>
+<ul>
+  <li>Spolehlivý — garantuje doručení a pořadí paketů</li>
+  <li>Persistentní spojení server ↔ klient</li>
+  <li>Typické scénáře: řízení robotů, datové brány mezi PLC a aplikací, real-time měření, telemetrie</li>
+</ul>
+<pre>// TCP klient v Androidu (v coroutine nebo vláknu)
+Socket socket = new Socket("192.168.1.100", 8080);
+PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+BufferedReader in = new BufferedReader(
+    new InputStreamReader(socket.getInputStream()));
+out.println("START_MEASUREMENT");
+String response = in.readLine();</pre>
+
+<h3>8.2 HTTP / HTTPS</h3>
+<ul>
+  <li>Aplikační protokol — model request → response</li>
+  <li><strong>REST API</strong> s JSON nebo XML payloadem</li>
+  <li><strong>HTTPS</strong> = HTTP + TLS šifrování</li>
+  <li>Průmyslové použití: dashboardy, cloud monitoring, SCADA webové rozhraní</li>
+</ul>
+<pre>// HTTP GET request v Androidu (OkHttp)
+OkHttpClient client = new OkHttpClient();
+Request request = new Request.Builder()
+    .url("https://api.factory.cz/sensor/temperature")
+    .build();
+Response response = client.newCall(request).execute();
+String json = response.body().string();</pre>
+
+<h3>8.3 MQTT</h3>
+<div class="def">MQTT je lightweight publish/subscribe protokol navržený pro IoT a M2M komunikaci s minimální spotřebou energie a šířky pásma.</div>
+
+<div class="grid2">
+  <div class="card">
+    <h4>Architektura MQTT</h4>
+    <p>• <strong>Broker</strong> = centrální uzel (např. Mosquitto, HiveMQ)<br>
+    • <strong>Publisher</strong> = posílá data na topic<br>
+    • <strong>Subscriber</strong> = odebírá data z topicu<br>
+    • Topic: hierarchická struktura (<code>factory/line1/temp</code>)</p>
+  </div>
+  <div class="card">
+    <h4>QoS úrovně</h4>
+    <p><strong>QoS 0</strong> — fire and forget, nejrychlejší, bez záruky<br>
+    <strong>QoS 1</strong> — doručeno alespoň jednou, možné duplikáty<br>
+    <strong>QoS 2</strong> — doručeno přesně jednou, nejpomalejší<br><br>
+    Pro průmysl: QoS 1 nebo 2.</p>
+  </div>
+</div>
+
+<p>MQTT je perfektní pro: senzory s omezenou energií, prediktivní údržbu, IoT gateway, datové sběry z výrobní linky.</p>
+
+<h3>8.4 Bluetooth / Bluetooth Low Energy (BLE)</h3>
+<table>
+  <tr><th>Typ</th><th>Profil</th><th>Propustnost</th><th>Průmyslové využití</th></tr>
+  <tr>
+    <td><strong>Klasický BT</strong></td>
+    <td>SPP (Serial Port Profile) = virtuální COM port</td>
+    <td>Vyšší (až 2 Mbps)</td>
+    <td>Jednoduché senzory, řídicí aplikace, diagnostika strojů</td>
+  </tr>
+  <tr>
+    <td><strong>BLE (Bluetooth Low Energy)</strong></td>
+    <td>GATT — Services → Characteristics → Descriptors</td>
+    <td>Nízká (ale dostačující pro senzory)</td>
+    <td>Wearables, IoT senzory, průmyslové tagy, asset tracking</td>
+  </tr>
+</table>
+
+<div class="grid3">
+  <div class="card">
+    <h4>GATT hierarchie (BLE)</h4>
+    <p><strong>Service</strong> — logická skupina<br>
+    <strong>Characteristic</strong> — datová hodnota<br>
+    <strong>Descriptor</strong> — metadata charakteristiky<br>
+    Vše identifikováno přes UUID.</p>
+  </div>
+  <div class="card">
+    <h4>BLE výhody v průmyslu</h4>
+    <p>• Nízká spotřeba energie<br>
+    • Dosah 10–100 m<br>
+    • Stovky zařízení najednou<br>
+    • Beacon technologie</p>
+  </div>
+  <div class="card">
+    <h4>BLE nevýhody</h4>
+    <p>• Nízká propustnost<br>
+    • Vyšší latence než WiFi<br>
+    • Interference při velkém počtu zařízení<br>
+    • Párování nutné</p>
+  </div>
+</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s9">9. Kyberbezpečnost mobilních platforem</h2>
+
+<div class="def">Android má dvoustupňový model oprávnění — statická deklarace v manifestu a dynamické potvrzení uživatelem za běhu. Citlivá data se ukládají do šifrovaného úložiště, komunikace probíhá přes HTTPS s certificate pinningem.</div>
+
+<h3>9.1 Oprávnění (Permissions)</h3>
+<div class="grid2">
+  <div class="card">
+    <h4>Manifest permissions (statická)</h4>
+    <p>Deklarují se v <code>AndroidManifest.xml</code> — instalační čas.<br>
+    Např.:<br>
+    <code>&lt;uses-permission android:name=<br>"android.permission.INTERNET"/&gt;</code></p>
+  </div>
+  <div class="card">
+    <h4>Runtime permissions (dynamická)</h4>
+    <p>Uživatel musí potvrdit za běhu aplikace:<br>
+    • Kamera<br>
+    • Mikrofon<br>
+    • Poloha (GPS)<br>
+    • Úložiště<br>
+    • Bluetooth</p>
+  </div>
+</div>
+
+<pre>// Kontrola a žádost o runtime permission
+if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+        != PackageManager.PERMISSION_GRANTED) {
+    ActivityCompat.requestPermissions(this,
+        new String[]{Manifest.permission.CAMERA},
+        REQUEST_CODE_CAMERA);
+}</pre>
+
+<h3>9.2 Šifrování dat</h3>
+<ul>
+  <li>Android podporuje <strong>File-Based Encryption</strong> na úrovni OS</li>
+  <li>Citlivá data ukládat do <code>EncryptedSharedPreferences</code></li>
+  <li>Privátní klíče ukládat do <strong>Android KeyStore</strong> (RSA, AES) — klíče neopouštějí HW čip</li>
+  <li>Komunikace přes <strong>HTTPS + certificate pinning</strong> (ověření konkrétního certifikátu serveru)</li>
+</ul>
+
+<h3>9.3 Bezpečné ukládání dat</h3>
+<table>
+  <tr><th>Úložiště</th><th>Bezpečnost</th><th>Použití</th></tr>
+  <tr><td><code>SharedPreferences</code></td><td>Nízká — plain text</td><td>Nekritické preference (téma, jazyk)</td></tr>
+  <tr><td><code>EncryptedSharedPreferences</code></td><td>Střední — AES šifrování</td><td>Tokeny, nastavení s nízkou citlivostí</td></tr>
+  <tr><td><code>Room Database</code></td><td>Střední (lze šifrovat SQLCipher)</td><td>Strukturovaná data, offline cache</td></tr>
+  <tr><td>External Storage</td><td><span style="color:#c04040;font-weight:700;">Nebezpečné</span> — čitelné jinými aplikacemi</td><td>Pouze veřejná data (fotky, logy)</td></tr>
+  <tr><td><strong>Android KeyStore</strong></td><td><span style="color:#168a4a;font-weight:700;">Maximální</span> — HW čip, klíče neopustí zařízení</td><td>RSA/AES klíče, podpisy, certifikáty</td></tr>
+</table>
+
+<h3>9.4 Proces publikace aplikace</h3>
+<div class="flow">
+  <div class="fbox">1. Podepsání<br><small>Keystore soubor</small></div><div class="farr">→</div>
+  <div class="fbox">2. Build<br><small>.AAB nebo .APK</small></div><div class="farr">→</div>
+  <div class="fbox">3. Nahrání<br><small>Google Play Console</small></div><div class="farr">→</div>
+  <div class="fbox">4. Skenování<br><small>Automatické bezpečnostní</small></div><div class="farr">→</div>
+  <div class="fbox">5. Schválení<br><small>Googlem</small></div>
+</div>
+
+<div class="note"><strong>AAB vs. APK:</strong> Google preferuje <strong>AAB</strong> (Android App Bundle) — Google Play z něj automaticky sestaví optimalizované APK pro každé zařízení (správná architektura, hustota displeje, jazyk). APK je univerzální balíček pro přímou instalaci (sideloading).</div>
+
+<hr class="sec">
+<!-- ================================================================ -->
+<h2 id="s10">10. Co umět říct u státnic</h2>
+
+<ul>
+  <li><span class="pill">Android</span> Open-source OS na Linux kernelu. Každá aplikace v sandboxu, vlastní UID, bytecode DEX běží v ART (JIT + AOT).</li>
+  <li><span class="pill">ART</span> načítá DEX bytecode, provádí JIT i AOT kompilaci, spravuje paměť přes garbage collector.</li>
+  <li><span class="pill">API level</span> = číslo verze Androidu. Tři klíčová čísla: <code>minSdkVersion</code>, <code>targetSdkVersion</code>, <code>compileSdkVersion</code>.</li>
+  <li><span class="pill">Životní cyklus</span> onCreate → onStart → onResume → onPause → onStop → onDestroy. onRestart při návratu z pozadí.</li>
+  <li><span class="pill">Rotace!</span> onPause → onSaveInstanceState → onStop → onDestroy → onCreate → onStart → onRestoreInstanceState → onResume. Toto pořadí se učitel ptá!</li>
+  <li><span class="pill">Kotlin</span> doporučený jazyk — null safety, coroutines, méně verbose než Java.</li>
+  <li><span class="pill">Flutter</span> multiplatformní, Skia renderer, widgety, větší APK.</li>
+  <li><span class="pill">Akcelerometr</span> zrychlení X/Y/Z, cítí gravitaci. Gyroskop úhlová rychlost. IMU = fúze obou přes Kalmanův filtr.</li>
+  <li><span class="pill">Průmysl senzory</span> diagnostika vibrací, prediktivní údržba, monitoring prostředí.</li>
+  <li><span class="pill">Camera2 API</span> řídí ISO, expozici, clonu, fokus. Průmysl: inspekce kvality, OCR, detekce vad. Převod do šedi: 0.30R + 0.59G + 0.11B.</li>
+  <li><span class="pill">AudioRecord API</span> PCM_16BIT nebo PCM_FLOAT. FFT → spektrální analýza → monitoring ložisek, motorů. Streaming přes TCP/MQTT.</li>
+  <li><span class="pill">TCP</span> spolehlivý, garantuje pořadí, persistentní spojení. Pro telemetrii a real-time měření.</li>
+  <li><span class="pill">MQTT</span> publish/subscribe, broker (Mosquitto), QoS 0/1/2. Perfektní pro IoT senzory a průmyslové sběry dat.</li>
+  <li><span class="pill">BLE GATT</span> Services → Characteristics → Descriptors. Nízká spotřeba, nízká propustnost — stačí pro senzory.</li>
+  <li><span class="pill">Permissions</span> Manifest = statická deklarace. Runtime = uživatel potvrzuje kamera/mikrofon/polohu za běhu.</li>
+  <li><span class="pill">KeyStore</span> = nejbezpečnější úložiště pro klíče. External Storage = nebezpečné.</li>
+  <li><span class="pill">Publikace</span> podepsání (keystore) → .AAB → Google Play Console → automatické skenování → schválení.</li>
+</ul>
+
+<h3>Největší pasti u státnic</h3>
+<table>
+  <tr><th>Špatně</th><th>Správně</th></tr>
+  <tr><td>Android = Linux distribuce</td><td>Android je postaven na Linux kernelu, ale má vlastní runtime (ART), scheduler a systém aktivit</td></tr>
+  <tr><td>onSaveInstanceState() je jen na rotaci</td><td>Volá se vždy před onStop() — při jakémkoliv přerušení (příchozí hovor, jiná aplikace)</td></tr>
+  <tr><td>SharedPreferences je bezpečné úložiště</td><td>SharedPreferences ukládá v plain textu — pro citlivá data nutno EncryptedSharedPreferences nebo KeyStore</td></tr>
+  <tr><td>BLE má velkou propustnost jako WiFi</td><td>BLE má nízkou propustnost (~1 Mbps max), ale dostačující pro senzorová data</td></tr>
+  <tr><td>MQTT QoS 0 je pro průmysl dostačující</td><td>Pro průmysl QoS 1 nebo 2 — garantované doručení zprávy</td></tr>
+  <tr><td>Camera2 API = jen fotky</td><td>Camera2 umožňuje plné řízení senzoru — ISO, expozice, sekvenční snímky, RAW formát</td></tr>
+</table>
+
+<hr class="sec">
+<div style="background:#1a4a8a;color:white;padding:18px 24px;border-radius:8px;margin-top:24px;">
+  <p style="color:white;font-size:13px;margin:0;text-align:center;">
+    <strong>Mobilní platformy a jejich využití v řídicích a průmyslových aplikacích</strong><br>
+    NMgr. Řídicí a informační systémy 2026 · Podklady: MITR_01–MITR_09
+  </p>
+</div>
+
+</div>
+</body>
+</html>

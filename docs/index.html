@@ -257,7 +257,7 @@
           <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
           <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
           <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
-          <a href="#" class="nav-disabled">12. Systémy pro zpracování...</a>
+          <a href="12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
           <a href="#" class="nav-disabled">13. Převod analogové...</a>
           <a href="#" class="nav-disabled">14. Digitální modulace</a>
         </div>
@@ -280,7 +280,7 @@
         <div class="nav-dropdown">
           <a href="statnice_freertos.html">FreeRTOS</a>
           <a href="#" class="nav-disabled">SWI</a>
-          <a href="#" class="nav-disabled">Android</a>
+          <a href="mobilni_platformy_statnice.html">Android</a>
         </div>
       </div>
     </nav>
@@ -298,7 +298,7 @@
     <div class="meta-grid">
       <div class="meta"><span>README</span><strong>Studijní pomůcka k přípravě na státnice</strong></div>
       <div class="meta"><span>Formát</span><strong>HTML otázky v jednom přehledu</strong></div>
-      <div class="meta"><span>Aktuální stav</span><strong>5 připravených otázek</strong></div>
+    <div class="meta"><span>Aktuální stav</span><strong>7 připravených otázek</strong></div>
     </div>
   </section>
   <section class="section" id="kybernetika">
@@ -340,6 +340,11 @@
           <h3>Frekvenční spektra NF a VF signálu</h3>
           <p>Magnitudové a fázové spektrum, šířka pásma a Nyquistovy teorémy vzorkování signálu.</p>
         </a>
+        <a class="question-card" href="12_Systémy pro zpracování signálu.html">
+          <span class="tag">Otázka 12</span>
+          <h3>Systémy pro zpracování signálu</h3>
+          <p>Zpracování signálu pomocí omezovače, směšovače, detektoru obálky, FM detektoru, multiplikativního detektoru a přijímače.</p>
+        </a>
       </div>
 
       <h3 id="ms">Měřicí systémy (MS 15–20)</h3>
@@ -363,11 +368,11 @@
           <h3>SWI</h3>
           <p>Plánováno: otázky k SWI budou přidány později.</p>
         </div>
-        <div class="question-card disabled">
+        <a class="question-card" href="mobilni_platformy_statnice.html">
           <span class="tag">PaISR</span>
-          <h3>Android</h3>
-          <p>Plánováno: materiály o mobilních platformách.</p>
-        </div>
+          <h3>Mobilní platformy a jejich využití</h3>
+          <p>Základní přehled Android, Flutter, .NET MAUI, React Native a průmyslové využití senzorů a komunikací.</p>
+        </a>
       </div>
 
       <p class="readme-note">Zobrazeny jsou pouze vypracované položky — ostatní jsou šedé a neklikatelné. Po nahrání další otázky (např. č. 8) ji doplním sem jako klikatelnou kartu.</p>
@@ -420,13 +425,18 @@
   <section class="section" id="otazky">
     <div class="section-head">
       <h2>Otázky</h2>
-      <p>Každá státnicová otázka je samostatný HTML soubor. Už jsou připravené otázky 1, 8, 9, 10 a 20, plus FreeRTOS jako specializace.</p>
+      <p>Každá státnicová otázka je samostatný HTML soubor. Už jsou připravené otázky 1, 8, 9, 10, 12 a 20, plus FreeRTOS a Mobilní platformy jako specializace.</p>
     </div>
     <div class="question-list">
       <a class="question-card" href="statnice_freertos.html">
         <span class="tag">Otázka 1</span>
         <h3>FreeRTOS</h3>
         <p>Vypracovaná otázka o scheduleru, úlohách, synchronizaci, časovačích a kontextovém přepínání.</p>
+      </a>
+      <a class="question-card" href="mobilni_platformy_statnice.html">
+        <span class="tag">PaISR</span>
+        <h3>Mobilní platformy a jejich využití</h3>
+        <p>Základní přehled Android, Flutter, .NET MAUI, React Native a průmyslové využití senzorů a komunikací.</p>
       </a>
       <a class="question-card" href="8_statnice_okenni_funkce.html">
         <span class="tag">Otázka 8</span>
@@ -443,6 +453,11 @@
         <h3>Frekvenční spektra NF a VF signálu</h3>
         <p>Magnitudové a fázové spektrum, šířka pásma a Nyquistovy teorémy vzorkování signálu.</p>
       </a>
+      <a class="question-card" href="12_Systémy pro zpracování signálu.html">
+        <span class="tag">Otázka 12</span>
+        <h3>Systémy pro zpracování signálu</h3>
+        <p>Zpracování signálu pomocí omezovače, směšovače, detektoru obálky, FM detektoru, multiplikativního detektoru a přijímače.</p>
+      </a>
       <a class="question-card" href="20_EMC.html">
         <span class="tag">Otázka 20</span>
         <h3>EMC a kvalita měřícího signálu</h3>
@@ -452,6 +467,7 @@
   </section>
   <p class="footer">Až přidáš další HTML soubory, stačí je doplnit do sekce Otázky a do menu.</p>
 </main>
+<script defer src="shared/nav-links.js"></script>
 <script>
   const topbar = document.getElementById('topbar');
   const navToggle = document.getElementById('navToggle');

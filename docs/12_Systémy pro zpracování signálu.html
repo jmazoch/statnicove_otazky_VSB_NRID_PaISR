@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Systémy pro zpracování signálu</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ]
+    });"></script>
+  <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+a { color: inherit; }
+.topbar { position: sticky; top: 0; z-index: 30; backdrop-filter: blur(12px); background: rgba(250,250,248,0.9); border-bottom: 1px solid rgba(26,74,138,0.12); }
+.topbar-inner { max-width: 1120px; margin: 0 auto; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; flex-direction: column; gap: 2px; text-decoration: none; color: #1a4a8a; }
+.brand strong { font-size: 16px; }
+.brand span { font-size: 12px; color: #666; }
+.nav-toggle { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid rgba(26,74,138,0.18); border-radius: 14px; background: #fff; color: #1a4a8a; cursor: pointer; }
+.nav-toggle span, .nav-toggle span::before, .nav-toggle span::after { display: block; width: 18px; height: 2px; background: currentColor; border-radius: 999px; position: relative; transition: transform 0.25s ease, opacity 0.25s ease; }
+.nav-toggle span::before, .nav-toggle span::after { content: ""; position: absolute; left: 0; }
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+.nav-links { display: flex; align-items: center; gap: 10px; }
+.nav-item { position: relative; display: flex; align-items: center; }
+.nav-links a, .nav-item > a { text-decoration: none; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: 700; color: #1a4a8a; padding: 10px 14px; border-radius: 999px; transition: background 0.2s ease, color 0.2s ease; display: flex; align-items: center; gap: 6px; }
+.nav-links a:hover, .nav-item > a:hover { background: rgba(26,74,138,0.08); color: #12345f; }
+.nav-dropdown { position: absolute; top: 100%; left: 0; background: rgba(255,252,246,0.92); min-width: 220px; border-radius: 12px; border: 1px solid rgba(31,36,31,0.12); box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: none; flex-direction: column; gap: 0; z-index: 999; }
+.nav-item:hover .nav-dropdown { display: flex; }
+.nav-item.is-open .nav-dropdown { display: flex; }
+.nav-dropdown a { padding: 10px 14px; border-radius: 0; background: transparent; margin: 0; font-size: 13px; border-bottom: 1px solid rgba(31,36,31,0.12); }
+.nav-dropdown a:last-child { border-bottom: none; }
+.nav-dropdown a:hover { background: rgba(26,74,138,0.08); }
+.nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s ease; }
+.nav-links a.nav-disabled { color: #999; opacity: 0.7; pointer-events: none; }
+@media (min-width: 761px) { .nav-item > a .nav-chevron { display: none; } }
+@media (max-width: 760px) {
+  .topbar-inner { padding: 12px 14px; }
+  .nav-toggle { display: inline-flex; }
+  .nav-links { display: none; width: 100%; flex-direction: column; align-items: stretch; padding: 12px 0 4px; }
+  .topbar.is-open .nav-links { display: flex; }
+  .nav-links a, .nav-item > a { width: 100%; justify-content: space-between; }
+  .nav-item { width: 100%; flex-direction: column; align-items: stretch; }
+  .nav-item > a { border-radius: 14px; }
+  .nav-dropdown { position: static; border: none; box-shadow: none; background: rgba(26,74,138,0.04); display: none; margin-top: 0; }
+  .nav-dropdown a { border-radius: 0; }
+  .nav-item.is-open .nav-dropdown { display: flex; }
+}
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+.def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; font-style: italic; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+.note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.formula { background: #f8f0ff; border-left: 4px solid #6a1a8a; padding: 12px 20px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 15px; color: #3a1a5a; overflow-x: auto; }
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f8ff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: #f5f8ff; border: 1px solid #c8d8f0; border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: #1a4a8a; margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+.toc { background: #f0f4fa; border: 1px solid #c0cfea; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+.toc h3 { color: #1a4a8a; margin-bottom: 10px; font-size: 14px; }
+.toc ol { font-size: 13px; }
+.toc li { margin-bottom: 3px; }
+.toc a { color: #1a4a8a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+pre { background:#0f172a; color:#e5e7eb; padding:12px 16px; border-radius:8px; overflow-x:auto; font-size:13px; line-height:1.45; margin:14px 0; }
+pre code { background: transparent; color: inherit; padding:0; }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
+.farr { font-size: 20px; color: #888; }
+hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
+@media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }
+  </style>
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">
+      <strong>Státnicové otázky</strong>
+      <span>Řídicí a informační systémy</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="index.html">Main</a>
+      <a href="#s1">Obsah</a>
+      <div class="nav-item" id="nav-rs">
+        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="#" class="nav-disabled">3. Stavová regulace</a>
+          <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="#" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+      <div class="nav-item" id="nav-pmzs">
+        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
+          <a href="12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="#" class="nav-disabled">13. Převod analogové...</a>
+          <a href="#" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+      <div class="nav-item" id="nav-ms">
+        <a href="index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="#" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="#" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="#" class="nav-disabled">18. Statické a dynamické...</a>
+          <a href="#" class="nav-disabled">19. Drátové a bezdrátové...</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+      <div class="nav-item" id="nav-paisr">
+        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="#" class="nav-disabled">SWI</a>
+          <a href="#" class="nav-disabled">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="page">
+
+  <h1>Systémy pro zpracování signálu</h1>
+  <p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · Podklady: přednášky a skripta PMZS</p>
+
+  <div class="toc">
+    <h3>Obsah</h3>
+    <ol>
+      <li><a href="#s1">Systémy pro zpracování signálu</a></li>
+      <li><a href="#s2">Způsoby zpracování signálu pomocí omezovače</a></li>
+      <li><a href="#s3">Způsoby zpracování signálu pomocí směšovače</a></li>
+      <li><a href="#s4">Způsoby zpracování signálu pomocí detektoru obálky</a></li>
+      <li><a href="#s5">Způsoby zpracování signálu pomocí detektoru FM signálu</a></li>
+      <li><a href="#s6">Způsoby zpracování signálu pomocí multiplikativního detektoru</a></li>
+      <li><a href="#s7">Způsoby zpracování signálu pomocí přijímače</a></li>
+      <li><a href="#s8">Co určitě umět říct u státnic</a></li>
+    </ol>
+  </div>
+
+  <h2 id="s1">1. Systémy pro zpracování signálu</h2>
+  <div class="def">Systémy pro zpracování signálu jsou elektronické nebo algoritmické bloky, které upravují časový průběh, spektrum, amplitudu, fázi nebo frekvenci signálu tak, aby bylo možné informaci přenést, potlačit rušení, změnit pásmo signálu nebo obnovit původní informační signál.</div>
+  <p>V předmětu PMZS se tato otázka týká hlavně <strong>pásmových signálů</strong>, tedy signálů, jejichž spektrum neleží kolem nulové frekvence, ale v okolí nosné frekvence <code>f<sub>c</sub></code>. Typický pásmový signál lze zapsat například jako:</p>
+
+  <div class="formula">\[ v(t) = R(t) \cdot \cos(\omega_c t + \theta(t)) \]</div>
+
+  <p>Kde \(R(t)\) je reálná obálka, \(\omega_c\) úhlová frekvence nosné a \(\theta(t)\) fázová složka. Informace může být zakódována do amplitudy, fáze nebo okamžité frekvence. Z toho plyne, že různé obvody jsou vhodné pro různé druhy modulace.</p>
+
+  <div class="flow">
+    <div class="fbox">informační signál m(t)</div>
+    <div class="farr">→</div>
+    <div class="fbox">modulace</div>
+    <div class="farr">→</div>
+    <div class="fbox">pásmový signál v(t)</div>
+    <div class="farr">→</div>
+    <div class="fbox">kanál + šum</div>
+    <div class="farr">→</div>
+    <div class="fbox">přijímač / detektor</div>
+    <div class="farr">→</div>
+    <div class="fbox">odhad m(t)</div>
+  </div>
+
+  <p>Důležité je rozlišovat <strong>lineární časově invariantní systémy</strong> a <strong>nelineární nebo časově proměnné systémy</strong>. Běžný lineární filtr umí změnit amplitudu a fázi složek, ale sám o sobě nepřesune signál na jinou frekvenci. Pro modulaci, demodulaci a frekvenční konverzi jsou proto nutné zejména nelineární nebo časově variantní obvody, například směšovač, násobič nebo detektor.</p>
+
+  <h3>Základní skupiny systémů</h3>
+  <table>
+    <tr><th>Systém</th><th>Hlavní funkce</th><th>Typické použití</th></tr>
+    <tr><td>Filtr</td><td>Propouští zvolené frekvenční pásmo, ostatní složky potlačuje.</td><td>Výběr kanálu, potlačení šumu, mezifrekvenční filtr.</td></tr>
+    <tr><td>Zesilovač</td><td>Zvyšuje amplitudu signálu, ideálně bez změny tvaru.</td><td>RF předzesilovač, IF zesilovač, audio zesilovač.</td></tr>
+    <tr><td>Omezovač</td><td>Odstraňuje kolísání amplitudy a ponechává informaci ve fázi/frekvenci.</td><td>FM/PM přijímače, potlačení amplitudového šumu.</td></tr>
+    <tr><td>Směšovač</td><td>Násobením se signálem lokálního oscilátoru přesouvá spektrum.</td><td>Konverze na mezifrekvenci, up/down konverze.</td></tr>
+    <tr><td>Detektor obálky</td><td>Získává obálku amplitudově modulovaného signálu.</td><td>Jednoduchá demodulace klasického AM signálu.</td></tr>
+    <tr><td>Multiplikativní detektor</td><td>Koherentně násobí přijatý signál lokální nosnou a filtruje základní pásmo.</td><td>DSB-SC, SSB, QAM, koherentní AM detekce.</td></tr>
+    <tr><td>Detektor FM</td><td>Převádí okamžitou frekvenci nebo změnu fáze na výstupní napětí.</td><td>FM demodulace, telemetrie, rozhlas FM.</td></tr>
+    <tr><td>Přijímač</td><td>Vybere kanál, zesílí jej, převede frekvenci a demoduluje informaci.</td><td>TRF a superheterodynní přijímače.</td></tr>
+  </table>
+
+  <div class="note"><strong>Co říct u zkoušky:</strong> U systémů pro zpracování pásmových signálů je klíčové, že pracují s nosnou frekvencí, obálkou, fází a frekvenčním spektrem. Filtr pouze vybírá složky, ale směšovač nebo multiplikativní detektor dokáže signál převést mezi pásmovým a základním pásmem.</div>
+  <div class="danger"><strong>Častá chyba:</strong> Nezaměňovat pásmový signál s informačním signálem. Informační signál \(m(t)\) bývá v základním pásmu, zatímco pásmový signál \(v(t)\) je přenesen do okolí nosné frekvence \(f_c\).</div>
+
+  <hr class="sec">
+
+  <h2 id="s2">2. Způsoby zpracování signálu pomocí omezovače</h2>
+  <div class="def">Omezovač je nelineární obvod s ostrou saturací statické charakteristiky, jehož výstup nabývá omezených hodnot podle polarity vstupního signálu. Pásmový omezovač je omezovač doplněný pásmovým filtrem.</div>
+  <p>Omezovač je důležitý zejména pro zpracování úhlově modulovaných signálů, tedy signálů FM a PM. U těchto modulací není informace uložena v amplitudě, ale ve fázi nebo okamžité frekvenci. Kolísání amplitudy tedy představuje rušení, které lze omezovačem potlačit.</p>
+
+  <h3>Princip ideálního omezovače</h3>
+  <p>Ideální symetrický omezovač lze popsat:</p>
+  <div class="formula">\[ v_{out}(t) = \begin{cases} +V_L & \text{pokud } v_{in}(t) > 0 \\ -V_L & \text{pokud } v_{in}(t) < 0 \end{cases} \]</div>
+  <p>Výstup tedy závisí hlavně na znaménku vstupního signálu, nikoli na jeho okamžité velikosti. Vznikne průběh podobný obdélníku, který obsahuje mnoho harmonických složek. Proto se za omezovač zařazuje pásmový filtr, který vybere základní složku v okolí nosné frekvence.</p>
+
+  <div class="flow">
+    <div class="fbox">FM/PM signál s amplitudovým šumem</div>
+    <div class="farr">→</div>
+    <div class="fbox">nelineární saturace</div>
+    <div class="farr">→</div>
+    <div class="fbox">obdélníkový průběh</div>
+    <div class="farr">→</div>
+    <div class="fbox">pásmový filtr</div>
+    <div class="farr">→</div>
+    <div class="fbox">stálá amplituda, zachovaná fáze</div>
+  </div>
+
+  <h3>Vliv na pásmový signál</h3>
+  <p>Obecný vstupní pásmový signál:</p>
+  <div class="formula">\[ v_{in}(t) = R(t) \cdot \cos(\omega_c t + \theta(t)) \]</div>
+  <p>Po ideálním pásmovém omezení se odstraní informace o amplitudě \(R(t)\), ale zůstane zachována informace o fázi a frekvenci:</p>
+  <div class="formula">\[ v_{out}(t) \approx K \cdot V_L \cdot \cos(\omega_c t + \theta(t)) \]</div>
+  <p>Konstanta \(K\) zahrnuje zesílení a vliv pásmového filtru. Výsledkem je signál s téměř konstantní obálkou, což je výhodné před FM detekcí.</p>
+
+  <div class="grid2">
+    <div class="card"><h4>Kdy je omezovač vhodný</h4><p>U FM a PM signálů, kde informace není v amplitudě. Omezovač potlačí amplitudové rušení a zlepší následnou detekci.</p></div>
+    <div class="card"><h4>Kdy je omezovač nevhodný</h4><p>U AM signálu před detekcí obálky, protože by odstranil právě tu složku, ve které je uložena informace.</p></div>
+  </div>
+
+  <table>
+    <tr><th>Vlastnost</th><th>Ideální omezovač</th><th>Pásmový omezovač</th></tr>
+    <tr><td>Nelinearita</td><td>Ostrá saturace na \(+V_L\) a \(-V_L\).</td><td>Stejná saturace, ale doplněná pásmovou filtrací.</td></tr>
+    <tr><td>Výstupní průběh</td><td>Obdélníkový nebo silně zkreslený průběh.</td><td>Přibližně harmonický signál v okolí nosné frekvence.</td></tr>
+    <tr><td>Zachovaná informace</td><td>Znaménko, průchody nulou, fáze.</td><td>Fáze a okamžitá frekvence.</td></tr>
+    <tr><td>Potlačená informace</td><td>Amplituda.</td><td>Amplitudové kolísání a amplitudový šum.</td></tr>
+  </table>
+
+  <div class="note"><strong>Tip ke státnicím:</strong> Řekni, že omezovač je užitečný u FM/PM, protože amplituda není nositelem informace. U FM detektoru bývá pásmový omezovač zařazen na vstupu právě proto, aby změny amplitudy nezpůsobily chybu demodulace.</div>
+  <div class="danger"><strong>Chyták:</strong> Omezovač není obyčejný zesilovač. Zesilovač má ideálně lineární charakteristiku, zatímco omezovač záměrně pracuje v nelineární saturaci.</div>
+
+  <hr class="sec">
+
+  <h2 id="s3">3. Způsoby zpracování signálu pomocí směšovače</h2>
+  <div class="def">Směšovač je nelineární nebo časově variantní obvod, který násobí vstupní signál signálem lokálního oscilátoru a tím posouvá spektrum vstupního signálu po frekvenční ose.</div>
+  <p>Směšovač, anglicky <em>mixer</em>, je základní blok modulátorů, demodulátorů a zejména přijímačů se směšováním na mezifrekvenci. Jeho úkolem není pouze zesílení, ale hlavně <strong>frekvenční konverze</strong>. To znamená, že složky signálu se přesunou z jedné frekvenční oblasti do jiné.</p>
+
+  <h3>Matematický princip</h3>
+  <p>Jádrem směšování je násobení dvěma harmonickými průběhy. Pomocí goniometrické identity platí:</p>
+  <div class="formula">\[ \cos(\omega_1 t) \cdot \cos(\omega_0 t) = \tfrac{1}{2}\cos\bigl((\omega_1 - \omega_0)t\bigr) + \tfrac{1}{2}\cos\bigl((\omega_1 + \omega_0)t\bigr) \]</div>
+  <p>Na výstupu směšovače tedy vznikají dvě hlavní frekvenční složky: <strong>rozdílová</strong> a <strong>součtová</strong>. Následující filtr vybere jen tu složku, kterou potřebujeme.</p>
+
+  <div class="flow">
+    <div class="fbox">vstupní RF signál</div>
+    <div class="farr">+</div>
+    <div class="fbox">lokální oscilátor LO</div>
+    <div class="farr">→</div>
+    <div class="fbox">násobení</div>
+    <div class="farr">→</div>
+    <div class="fbox">f<sub>RF</sub> − f<sub>LO</sub> a f<sub>RF</sub> + f<sub>LO</sub></div>
+    <div class="farr">→</div>
+    <div class="fbox">filtr</div>
+  </div>
+
+  <h3>Směšování nahoru a dolů</h3>
+  <table>
+    <tr><th>Režim</th><th>Co se děje se spektrem</th><th>Použití</th></tr>
+    <tr><td>Down-conversion</td><td>Vysokofrekvenční signál se převede na nižší mezifrekvenci nebo do základního pásma.</td><td>Přijímače, superheterodyn, SDR přijímače.</td></tr>
+    <tr><td>Up-conversion</td><td>Signál v základním pásmu nebo na mezifrekvenci se přesune na vyšší nosnou frekvenci.</td><td>Vysílače, RF modulátory.</td></tr>
+    <tr><td>Frequency translation</td><td>Celé frekvenční spektrum se posune o frekvenci lokálního oscilátoru.</td><td>Zpracování pásmových signálů, měřicí technika.</td></tr>
+  </table>
+
+  <h3>Bloky ideálního směšovače</h3>
+  <div class="grid3">
+    <div class="card"><h4>Vstupní signál</h4><p>Přivádí se modulovaný pásmový signál, například RF signál z antény nebo z předchozího stupně.</p></div>
+    <div class="card"><h4>Lokální oscilátor</h4><p>Generuje harmonický signál o známé frekvenci. Tato frekvence určuje výsledný frekvenční posun.</p></div>
+    <div class="card"><h4>Filtr</h4><p>Vybere požadovanou součtovou nebo rozdílovou složku a potlačí zbytek spektra.</p></div>
+  </div>
+
+  <p>V přijímači superheterodynního typu se směšovač používá pro převod přijaté nosné frekvence na pevnou mezifrekvenci \(f_{IF}\). Pro správný návrh platí:</p>
+  <div class="formula">\[ f_{IF} = |f_{RF} - f_{LO}| \]</div>
+  <p>Protože se filtr a zesilovač na mezifrekvenci nastavují na pevnou frekvenci, je možné dosáhnout vyšší selektivity a stability než u kaskádně laděného přijímače.</p>
+
+  <div class="note"><strong>Co říct u zkoušky:</strong> Směšovač nevytváří pouze součet dvou signálů. Jeho princip je násobení, a proto na výstupu vznikají nové frekvence odpovídající součtu a rozdílu vstupní frekvence a frekvence lokálního oscilátoru.</div>
+  <div class="danger"><strong>Častá chyba:</strong> Pokud se po směšování nepoužije vhodný filtr, zůstanou v signálu nežádoucí součtové složky, zrcadlové frekvence nebo produkty nelinearity.</div>
+
+  <hr class="sec">
+
+  <h2 id="s4">4. Způsoby zpracování signálu pomocí detektoru obálky</h2>
+  <div class="def">Detektor obálky je systém, který z pásmového signálu získává jeho reálnou obálku. U klasické amplitudové modulace je obálka přímo úměrná přenášenému informačnímu signálu.</div>
+  <p>Detektor obálky je nejjednodušší způsob demodulace klasického AM signálu s nosnou. Pokud je amplituda nosné měněna podle informačního signálu, lze zprávu obnovit sledováním vnějšího tvaru vysokofrekvenčního průběhu.</p>
+
+  <h3>AM signál a obálka</h3>
+  <p>Klasický AM signál:</p>
+  <div class="formula">\[ v_{AM}(t) = A_c \cdot [1 + k_a \cdot m(t)] \cdot \cos(\omega_c t) \]</div>
+  <p>Obálka je potom:</p>
+  <div class="formula">\[ R(t) = A_c \cdot [1 + k_a \cdot m(t)] \]</div>
+  <p>Detektor obálky má na výstupu přibližně \(v_{out}(t) = k \cdot R(t)\). Po odstranění stejnosměrné složky lze získat původní informační průběh \(m(t)\).</p>
+
+  <h3>Praktická realizace</h3>
+  <p>Jednoduchý analogový detektor obálky tvoří dioda a RC člen. Dioda propouští špičky signálu a kondenzátor se nabíjí na přibližnou hodnotu obálky. Rezistor umožňuje vybíjení kondenzátoru tak, aby obvod sledoval pomalé změny obálky, ale nereagoval na jednotlivé periody nosné.</p>
+
+  <div class="flow">
+    <div class="fbox">AM signál</div>
+    <div class="farr">→</div>
+    <div class="fbox">diodové usměrnění</div>
+    <div class="farr">→</div>
+    <div class="fbox">RC sledování špiček</div>
+    <div class="farr">→</div>
+    <div class="fbox">dolní propust</div>
+    <div class="farr">→</div>
+    <div class="fbox">m(t)</div>
+  </div>
+
+  <h3>Podmínka správné volby RC konstanty</h3>
+  <p>Časová konstanta detektoru musí být zvolena mezi periodou nosné a periodou modulačního signálu:</p>
+  <div class="formula">\[ T_c \ll R \cdot C \ll T_m \]</div>
+  <p>Jinými slovy: RC člen má být dostatečně pomalý, aby vyhladil nosnou, ale dostatečně rychlý, aby sledoval změny obálky.</p>
+
+  <table>
+    <tr><th>Stav RC konstanty</th><th>Důsledek</th><th>Projev na výstupu</th></tr>
+    <tr><td>\(R \cdot C\) příliš malé</td><td>Kondenzátor se vybíjí příliš rychle.</td><td>Výstup obsahuje zbytky nosné a zvlnění.</td></tr>
+    <tr><td>\(R \cdot C\) vhodné</td><td>Obvod sleduje obálku a potlačí nosnou.</td><td>Dobře obnovený modulační signál.</td></tr>
+    <tr><td>\(R \cdot C\) příliš velké</td><td>Kondenzátor se vybíjí příliš pomalu.</td><td>Vzniká zkreslení obálky, zejména při rychlém poklesu signálu.</td></tr>
+  </table>
+
+  <div class="grid2">
+    <div class="card"><h4>Vhodné použití</h4><p>Klasická AM modulace s nepřerušenou nosnou, kde se obálka nikdy nepřekříží přes nulu.</p></div>
+    <div class="card"><h4>Nevhodné použití</h4><p>DSB-SC, SSB nebo QAM bez nosné. Zde obálka sama o sobě nenese přímo původní informaci.</p></div>
+  </div>
+
+  <div class="note"><strong>Tip ke státnicím:</strong> Detektor obálky je jednoduchý a levný, ale funguje správně pouze tehdy, když obálka odpovídá informačnímu signálu. Proto je vhodný pro běžné AM, nikoli pro DSB-SC s potlačenou nosnou.</div>
+  <div class="danger"><strong>Chyták:</strong> Při přemodulování AM signálu, tedy při příliš velké hloubce modulace, se obálka překříží a detektor obálky obnoví zkreslený signál.</div>
+
+  <hr class="sec">
+
+  <h2 id="s5">5. Způsoby zpracování signálu pomocí detektoru FM signálu</h2>
+  <div class="def">Detektor FM signálu je systém, jehož výstupní napětí je úměrné okamžité frekvenci vstupního signálu, respektive derivaci jeho fázové složky.</div>
+  <p>U frekvenční modulace je informace uložena ve změnách okamžité frekvence nosné. Detektor FM proto nemá sledovat amplitudu, ale převést změnu frekvence na změnu výstupního napětí.</p>
+
+  <h3>Okamžitá fáze a okamžitá frekvence</h3>
+  <p>Vstupní FM signál:</p>
+  <div class="formula">\[ v_{in}(t) = R(t) \cdot \cos(\omega_c t + \theta(t)) \]</div>
+  <p>Okamžitá úhlová frekvence je derivací celkové fáze:</p>
+  <div class="formula">\[ \omega_i(t) = \frac{d}{dt}[\omega_c t + \theta(t)] = \omega_c + \frac{d\theta(t)}{dt} \]</div>
+  <p>Ideální FM detektor má výstup:</p>
+  <div class="formula">\[ v_{out}(t) = K \cdot \left[\omega_c + \frac{d\theta(t)}{dt}\right] \]</div>
+  <p>V praxi se často používá vyvážené zapojení, které potlačí konstantní složku \(K \cdot \omega_c\), takže zůstane pouze složka úměrná informaci:</p>
+  <div class="formula">\[ v_{out}(t) \approx K \cdot \frac{d\theta(t)}{dt} \]</div>
+
+  <h3>Základní způsoby FM detekce</h3>
+  <table>
+    <tr><th>Princip</th><th>Popis</th><th>Poznámka</th></tr>
+    <tr><td>FM-AM konverze</td><td>Frekvenční odchylka se převede na změnu amplitudy a ta se detekuje obálkovým detektorem.</td><td>Typicky derivační nebo sklonový detektor.</td></tr>
+    <tr><td>Průchody nulou</td><td>Měří se počet průchodů signálu nulovou úrovní za časový interval.</td><td>Vhodné i pro digitální realizaci.</td></tr>
+    <tr><td>Fázový posun</td><td>Změna frekvence se převede na změnu fáze mezi dvěma větvemi.</td><td>Použití ve fázových diskriminátorech a PLL.</td></tr>
+  </table>
+
+  <h3>FM detektor se sklonovou detekcí</h3>
+  <p>Jednoduchý způsob realizace je využít pásmový omezovač, derivační obvod a detektor obálky. Omezovač nejprve potlačí nežádoucí změny amplitudy. Derivační člen způsobí, že amplituda odvozeného signálu je závislá na okamžité frekvenci. Detektor obálky pak tuto amplitudu převede na nízkofrekvenční výstupní signál.</p>
+
+  <div class="flow">
+    <div class="fbox">FM signál</div>
+    <div class="farr">→</div>
+    <div class="fbox">pásmový omezovač</div>
+    <div class="farr">→</div>
+    <div class="fbox">derivační člen</div>
+    <div class="farr">→</div>
+    <div class="fbox">FM → AM</div>
+    <div class="farr">→</div>
+    <div class="fbox">detektor obálky</div>
+    <div class="farr">→</div>
+    <div class="fbox">m(t)</div>
+  </div>
+
+  <div class="note"><strong>Co říct u zkoušky:</strong> FM detektor nepotřebuje obnovovat amplitudu. Amplitudové změny jsou rušivé, proto se před FM detekci často zařazuje omezovač. Vlastní detektor převádí změny okamžité frekvence na výstupní napětí.</div>
+  <div class="danger"><strong>Častá chyba:</strong> Neplést FM detektor s detektorem obálky pro AM. U FM samotná obálka nenese informaci; obálkový detektor se u sklonového FM detektoru používá až po převodu FM změn na amplitudové změny.</div>
+
+  <hr class="sec">
+
+  <h2 id="s6">6. Způsoby zpracování signálu pomocí multiplikativního detektoru</h2>
+  <div class="def">Multiplikativní detektor je koherentní demodulátor, který násobí přijatý pásmový signál lokálně generovanou nosnou a po dolnopropustné filtraci získává signál v základním frekvenčním pásmu.</div>
+  <p>Multiplikativní detektor je principově podobný směšovači, ale jeho cílem je detekce, tedy získání informačního signálu. Používá se tam, kde jednoduchý detektor obálky nestačí, hlavně u modulací s potlačenou nosnou nebo u kvadraturních modulací.</p>
+
+  <h3>Princip pro obecný pásmový signál</h3>
+  <p>Mějme přijatý signál:</p>
+  <div class="formula">\[ v_{in}(t) = R(t) \cdot \cos(\omega_c t + \theta(t)) \]</div>
+  <p>Lokální oscilátor generuje:</p>
+  <div class="formula">\[ v_{LO}(t) = A_0 \cdot \cos(\omega_c t + \theta_0) \]</div>
+  <p>Po násobení vznikne nízkofrekvenční složka a vysokofrekvenční složka kolem dvojnásobku nosné. Dolnopropustný filtr ponechá nízkofrekvenční část:</p>
+  <div class="formula">\[ v_{out}(t) = \tfrac{1}{2} A_0 \cdot R(t) \cdot \cos(\theta(t) - \theta_0) \]</div>
+  <p>Výsledek závisí na fázovém rozdílu mezi přijatým signálem a lokálním oscilátorem. Proto se multiplikativní detekce označuje jako <strong>koherentní</strong> nebo <strong>synchronní</strong> detekce.</p>
+
+  <h3>DSB-SC jako typický příklad</h3>
+  <p>U DSB-SC je nosná potlačena a signál má tvar:</p>
+  <div class="formula">\[ v_{DSB\text{-}SC}(t) = m(t) \cdot \cos(\omega_c t) \]</div>
+  <p>Po vynásobení lokální nosnou:</p>
+  <div class="formula">\[ v_{DSB\text{-}SC}(t) \cdot 2\cos(\omega_c t) = m(t) \cdot [1 + \cos(2\omega_c t)] \]</div>
+  <p>Dolnopropustný filtr odstraní složku \(\cos(2\omega_c t)\) a zůstane:</p>
+  <div class="formula">\[ v_{out}(t) \approx m(t) \]</div>
+
+  <table>
+    <tr><th>Modulace</th><th>Proč se hodí multiplikativní detektor</th><th>Poznámka</th></tr>
+    <tr><td>DSB-SC</td><td>Nosná je potlačena, obálka neodpovídá přímo informaci.</td><td>Nutná synchronizace lokální nosné.</td></tr>
+    <tr><td>SSB</td><td>Přenáší se pouze jedno postranní pásmo.</td><td>Vyžaduje přesnou frekvenci oscilátoru.</td></tr>
+    <tr><td>QAM / QM</td><td>Informace je v I a Q složce, tedy v amplitudě i fázi.</td><td>Používají se dvě větve s nosnými posunutými o 90°.</td></tr>
+    <tr><td>Koherentní AM</td><td>Umožní přesnější demodulaci než obyčejný detektor obálky.</td><td>Složitější, ale kvalitnější řešení.</td></tr>
+  </table>
+
+  <div class="flow">
+    <div class="fbox">pásmový signál</div>
+    <div class="farr">×</div>
+    <div class="fbox">lokální nosná</div>
+    <div class="farr">→</div>
+    <div class="fbox">součet + rozdíl frekvencí</div>
+    <div class="farr">→</div>
+    <div class="fbox">LPF</div>
+    <div class="farr">→</div>
+    <div class="fbox">základní pásmo</div>
+  </div>
+
+  <div class="note"><strong>Tip ke státnicím:</strong> Multiplikativní detektor je vlastně směšovač použitý jako demodulátor. Rozhodující je, že lokální oscilátor musí mít stejnou frekvenci a správnou fázi jako nosná přijatého signálu.</div>
+  <div class="danger"><strong>Chyták:</strong> Pokud je lokální oscilátor fázově posunutý, výstup se násobí faktorem \(\cos(\varphi)\). Při posunu 90° může teoreticky v jedné větvi signál zmizet, proto se u kvadraturních systémů používají I/Q větve.</div>
+
+  <hr class="sec">
+
+  <h2 id="s7">7. Způsoby zpracování signálu pomocí přijímače</h2>
+  <div class="def">Přijímač je systém, který z přijatého pásmového signálu vybere požadovaný kanál, zesílí jej, potlačí rušení, případně jej převede na mezifrekvenci nebo do základního pásma a demodulací získá informační signál.</div>
+  <p>Přijímač je soustava několika bloků. Přijímá signál z antény nebo z vedení, kde je užitečný signál obvykle zatížen šumem, rušením a útlumem. Úkolem přijímače je získat co nejvěrnější odhad původního informačního signálu.</p>
+
+  <h3>Obecný přijímací řetězec</h3>
+  <div class="flow">
+    <div class="fbox">anténa / vstup</div>
+    <div class="farr">→</div>
+    <div class="fbox">vstupní filtr</div>
+    <div class="farr">→</div>
+    <div class="fbox">RF zesilovač</div>
+    <div class="farr">→</div>
+    <div class="fbox">směšovač / detektor</div>
+    <div class="farr">→</div>
+    <div class="fbox">IF nebo základní pásmo</div>
+    <div class="farr">→</div>
+    <div class="fbox">demodulace</div>
+    <div class="farr">→</div>
+    <div class="fbox">výstup m(t)</div>
+  </div>
+
+  <h3>Kaskádně laděný přijímač TRF</h3>
+  <p>Kaskádně laděný přijímač, označovaný jako TRF z anglického <em>Tuned Radio Frequency</em>, zpracovává signál přímo na přijímané vysokofrekvenční nosné. Obsahuje několik laděných RF stupňů, které musí být při změně stanice přeladěny společně.</p>
+  <p>Výhodou je jednodušší princip. Nevýhodou je složité současné ladění více stupňů, horší stálost parametrů a omezená selektivita při širokém rozsahu ladění.</p>
+
+  <h3>Superheterodynní přijímač</h3>
+  <p>Superheterodynní přijímač nejprve převede přijímanou frekvenci pomocí směšovače na pevnou mezifrekvenci \(f_{IF}\). Na této pevné frekvenci se poté provádí hlavní filtrace, zesílení a demodulace.</p>
+
+  <div class="flow">
+    <div class="fbox">RF signál f<sub>RF</sub></div>
+    <div class="farr">→</div>
+    <div class="fbox">směšovač + LO</div>
+    <div class="farr">→</div>
+    <div class="fbox">mezifrekvence f<sub>IF</sub></div>
+    <div class="farr">→</div>
+    <div class="fbox">IF filtr + zesilovač</div>
+    <div class="farr">→</div>
+    <div class="fbox">detektor</div>
+    <div class="farr">→</div>
+    <div class="fbox">audio/data</div>
+  </div>
+
+  <table>
+    <tr><th>Vlastnost</th><th>Kaskádně laděný TRF</th><th>Superheterodyn</th></tr>
+    <tr><td>Frekvence zpracování</td><td>Stále na přijímané RF frekvenci.</td><td>Po směšování na pevné mezifrekvenci.</td></tr>
+    <tr><td>Ladění</td><td>Musí se ladit více RF filtrů najednou.</td><td>Ladí se hlavně lokální oscilátor; IF bloky jsou pevné.</td></tr>
+    <tr><td>Selektivita</td><td>Horší při velkém rozsahu frekvencí.</td><td>Dobrá, protože filtry jsou pevně navrženy na IF.</td></tr>
+    <tr><td>Složitost</td><td>Jednodušší koncepce, ale prakticky náročnější na ladění.</td><td>Složitější kvůli směšovači a LO, ale technicky výhodnější.</td></tr>
+    <tr><td>Typické použití</td><td>Jednodušší nebo speciální přijímače.</td><td>Rozhlasové a komunikační přijímače, měřicí technika.</td></tr>
+  </table>
+
+  <h3>Typické detekční bloky v přijímači</h3>
+  <table>
+    <tr><th>Přijímaná modulace</th><th>Vhodný detektor</th><th>Proč</th></tr>
+    <tr><td>AM s nosnou</td><td>Detektor obálky</td><td>Obálka odpovídá informačnímu signálu.</td></tr>
+    <tr><td>DSB-SC / SSB</td><td>Multiplikativní detektor</td><td>Nosná je potlačena nebo chybí, je nutná koherentní detekce.</td></tr>
+    <tr><td>FM</td><td>FM detektor, případně PLL</td><td>Informace je ve změně okamžité frekvence.</td></tr>
+    <tr><td>PM / QAM / PSK</td><td>Fázový nebo I/Q koherentní detektor</td><td>Informace je ve fázi nebo v kvadraturních složkách.</td></tr>
+  </table>
+
+  <div class="note"><strong>Co říct u zkoušky:</strong> Přijímač není jen detektor. Před detekcí musí signál vybrat, zesílit, často převést na mezifrekvenci a potlačit nežádoucí složky. Superheterodyn je výhodný tím, že hlavní selektivní filtrace probíhá na pevné mezifrekvenci.</div>
+  <div class="danger"><strong>Chyták:</strong> U superheterodynu se musí řešit i zrcadlová frekvence. Ta může po směšování vytvořit stejnou mezifrekvenci jako požadovaný kanál, proto je nutný vstupní preselektor.</div>
+
+  <hr class="sec">
+
+  <h2 id="s8">Co určitě umět říct u státnic</h2>
+  <div class="def">U státnic je důležité umět stručně vysvětlit účel každého bloku, jeho vstup a výstup, typickou modulaci, pro kterou se používá, a hlavní chyták daného principu.</div>
+  <ul>
+    <li>Pásmový signál má spektrum v okolí nosné frekvence \(f_c\), zatímco informační signál bývá v základním pásmu.</li>
+    <li>Lineární časově invariantní filtr sám o sobě neposouvá signál na jinou frekvenci; k frekvenční konverzi je potřeba směšování nebo jiná nelinearita.</li>
+    <li>Omezovač je nelineární obvod se saturací; odstraňuje informaci o amplitudě, ale ponechává fázi a okamžitou frekvenci.</li>
+    <li>Omezovač je vhodný pro FM a PM signály, protože u nich není informace uložena v amplitudě.</li>
+    <li>Směšovač násobí vstupní signál lokálním oscilátorem, takže na výstupu vznikají součtové a rozdílové frekvence.</li>
+    <li>Po směšování je nutný filtr, který vybere požadovanou složku a potlačí nežádoucí produkty směšování.</li>
+    <li>Detektor obálky sleduje reálnou obálku signálu a je vhodný hlavně pro klasickou AM modulaci s nosnou.</li>
+    <li>Detektor obálky není vhodný pro DSB-SC, protože u potlačené nosné obálka neodpovídá přímo informačnímu signálu.</li>
+    <li>FM detektor převádí okamžitou frekvenci nebo derivaci fáze na výstupní napětí.</li>
+    <li>Typický jednoduchý FM detektor může využít řetězec: pásmový omezovač, derivační člen a detektor obálky.</li>
+    <li>Multiplikativní detektor je koherentní detektor; násobí přijatý signál lokální nosnou a po dolnopropustné filtraci získá základní pásmo.</li>
+    <li>U multiplikativní detekce je kritická shoda frekvence a fáze lokálního oscilátoru s nosnou přijatého signálu.</li>
+    <li>Přijímač obsahuje vstupní filtr, zesilovač, směšovač nebo detektor, filtry a demodulační část.</li>
+    <li>Kaskádně laděný přijímač zpracovává signál přímo na RF frekvenci, ale vyžaduje souběžné ladění více stupňů.</li>
+    <li>Superheterodyn převádí signál na pevnou mezifrekvenci, což usnadňuje selektivní filtraci a zesílení.</li>
+    <li>U superheterodynu je nutné hlídat zrcadlovou frekvenci a správnou volbu lokálního oscilátoru.</li>
+  </ul>
+
+  <hr class="sec">
+  <div style="background:#1a4a8a;color:white;padding:18px 24px;border-radius:8px;margin-top:24px;">
+    <p style="color:white;font-size:13px;margin:0;text-align:center;">
+      <strong>Systémy pro zpracování signálu</strong> · Řídicí a informační systémy 2026<br>
+      Podklady: přednášky a skripta PMZS
+    </p>
+  </div>
+
+</div>
+<script defer src="shared/nav-links.js"></script>
+<script>
+  const topbar = document.getElementById('topbar');
+  const navToggle = document.getElementById('navToggle');
+  const navItems = document.querySelectorAll('.nav-item');
+  const navLinks = document.querySelectorAll('#site-nav > a');
+  function setMenu(open) {
+    topbar.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+  }
+  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
+  navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  navItems.forEach((item) => {
+    const link = item.querySelector('a:first-child');
+    link.addEventListener('click', (e) => {
+      if (window.innerWidth <= 760 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
+        e.preventDefault();
+        item.classList.toggle('is-open');
+      }
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle')) {
+      navItems.forEach(item => item.classList.remove('is-open'));
+    }
+  });
+</script>
+</body>
+</html>
