@@ -293,7 +293,6 @@
     <p class="lead">Repozitář slouží jako osobní studijní podpora. Na hlavní stránce je shrnutý README a přehled HTML souborů s vypracovanými otázkami. Teď je k dispozici jedna otázka, další lze doplňovat stejným způsobem.</p>
     <div class="hero-actions">
       <a class="button primary" href="#otazky">Zobrazit otázky</a>
-      <a class="button secondary" href="statnice_freertos.html">Otevřít FreeRTOS</a>
     </div>
     <div class="meta-grid">
       <div class="meta"><span>README</span><strong>Studijní pomůcka k přípravě na státnice</strong></div>
@@ -375,9 +374,7 @@
         </a>
       </div>
 
-      <p class="readme-note">Zobrazeny jsou pouze vypracované položky — ostatní jsou šedé a neklikatelné. Po nahrání další otázky (např. č. 8) ji doplním sem jako klikatelnou kartu.</p>
-
-      <ol>
+      <ul>
         <li><strong>Syntéza spojitých regulačních obvodů.</strong> Striktní formulace návrhového problému jednoduché regulační PID smyčky: blokové schéma, přenosy, návrhové požadavky. Ukazatele kvality regulace. Klasifikace metod syntézy, obecné požadavky na efektivní metodu návrhu. Vybraná návrhová metoda – podrobný popis a vysvětlení postupu (Ziegler–Nichols, optimální modul, optimalizace na základě H∞ specifikace).</li>
         <li><strong>Praktické aspekty aplikace PID regulátorů.</strong> Reálný PID regulátor. Filtrace derivační složky. Windup efekt a beznarázové připojení. PID regulátor se dvěma stupni volnosti. Komerční průmyslové regulátory, standardní (ISA) tvar přenosu PID regulátoru. Digitální implementace PID: metody diskretizace PID regulátoru, základní struktura regulačního obvodu se vzorkováním.</li>
         <li><strong>Stavová regulace.</strong> Blokové schéma se stavovou zpětnou vazbou, úpravy pro použití pozorovatele stavů. Podmínky realizace (řiditelnost, pozorovatelnost). Metoda umístění pólů pro návrh stavového regulátoru. Luenbergerův pozorovatel a Kalmanův filtr: základní principy, příklady použití.</li>
@@ -398,7 +395,7 @@
         <li><strong>Statické a dynamické vlastnosti měřicího informačního systému.</strong> Metody měření statických a dynamických vlastností MIS.</li>
         <li><strong>Přehled základních typů drátových a bezdrátových sběrnic.</strong> Základní parametry, topologie sběrnicových systémů pro přenos dat.</li>
         <li><strong>EMC a její vliv na kvalitu měřícího signálu.</strong> Způsoby přenosových vazeb rušivých signálů a základní způsoby omezení rušivých signálů.</li>
-      </ol>
+      </ul>
       <p><strong>Zaměření PISR — Předměty pro specializaci (Počítače a informační systémy v řízení):</strong></p>
       <ul>
         <li>Řídicí systémy s počítači</li>
@@ -413,7 +410,6 @@
   <section class="section" id="readme">
     <div class="section-head">
       <h2>README</h2>
-      <p>Krátký přepis úvodu z repozitáře, aby bylo hned jasné, k čemu tenhle projekt slouží.</p>
     </div>
     <div class="readme">
       <p><strong>Vypracované státnicové otázky</strong> jsou osobní studijní materiál k přípravě na státní závěrečné zkoušky. Cílem je mít jednotlivé otázky přehledně a poctivě zpracované podle dostupných podkladů ze studia.</p>
@@ -425,11 +421,11 @@
   <section class="section" id="otazky">
     <div class="section-head">
       <h2>Otázky</h2>
-      <p>Každá státnicová otázka je samostatný HTML soubor. Už jsou připravené otázky 1, 8, 9, 10, 12 a 20, plus FreeRTOS a Mobilní platformy jako specializace.</p>
+      <p>Zpracované otázky</p>
     </div>
     <div class="question-list">
       <a class="question-card" href="statnice_freertos.html">
-        <span class="tag">Otázka 1</span>
+        <span class="tag">PaISR</span>
         <h3>FreeRTOS</h3>
         <p>Vypracovaná otázka o scheduleru, úlohách, synchronizaci, časovačích a kontextovém přepínání.</p>
       </a>
@@ -465,7 +461,6 @@
       </a>
     </div>
   </section>
-  <p class="footer">Až přidáš další HTML soubory, stačí je doplnit do sekce Otázky a do menu.</p>
 </main>
 <script defer src="shared/nav-links.js"></script>
 <script>
