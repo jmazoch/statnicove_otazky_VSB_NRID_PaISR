@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicová otázka 10: Amplitudové a úhlové analogové modulace</title>
+    <style>* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+.def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; font-style: italic; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+.note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f8ff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: #f5f8ff; border: 1px solid #c8d8f0; border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: #1a4a8a; margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+.toc { background: #f0f4fa; border: 1px solid #c0cfea; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+.toc h3 { color: #1a4a8a; margin-bottom: 10px; font-size: 14px; }
+.toc ol { font-size: 13px; }
+.toc li { margin-bottom: 3px; }
+.toc a { color: #1a4a8a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+pre { background:#0f172a; color:#e5e7eb; padding:12px 16px; border-radius:8px; overflow-x:auto; font-size:13px; line-height:1.45; margin:14px 0; }
+pre code { background: transparent; color: inherit; padding:0; }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
+.farr { font-size: 20px; color: #888; }
+hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
+@media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }
+.figure { background:#f8fbff; border:1px solid #d8e3f4; border-radius:8px; padding:12px; margin:14px 0; text-align:center; }
+.figure img { max-width:100%; height:auto; border-radius:6px; display:block; margin:0 auto; }
+.figcap { font-size:13px; color:#53698f; margin-top:8px; font-style:italic; text-align:center; }
+</style>
+<link rel="stylesheet" href="shared/navbar-styles.css">
+</head>
+<body>
+
+    <header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Hlavní stránka">
+      <strong>Státnicové otázky</strong>
+      <span>README a přehled vypracovaných HTML otázek</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="index.html">Main</a>
+      <a href="index.html#otazky">Otázky</a>
+      
+      <div class="nav-item" id="nav-rs">
+        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="#" class="nav-disabled">3. Stavová regulace</a>
+          <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="#" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-pmzs">
+        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
+          <a href="12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="#" class="nav-disabled">13. Převod analogové...</a>
+          <a href="#" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-ms">
+        <a href="index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#">15. Vlastnosti měřicího systému</a>
+          <a href="#">16. Příčiny chyb...</a>
+          <a href="#">17. Statistické parametry...</a>
+          <a href="#">18. Statické a dynamické...</a>
+          <a href="#">19. Drátové a bezdrátové...</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-paisr">
+        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="#" class="nav-disabled">SWI</a>
+          <a href="mobilni_platformy_statnice.html">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="page">
+<h1>Otázka 11: Amplitudové a úhlové analogové modulace</h1>
+<p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · Podklady: přednášky a skripta PMZS</p>
+    <div class="meta-info">
+        <strong>Obor:</strong> NMgr. Řídicí a informační systémy<br>
+        <strong>Téma:</strong> Amplitudové analogové modulace, úhlové analogové modulace. Analýza modulovaného vysokofrekvenčního
+signálu v časové oblasti, frekvenční analýza a spektra modulovaného vysokofrekvenčního signálu, modulace (AM,
+DSB-SC, SSB-AM, QM, PM, FM). <br>
+    </div>
+
+    <!-- SEKCE 1 -->
+    <h2>1. Analýza modulovaného VF signálu</h2>
+    <div class="def">
+        <strong>Pásmový signál <span class="math"><i>v(t)</i></span>:</strong> Signál přenášející informaci přes komunikační kanál, který má své nenulové frekvenční spektrum koncentrované v okolí vysokofrekvenční nosné frekvence <span class="math"><i>f<sub>c</sub></i></span>.<br><br>
+        Každý pásmový signál lze definovat pomocí komplexní obálky <span class="math"><i>g(t)</i></span> a nosné úhlové frekvence <span class="math">&omega;<sub>c</sub></span> jako:
+        <br>
+        <div class="math-block"><i>v(t)</i> = Re { <i>g(t)</i> &middot; e<sup> <i>j&omega;<sub>c</sub>t</i></sup> }</div>
+    </div>
+
+    <div class="grid2">
+        <div class="card">
+            <h3>Polární tvar</h3>
+            <p><code>v(t) = R(t) &middot; cos(&omega;<sub>c</sub>t + &theta;(t))</code></p>
+            <ul>
+                <li><strong>R(t):</strong> Amplitudová modulační složka (reálná obálka).</li>
+                <li><strong>&theta;(t):</strong> Fázová modulační složka.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Kartézský tvar</h3>
+            <p><code>v(t) = x(t) &middot; cos(&omega;<sub>c</sub>t) - y(t) &middot; sin(&omega;<sub>c</sub>t)</code></p>
+            <ul>
+                <li><strong>x(t):</strong> Soufázová (in-phase) složka.</li>
+                <li><strong>y(t):</strong> Kvadraturní složka.</li>
+            </ul>
+        </div>
+    </div>
+
+    <p>Při převodu do frekvenční oblasti získáváme <strong>komplexní spektrální funkci</strong>, kterou dále dělíme na:</p>
+    <ul>
+        <li><strong>Amplitudové spektrum |W<sub>m</sub>(f)|:</strong> Určuje velikost (amplitudu) jednotlivých frekvenčních složek.</li>
+        <li><strong>Fázové spektrum &Theta;<sub>m</sub>(f):</strong> Určuje fázové posuny jednotlivých frekvenčních složek (u AM je pro kladnou obálku nulové, u DSB-SC skáče o &pi;).</li>
+        <li><strong>Výkonové spektrum |P<sub>m</sub>(f)|:</strong> Je úměrné druhé mocnině amplitudového spektra a ukazuje rozložení energie signálu.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Princip do frekvenční oblasti (Spektrum):</strong> Z původního frekvenčního spektra (ležícího kolem 0 Hz) dojde při modulaci k "přesunutí" spektra přesně k nosné frekvenci &plusmn; f<sub>c</sub>.
+    </div>
+
+    <div class="danger">
+        <strong>Přesah do číslicového zpracování (Aliasing):</strong> Pokud chceme modulovaný signál vzorkovat, musíme bezpodmínečně dodržet <em>Shannon-Kotělnikův vzorkovací teorém</em> nebo vzorkovací teorém pro pásmové signály. Nedodržení vede k nevratnému překrytí spekter (aliasingu). Proti tomu bojujeme zařazením hardwarového antialiasingového dolnopropustného filtru před A/D převodník.
+    </div>
+
+    <!-- SEKCE 2 -->
+    <h2>2. Amplitudové analogové modulace (Lineární)</h2>
+
+    <div class="def">
+        Amplitudové modulace jsou <strong>lineární</strong>. Komplexní obálka <span class="math"><i>g(t)</i></span> je lineární funkcí modulačního signálu <span class="math"><i>m(t)</i></span>. Platí u nich princip superpozice – frekvenční spektra se sčítají, aniž by vznikaly nové (kombinační) frekvence.
+    </div>
+
+    <table>
+        <tr>
+            <th>Modulace</th>
+            <th>Komplexní obálka g(t)</th>
+            <th>Spektrum / Šířka pásma</th>
+            <th>Detekce a Vlastnosti</th>
+        </tr>
+        <tr>
+            <td><strong>AM</strong> (Klasická)</td>
+            <td><code>1 + m(t)</code></td>
+            <td>Nosná + horní a dolní postranní pásmo.<br>Šířka: 2B</td>
+            <td><strong>Levná demodulace:</strong> Obálkový detektor. Nízká energetická účinnost (většina výkonu se plýtvá na nesení nosné vlny). Pro harmonický signál má přesně 3 spektrální čáry.</td>
+        </tr>
+        <tr>
+            <td><strong>DSB-SC</strong></td>
+            <td><code>m(t)</code></td>
+            <td>Horní a dolní pásmo (nosná je zcela potlačena).<br>Šířka: 2B</td>
+            <td><strong>100% energetická účinnost</strong>. Vyžaduje dražší <strong>multiplikativní detektor</strong> s přesnou fázovou synchronizací (Costasova smyčka).</td>
+        </tr>
+        <tr>
+            <td><strong>SSB-AM</strong></td>
+            <td><code>m(t) &plusmn; j m&#770;(t)</code></td>
+            <td>Přenáší se jen JEDNO postranní pásmo.<br>Šířka: B</td>
+            <td><strong>Úspora pásma na polovinu.</strong> Tvorba fázového posunu o 90&deg; vyžaduje matematickou <strong>Hilbertovu transformaci</strong> modulačního signálu.</td>
+        </tr>
+        <tr>
+            <td><strong>QM</strong> (Kvadraturní)</td>
+            <td><code>m<sub>1</sub>(t) + j m<sub>2</sub>(t)</code></td>
+            <td>Dva nezávislé signály na stejné f<sub>c</sub>.<br>Šířka: 2B</td>
+            <td><strong>Ortogonalita:</strong> Moduluje na cos(&omega;<sub>c</sub>t) a sin(&omega;<sub>c</sub>t). Demodulace pomocí IQ detektoru.</td>
+        </tr>
+    </table>
+
+    <div class="note">
+        <strong>Státnicový tip na QM (Kvadraturní modulace):</strong> Uvedený princip z QM (dvě ortogonální složky In-phase a Quadrature posunuté o 90&deg;) je absolutním základem dnešních digitálních modulací jako je QAM. Demodulátor se jmenuje <strong>IQ detektor</strong>. Pokud nedodržíte lokálním oscilátorem fázovou koherenci, obě složky se do sebe zničící formou promíchají.
+    </div>
+
+    <h3>2.1 Klasická Amplitudová modulace (AM)</h3>
+    <p>Komplexní obálka: <span class="math"><i>g(t)</i> = 1 + <i>m(t)</i></span>. Ve spektru dominuje nosná vlna. Fázové spektrum u standardní AM bez zpoždění nabývá nulových hodnot (pokud nedojde k přemodulování).</p>
+    <div class="plot-container">
+        <img id="time_am" alt="AM Časový průběh" />
+        <div class="plot-caption">Časový průběh AM. Červeně m(t) posunuté o +1, modře VF signál. Osa x = čas t [s], Osa y = amplituda v(t).</div>
+    </div>
+    <div class="plot-container">
+        <img id="spec_am" alt="AM Spektra" />
+        <div class="plot-caption">Amplitudové, fázové a výkonové spektrum AM. Fáze je na všech složkách nulová (body leží na ose). V amplitudě a výkonu dominuje středová nosná vlna.</div>
+    </div>
+
+    <h3>2.2 DSB-SC (Double-Sideband Suppressed-Carrier)</h3>
+    <p>Komplexní obálka: <span class="math"><i>g(t)</i> = <i>m(t)</i></span>. Nosná vlna chybí. Při průchodu nulu se fáze otočí o 180&deg; (&pi;), což se projeví i ve fázovém spektru.</p>
+    <div class="plot-container">
+        <img id="time_dsb" alt="DSB-SC Časový průběh" />
+        <div class="plot-caption">Časový průběh DSB-SC. Modře je signál, červeně obálka tvořená absolutní hodnotou |m(t)|. V místě nuly dochází ke skoku fáze.</div>
+    </div>
+    <div class="plot-container">
+        <img id="spec_dsb" alt="DSB-SC Spektra" />
+        <div class="plot-caption">Spektra DSB-SC. Nosná fc je potlačena, výkon leží výhradně v postranních pásmech. Fázové spektrum se symetricky překlápí.</div>
+    </div>
+
+    <h3>2.3 SSB-AM (LSSB a USSB)</h3>
+    <p>Využívá Hilbertovu transformaci k odříznutí jednoho postranního pásma. <span class="math"><i>g(t)</i> = <i>m(t)</i> &plusmn; j&middot;<i>m&#770;(t)</i></span>.</p>
+    <div class="plot-container">
+        <img id="spec_ssb" alt="SSB Spektra" />
+        <div class="plot-caption">Triády spekter pro LSSB (vlevo - nižší frekvence pod fc) a USSB (vpravo - vyšší frekvence nad fc).</div>
+    </div>
+
+    <h3>2.4 Kvadraturní modulace (QM)</h3>
+    <p>Přenáší dva nezávislé signály na jedné nosné pomocí složek I a Q posunutých o 90&deg;. <span class="math"><i>g(t)</i> = <i>m<sub>1</sub>(t)</i> + j &middot; <i>m<sub>2</sub>(t)</i></span>.</p>
+    <div class="plot-container">
+        <img id="spec_qm" alt="QM Spektra" />
+        <div class="plot-caption">Spektra QM modulace. Amplituda obou signálů se překrývá v pásmu, odlišení zajišťuje fázové spektrum (posun &pi;/2).</div>
+    </div>
+
+    <!-- SEKCE 3 -->
+    <h2>3. Úhlové analogové modulace (Nelineární)</h2>
+    <div class="def">
+        Úhlové modulace jsou <strong>nelineární</strong> procesy. Amplituda nosné vlny zůstává konstantní. Modulační signál mění buď počáteční fázi, nebo okamžitou frekvenci. Nelinearita znamená neplatnost principu superpozice.
+    </div>
+
+    <div class="danger">
+        <strong>Pozor na výpočet spektra!</strong> Kvůli nelinearitě nevznikne jen posunuté spektrum zprávy jako u AM. Vzniká obrovské množství nových <strong>kombinačních frekvencí</strong> (jejich obálky klesají dle Besselových funkcí). Pro odhad praktické šířky pásma úhlové modulace používáme <strong>Carsonovo pravidlo</strong>.
+    </div>
+
+    <h3>3.1 Fázová modulace (PM)</h3>
+    <p>Odchylka okamžité fáze je <strong>přímo úměrná</strong> informačnímu signálu <span class="math"><i>m(t)</i></span>. <span class="math">&theta;(t) = <i>D<sub>p</sub></i> &middot; <i>m(t)</i></span>.</p>
+    <div class="plot-container">
+        <img id="time_pm" alt="PM Časový průběh" />
+        <div class="plot-caption">Časový průběh PM. Při použití čtvercového modulačního signálu m(t) (červeně) dochází k okamžitým, skokovým změnám fáze nosné vlny (modře) – v průběhu vznikají zřetelné zlomy.</div>
+    </div>
+    <div class="plot-container">
+        <img id="spec_pm" alt="PM Spektra" />
+        <div class="plot-caption">Spektra PM při buzení čtvercovým signálem. Spektrum tvoří zbytková nosná a pouze <strong>liché harmonické</strong> postranní složky (&plusmn;fm, &plusmn;3fm, &plusmn;5fm), jejichž amplitudy klesají úměrně s 1/n, což odpovídá spektru samotné čtvercové vlny.</div>
+    </div>
+
+    <h3>3.2 Frekvenční modulace (FM)</h3>
+    <p>Odchylka okamžité frekvence je přímo úměrná <span class="math"><i>m(t)</i></span>, takže okamžitá fáze je matematickým <strong>integrálem</strong> modulačního signálu!. <span class="math">&theta;(t) = <i>D<sub>f</sub></i> &int; <i>m(&tau;)</i> d&tau;</span>.</p>
+    
+    <div class="flow">
+        <div class="fbox">m(t) &rarr; Integrátor</div>
+        <span>&rarr;</span>
+        <div class="fbox">Fázový modulátor</div>
+        <span>&rarr;</span>
+        <div class="fbox"><strong>= FM signál</strong></div>
+    </div>
+    <p style="text-align: center; color: #4a5568;"><em>(Schéma generování FM signálu, pokud máme k dispozici pouze fázový modulátor)</em></p>
+
+    <div class="plot-container">
+        <img id="time_fm" alt="FM Časový průběh" />
+        <div class="plot-caption">Časový průběh FM. Nosná je <strong>nejhustší</strong> (nejvyšší okamžitá frekvence) v maximu informačního signálu.</div>
+    </div>
+    <div class="plot-container">
+        <img id="spec_fm" alt="FM Spektra" />
+        <div class="plot-caption">Spektra FM. Protože integrál z kosinusu je sinus, fázové spektrum je asymetrické (rozdíl oproti PM).</div>
+    </div>
+
+    <!-- SEKCE 4 - CO ŘÍCT U STÁTNIC -->
+    <h2>4. Co určitě umět říct u státnic</h2>
+    <div class="note">
+        <ul class="checklist">
+            <li><span class="highlight">Osa X a Y ve frekvenční analýze:</span> Osa X je vždy frekvence <span class="math"><i>f</i></span> [Hz], u dvoustranných spekter má střed v nule. Spektrum je rozděleno na amplitudové <strong>|W<sub>m</sub>(f)|</strong>, fázové <strong>&Theta;<sub>m</sub>(f)</strong> a výkonové <strong>|P<sub>m</sub>(f)|</strong>. Výkonové spektrum je definováno kvadrátem amplitudového.</li>
+            <li><span class="highlight">Linearita modulací:</span> Amplitudové modulace (AM, DSB-SC, SSB, QM) jsou <strong>lineární</strong> – platí u nich princip superpozice, postranní pásma jsou pouhým obrazem informačního spektra. Úhlové modulace (FM, PM) jsou <strong>nelineární</strong> – superpozice neplatí a generují teoreticky nekonečně mnoho kombinačních pásem (popsatelných Besselovými funkcemi).</li>
+            <li><span class="highlight">Rozdíl mezi AM a DSB-SC:</span> Obyčejná AM pořád vysílá tučnou nosnou vlnu, která neobsahuje data, čímž plýtvá energií, ale lze ji levně demodulovat diodovým detektorem obálky. U DSB-SC se nosná nevysílá, čímž vzniká 100% energetická efektivnost, ale k přijetí potřebujeme složitý <strong>multiplikativní detektor</strong> se synchronizací (Costasova smyčka).</li>
+            <li><span class="highlight">Počet spektrálních čar AM:</span> Pokud moduluji prostou AM jedním harmonickým (sinusovým) signálem, ve spektru budou vždy přesně <strong>3 čáry</strong> (nosná, horní postranní, dolní postranní). Šířka pásma je dvojnásobkem modulační frekvence.</li>
+            <li><span class="highlight">Výhoda SSB-AM a Hilbertova transformace:</span> Ušetří přesně <strong>polovinu šířky frekvenčního pásma</strong> a polovinu energie. Generuje se matematickým přesným fázovým posunem celého spektra modulačního signálu o -90&deg; (Hilbertova transformace) a následným odečtením/přičtením.</li>
+            <li><span class="highlight">Kvadraturní modulace (QM):</span> Vyžaduje přísnou fázovou koherenci oscilátoru při příjmu (řeší fázový závěs PLL). Dva nezávislé signály nesené na jedné frekvenci rozlišíme díky tomu, že nosné vlny jsou na sebe kolmé (ortogonální) s fázovým rozdílem 90&deg; (tzv. I a Q složka). Bez ní by se obě složky do sebe nevratně smíchaly.</li>
+            <li><span class="highlight">Rozdíl PM vs FM:</span> U fázové modulace (PM) řídíme přímo fázi signálu. U frekvenční modulace (FM) řídíme okamžitou frekvenci (fáze se získá jako matematický <strong>integrál</strong> modulačního signálu).</li>
+            <li><span class="highlight">Vzorkování a Kvantizační šum (mezioborový přesah):</span> Fourierovu transformaci na počítači řešíme algoritmem <strong>FFT</strong>. Při vzorkování se bráníme aliasingu dolnopropustným antialiasingovým filtrem. Během A/D převodu vzniká kvantizační šum, jehož <strong>maximální absolutní chyba je vždy přesně polovina jednoho kvantizačního kroku</strong>!</li>
+        </ul>
+    </div>
+
+    <!-- SCRIPT PRO KRESLENÍ GRAFŮ (Ponechán původní, nezkrácený kód) -->
+    <script>
+        window.onload = function() {
+            // Pomocné funkce
+            function createBase64Plot(imgId, width, height, drawLogic) {
+                var c = document.createElement('canvas');
+                c.width = width; c.height = height;
+                var ctx = c.getContext('2d');
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, width, height);
+                drawLogic(ctx, width, height);
+                var img = document.getElementById(imgId);
+                if (img) img.src = c.toDataURL('image/png');
+            }
+
+            // Kreslení os pro časový průběh
+            function drawTimeAxes(ctx, w, h) {
+                var midY = h/2;
+                ctx.strokeStyle = '#cbd5e0'; ctx.lineWidth = 1;
+                ctx.beginPath(); ctx.moveTo(0, midY); ctx.lineTo(w, midY); ctx.stroke(); // X
+                ctx.beginPath(); ctx.moveTo(30, 0); ctx.lineTo(30, h); ctx.stroke();     // Y
+                
+                // Šipky
+                ctx.beginPath(); ctx.moveTo(w, midY); ctx.lineTo(w-8, midY-4); ctx.lineTo(w-8, midY+4); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(30, 0); ctx.lineTo(26, 8); ctx.lineTo(34, 8); ctx.fill();
+
+                ctx.fillStyle = '#4a5568'; ctx.font = "12px Arial";
+                ctx.fillText('t [s]', w - 30, midY + 15);
+                ctx.fillText('v(t)', 5, 12);
+            }
+
+            // Vykreslí triádu spekter (Amplituda, Fáze, Výkon) do jednoho obrázku
+            function drawSpectraTriad(ctx, w, h, freqsList, centerX, startX, hideLabels) {
+                var sX = startX !== undefined ? startX : 10; 
+                var h3 = h / 3; 
+                var labels = ["|W_m(f)|", "Θ_m(f)", "|P_m(f)|"];
+                
+                for(var i=0; i<3; i++) {
+                    var yOffset = i * h3;
+                    var yZero = yOffset + h3 - 25; 
+                    if(i === 1) yZero = yOffset + h3 / 2; 
+                    
+                    ctx.strokeStyle = '#cbd5e0'; ctx.lineWidth = 1;
+                    ctx.beginPath(); ctx.moveTo(centerX, yOffset + 5); ctx.lineTo(centerX, yOffset + h3 - 5); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(sX, yZero); ctx.lineTo(w - 10, yZero); ctx.stroke();
+                    
+                    ctx.fillStyle = '#4a5568';
+                    ctx.beginPath(); ctx.moveTo(w-10, yZero); ctx.lineTo(w-18, yZero-4); ctx.lineTo(w-18, yZero+4); ctx.fill();
+                    ctx.beginPath(); ctx.moveTo(centerX, yOffset+5); ctx.lineTo(centerX-4, yOffset+13); ctx.lineTo(centerX+4, yOffset+13); ctx.fill();
+
+                    if (!hideLabels) {
+                        ctx.font = "bold 12px Arial";
+                        ctx.textAlign = "left";
+                        ctx.fillText(labels[i], 2, yOffset + 20);
+                    }
+                    
+                    ctx.font = "11px Arial";
+                    ctx.textAlign = "left";
+                    ctx.fillText('f [Hz]', w - 40, yZero - 8);
+                    if(i !== 1) ctx.fillText('0', centerX - 12, yZero + 12);
+
+                    freqsList.forEach(function(f) {
+                        var val = 0;
+                        if(i === 0) val = f.a * 35; 
+                        if(i === 1) val = f.p * 15; 
+                        if(i === 2) val = (f.a * f.a) * 35; 
+                        
+                        ctx.strokeStyle = f.color || '#2b6cb0'; ctx.lineWidth = 2;
+                        ctx.beginPath(); 
+                        ctx.moveTo(f.x, yZero); 
+                        ctx.lineTo(f.x, yZero - val); 
+                        ctx.stroke();
+                        
+                        ctx.beginPath(); 
+                        ctx.arc(f.x, yZero - val, 3, 0, 2*Math.PI); 
+                        ctx.fillStyle = f.color || '#2b6cb0'; ctx.fill();
+
+                        if (i === 0 && f.label) {
+                            ctx.fillStyle = '#2d3748';
+                            ctx.font = "11px Arial";
+                            ctx.textAlign = "center"; 
+                            ctx.fillText(f.label, f.x, yZero + 15);
+                            ctx.textAlign = "left"; 
+                        }
+                    });
+                }
+            }
+
+            var W_TIME = 700, H_TIME = 150;
+
+            createBase64Plot('time_am', W_TIME, H_TIME, function(ctx, w, h) {
+                drawTimeAxes(ctx, w, h);
+                var midY = h/2; 
+                ctx.beginPath(); ctx.strokeStyle = '#3182ce'; ctx.lineWidth = 1.5;
+                for(var x=30; x<=w-20; x++) {
+                    var t = (x-30)*0.05; var mt = Math.cos(t*0.25);
+                    var y = (1 + 0.6*mt) * Math.cos(t*4);
+                    ctx.lineTo(x, midY - y*35);
+                } ctx.stroke();
+                ctx.beginPath(); ctx.strokeStyle = '#e53e3e'; ctx.lineWidth = 2; ctx.setLineDash([1]);
+                for(var x=30; x<=w-20; x++) {
+                    var t = (x-30)*0.05; var mt = Math.cos(t*0.25);
+                    ctx.lineTo(x, midY - (1 + 0.6*mt)*35);
+                } ctx.stroke(); ctx.setLineDash([]);
+            });
+
+            createBase64Plot('time_dsb', W_TIME, H_TIME, function(ctx, w, h) {
+                drawTimeAxes(ctx, w, h);
+                var midY = h/2; 
+                ctx.beginPath(); ctx.strokeStyle = '#3182ce'; ctx.lineWidth = 1.5;
+                for(var x=30; x<=w-20; x++) {
+                    var t = (x-30)*0.05; var mt = Math.cos(t*0.25);
+                    var y = mt * Math.cos(t*4);
+                    ctx.lineTo(x, midY - y*55);
+                } ctx.stroke();
+                ctx.beginPath(); ctx.strokeStyle = '#e53e3e'; ctx.lineWidth = 2; ctx.setLineDash([1]);
+                for(var x=30; x<=w-20; x++) {
+                    var t = (x-30)*0.05; var mt = Math.cos(t*0.25);
+                    ctx.lineTo(x, midY - Math.abs(mt)*55);
+                } ctx.stroke(); ctx.setLineDash([]);
+            });
+
+            createBase64Plot('time_pm', W_TIME, H_TIME, function(ctx, w, h) {
+                drawTimeAxes(ctx, w, h);
+                var midY = h/2; 
+                
+                function getM(t) {
+                    return Math.sin(t * 0.4) >= 0 ? 1 : -1;
+                }
+
+                ctx.beginPath(); ctx.strokeStyle = '#3182ce'; ctx.lineWidth = 1.5;
+                for(var x=30; x<=w-20; x++) {
+                    var t = (x-30)*0.05; 
+                    var mt = getM(t); 
+                    var y = Math.cos(t*3 + mt * 1.5); 
+                    ctx.lineTo(x, midY - y*45);
+                } ctx.stroke();
+
+                ctx.beginPath(); ctx.strokeStyle = 'rgba(229, 62, 62, 0.5)'; ctx.lineWidth = 2;
+                for(var x=30; x<=w-20; x++) {
+                    var t = (x-30)*0.05; 
+                    var mt = getM(t);
+                    ctx.lineTo(x, midY - mt*45);
+                } ctx.stroke();
+            });
+
+            createBase64Plot('time_fm', W_TIME, H_TIME, function(ctx, w, h) {
+                drawTimeAxes(ctx, w, h);
+                var midY = h/2; 
+                ctx.beginPath(); ctx.strokeStyle = '#3182ce'; ctx.lineWidth = 1.5;
+                for(var x=30; x<=w-20; x++) {
+                    var t = (x-30)*0.05; 
+                    var integral_mt = Math.sin(t*0.15); 
+                    var y = Math.cos(t*2 + integral_mt * 4); 
+                    ctx.lineTo(x, midY - y*45);
+                } ctx.stroke();
+                ctx.beginPath(); ctx.strokeStyle = 'rgba(229, 62, 62, 0.5)'; ctx.lineWidth = 2;
+                for(var x=30; x<=w-20; x++) {
+                    var t = (x-30)*0.05; var mt = Math.cos(t*0.15);
+                    ctx.lineTo(x, midY - mt*45);
+                } ctx.stroke();
+            });
+
+            var W_SPEC = 700, H_SPEC = 300;
+            var f0 = 350; 
+            var fc = 180; 
+            var fm = 65; 
+
+            createBase64Plot('spec_am', W_SPEC, H_SPEC, function(ctx, w, h) {
+                var data = [
+                    {x: f0-fc, a: 1.0, p: 0, label: '-fc'}, 
+                    {x: f0+fc, a: 1.0, p: 0, label: '+fc'},
+                    {x: f0-fc-fm, a: 0.5, p: 0, label: '-fc-fm'}, 
+                    {x: f0-fc+fm, a: 0.5, p: 0, label: '-fc+fm'},
+                    {x: f0+fc-fm, a: 0.5, p: 0, label: 'fc-fm'}, 
+                    {x: f0+fc+fm, a: 0.5, p: 0, label: 'fc+fm'}
+                ];
+                drawSpectraTriad(ctx, w, h, data, f0);
+            });
+
+            createBase64Plot('spec_dsb', W_SPEC, H_SPEC, function(ctx, w, h) {
+                var data = [
+                    {x: f0-fc-fm, a: 0.7, p: 1.57, label: '-fc-fm'}, 
+                    {x: f0-fc+fm, a: 0.7, p: -1.57, label: '-fc+fm'},
+                    {x: f0+fc-fm, a: 0.7, p: -1.57, label: 'fc-fm'}, 
+                    {x: f0+fc+fm, a: 0.7, p: 1.57, label: 'fc+fm'}
+                ];
+                drawSpectraTriad(ctx, w, h, data, f0);
+            });
+
+            createBase64Plot('spec_ssb', W_SPEC, H_SPEC, function(ctx, w, h) {
+                ctx.strokeStyle = '#e2e8f0'; ctx.beginPath(); ctx.moveTo(w/2, 0); ctx.lineTo(w/2, h); ctx.stroke();
+                var f0_L = 175; var f0_U = 525; var fc_s = 90; var fm_s = 40; 
+                
+                var data_L = [
+                    {x: f0_L - fc_s + fm_s, a: 0.8, p: 1.57, label: '-fc+fm'},
+                    {x: f0_L + fc_s - fm_s, a: 0.8, p: -1.57, label: '+fc-fm'}
+                ];
+                drawSpectraTriad(ctx, w/2, h, data_L, f0_L, 10, false);
+                ctx.fillStyle = '#2d3748'; ctx.font="bold 12px Arial"; 
+                ctx.fillText('LSSB', 60, 20); 
+
+                var data_U = [
+                    {x: f0_U - fc_s - fm_s, a: 0.8, p: -1.57, label: '-fc-fm'},
+                    {x: f0_U + fc_s + fm_s, a: 0.8, p: 1.57, label: '+fc+fm'}
+                ];
+                drawSpectraTriad(ctx, w, h, data_U, f0_U, w/2 + 10, true);
+                ctx.fillText('USSB', w/2 + 60, 20); 
+            });
+
+            createBase64Plot('spec_qm', W_SPEC, H_SPEC, function(ctx, w, h) {
+                var data = [
+                    {x: f0-fc-fm, a: 0.6, p: 0, color: '#3182ce', label:'-fc-fm'}, 
+                    {x: f0-fc+fm, a: 0.6, p: 0, color: '#3182ce', label:'-fc+fm'},
+                    {x: f0+fc-fm, a: 0.6, p: 0, color: '#3182ce', label:'fc-fm'}, 
+                    {x: f0+fc+fm, a: 0.6, p: 0, color: '#3182ce', label:'fc+fm'},
+                    {x: f0-fc-fm-10, a: 0.5, p: 1.57, color: '#e53e3e'}, 
+                    {x: f0-fc+fm+10, a: 0.5, p: -1.57, color: '#e53e3e'},
+                    {x: f0+fc-fm-10, a: 0.5, p: -1.57, color: '#e53e3e'}, 
+                    {x: f0+fc+fm+10, a: 0.5, p: 1.57, color: '#e53e3e'}
+                ];
+                drawSpectraTriad(ctx, w, h, data, f0);
+            });
+
+            createBase64Plot('spec_pm', W_SPEC, H_SPEC, function(ctx, w, h) {
+                var fm_sq = 32; 
+                var data = [
+                    {x: f0-fc, a: 0.3, p: 0, label: '-fc'}, 
+                    {x: f0+fc, a: 0.3, p: 0, label: '+fc'},
+                    
+                    {x: f0-fc-fm_sq, a: 0.8, p: 1.57, label: '-fc-fm'}, 
+                    {x: f0-fc+fm_sq, a: 0.8, p: -1.57, label: '-fc+fm'},
+                    {x: f0+fc-fm_sq, a: 0.8, p: -1.57, label: 'fc-fm'}, 
+                    {x: f0+fc+fm_sq, a: 0.8, p: 1.57, label: 'fc+fm'},
+                    
+                    {x: f0-fc-3*fm_sq, a: 0.26, p: 1.57, label: '-fc-3fm'}, 
+                    {x: f0-fc+3*fm_sq, a: 0.26, p: -1.57, label: '-fc+3fm'},
+                    {x: f0+fc-3*fm_sq, a: 0.26, p: -1.57, label: 'fc-3fm'}, 
+                    {x: f0+fc+3*fm_sq, a: 0.26, p: 1.57, label: 'fc+3fm'},
+
+                    {x: f0-fc-5*fm_sq, a: 0.16, p: 1.57, label: '-fc-5fm'}, 
+                    {x: f0-fc+5*fm_sq, a: 0.16, p: -1.57, label: '-fc+5fm'},
+                    {x: f0+fc-5*fm_sq, a: 0.16, p: -1.57, label: 'fc-5fm'}, 
+                    {x: f0+fc+5*fm_sq, a: 0.16, p: 1.57, label: 'fc+5fm'}
+                ];
+                drawSpectraTriad(ctx, w, h, data, f0);
+            });
+
+            createBase64Plot('spec_fm', W_SPEC, H_SPEC, function(ctx, w, h) {
+                var fm_b = 45; 
+                var data = [
+                    {x: f0-fc, a: 0.8, p: 0, label: '-fc'}, {x: f0+fc, a: 0.8, p: 0, label: '+fc'},
+                    {x: f0-fc-fm_b, a: 0.7, p: -1.57, label: '-fc-fm'}, {x: f0-fc+fm_b, a: 0.7, p: 1.57, label: '-fc+fm'},
+                    {x: f0+fc-fm_b, a: 0.7, p: 1.57, label: 'fc-fm'}, {x: f0+fc+fm_b, a: 0.7, p: -1.57, label: 'fc+fm'},
+                    {x: f0-fc-2*fm_b, a: 0.4, p: 3.14, label: '-fc-2fm'}, {x: f0-fc+2*fm_b, a: 0.4, p: 3.14, label: '-fc+2fm'},
+                    {x: f0+fc-2*fm_b, a: 0.4, p: 3.14, label: 'fc-2fm'}, {x: f0+fc+2*fm_b, a: 0.4, p: 3.14, label: 'fc+2fm'}
+                ];
+                drawSpectraTriad(ctx, w, h, data, f0);
+            });
+        };
+    </script>
+
+<script src="shared/navbar-inject.js"></script>
+</div>
+
+</body>
+</html>

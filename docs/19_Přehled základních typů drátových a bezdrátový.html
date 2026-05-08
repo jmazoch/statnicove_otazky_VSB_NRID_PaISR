@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19. Přehled drátových a bezdrátových sběrnic v MIS</title>
+    <style>* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+.def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; font-style: italic; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+.note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f8ff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: #f5f8ff; border: 1px solid #c8d8f0; border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: #1a4a8a; margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+.toc { background: #f0f4fa; border: 1px solid #c0cfea; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+.toc h3 { color: #1a4a8a; margin-bottom: 10px; font-size: 14px; }
+.toc ol { font-size: 13px; }
+.toc li { margin-bottom: 3px; }
+.toc a { color: #1a4a8a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+pre { background:#0f172a; color:#e5e7eb; padding:12px 16px; border-radius:8px; overflow-x:auto; font-size:13px; line-height:1.45; margin:14px 0; }
+pre code { background: transparent; color: inherit; padding:0; }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
+.farr { font-size: 20px; color: #888; }
+hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
+@media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }
+.figure { background:#f8fbff; border:1px solid #d8e3f4; border-radius:8px; padding:12px; margin:14px 0; text-align:center; }
+.figure img { max-width:100%; height:auto; border-radius:6px; display:block; margin:0 auto; }
+.figcap { font-size:13px; color:#53698f; margin-top:8px; font-style:italic; text-align:center; }
+span.math { font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: bold; color: #1a4a8a; font-size: 1.1em; padding: 0 2px; }
+.img-container { text-align: center; margin: 14px 0; background: #f8fbff; padding: 12px; border-radius: 8px; border: 1px solid #d8e3f4; }
+.img-container svg { max-width: 100%; height: auto; }
+ul.checklist { list-style-type: none; padding-left: 0; }
+ul.checklist li { margin-bottom: 8px; position: relative; padding-left: 24px; }
+ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; position: absolute; left: 0; }
+.highlight { font-weight: bold; color: #c53030; }
+.badge-dom { display: inline-block; padding: 3px 8px; background: #e74c3c; color: white; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+.badge-rec { display: inline-block; padding: 3px 8px; background: #3498db; color: white; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+</style>
+<link rel="stylesheet" href="shared/navbar-styles.css">
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Hlavní stránka">
+      <strong>Státnicové otázky</strong>
+      <span>README a přehled vypracovaných HTML otázek</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="index.html">Main</a>
+      <a href="index.html#otazky">Otázky</a>
+      
+      <div class="nav-item" id="nav-rs">
+        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="#" class="nav-disabled">3. Stavová regulace</a>
+          <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="#" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-pmzs">
+        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
+          <a href="12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="#" class="nav-disabled">13. Převod analogové...</a>
+          <a href="#" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-ms">
+        <a href="index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#">15. Vlastnosti měřicího systému</a>
+          <a href="#">16. Příčiny chyb...</a>
+          <a href="#">17. Statistické parametry...</a>
+          <a href="#">18. Statické a dynamické...</a>
+          <a href="#">19. Drátové a bezdrátové...</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-paisr">
+        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="#" class="nav-disabled">SWI</a>
+          <a href="mobilni_platformy_statnice.html">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="page">
+<h1>19. Přehled základních typů drátových a bezdrátových sběrnic v MIS</h1>
+<p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · Podklady: přednášky a skripta MŘ a PMZS</p>
+
+<div class="def">
+    Znalost principů sériových sběrnic, napěťových úrovní, mechanismů pro řešení kolizí a topologií je klíčová pro pochopení struktury a funkce moderních Měřicích a Informačních Systémů (MIS).
+</div>
+
+<!-- ======================================================= -->
+<!-- TOPOLOGIE -->
+<!-- ======================================================= -->
+<h2>1. Topologie sběrnicových systémů pro přenos dat</h2>
+<p>Topologie sítě definuje fyzické a logické uspořádání uzlů a spojů. Volba topologie má přímý vliv na spolehlivost, propustnost, cenu a robustnost sítě.</p>
+
+<div class="grid3">
+    <div class="card">
+        <h3>Sběrnicová (Bus)</h3>
+        <p>Jedno sdílené komunikační médium (páteř) pro všechny uzly.</p>
+        <div class="img-container">
+            <svg width="250" height="120" viewBox="0 0 250 120">
+                <line x1="20" y1="60" x2="230" y2="60" stroke="#34495e" stroke-width="4"/>
+                <circle cx="50" cy="20" r="15" fill="#3498db"/> <line x1="50" y1="35" x2="50" y2="60" stroke="#34495e" stroke-width="2"/>
+                <circle cx="125" cy="100" r="15" fill="#3498db"/> <line x1="125" y1="85" x2="125" y2="60" stroke="#34495e" stroke-width="2"/>
+                <circle cx="200" cy="20" r="15" fill="#3498db"/> <line x1="200" y1="35" x2="200" y2="60" stroke="#34495e" stroke-width="2"/>
+            </svg>
+        </div>
+        <ul>
+            <li><strong>Výhody:</strong> Nízké náklady, snadné přidání uzlu.</li>
+            <li><strong>Nevýhody:</strong> Nutnost řešit kolize, přerušení kabelu znefunkční segment.</li>
+            <li><strong>Zástupce:</strong> CAN, I2C, 1-Wire.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Hvězdicová (Star)</h3>
+        <p>Všechny uzly připojeny k centrálnímu bodu (Master/Switch).</p>
+        <div class="img-container">
+            <svg width="250" height="150" viewBox="0 0 250 150">
+                <circle cx="125" cy="75" r="20" fill="#e74c3c"/>
+                <line x1="125" y1="75" x2="60" y2="30" stroke="#34495e" stroke-width="2"/> <circle cx="60" cy="30" r="15" fill="#3498db"/>
+                <line x1="125" y1="75" x2="190" y2="30" stroke="#34495e" stroke-width="2"/> <circle cx="190" cy="30" r="15" fill="#3498db"/>
+                <line x1="125" y1="75" x2="60" y2="120" stroke="#34495e" stroke-width="2"/> <circle cx="60" cy="120" r="15" fill="#3498db"/>
+                <line x1="125" y1="75" x2="190" y2="120" stroke="#34495e" stroke-width="2"/> <circle cx="190" cy="120" r="15" fill="#3498db"/>
+            </svg>
+        </div>
+        <ul>
+            <li><strong>Výhody:</strong> Výpadek kabelu odpojí jen 1 uzel, nedochází ke kolizím na lince.</li>
+            <li><strong>Nevýhody:</strong> Závislost na centrálním bodu (SPOF).</li>
+            <li><strong>Zástupce:</strong> USB (fyzicky), Wi-Fi, Ethernet.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Kruhová (Ring)</h3>
+        <p>Uzly propojeny do uzavřeného kruhu, data putují jedním směrem.</p>
+        <div class="img-container">
+            <svg width="250" height="150" viewBox="0 0 250 150">
+                <circle cx="125" cy="75" r="50" stroke="#34495e" stroke-width="2" fill="none"/>
+                <circle cx="125" cy="25" r="15" fill="#3498db"/>
+                <circle cx="175" cy="75" r="15" fill="#3498db"/>
+                <circle cx="125" cy="125" r="15" fill="#3498db"/>
+                <circle cx="75" cy="75" r="15" fill="#3498db"/>
+            </svg>
+        </div>
+        <ul>
+            <li><strong>Výhody:</strong> Pravidelný a předvídatelný přenos (žádné neřízené kolize).</li>
+            <li><strong>Nevýhody:</strong> Výpadek uzlu může zastavit celý kruh (řeší se dvojitým kruhem).</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Stromová (Tree)</h3>
+        <p>Kombinace hvězdy a sběrnice, hierarchické uspořádání.</p>
+        <div class="img-container">
+            <svg width="250" height="150" viewBox="0 0 250 150">
+                <circle cx="125" cy="20" r="15" fill="#e74c3c"/>
+                <line x1="125" y1="20" x2="70" y2="70" stroke="#34495e" stroke-width="2"/> <circle cx="70" cy="70" r="15" fill="#f1c40f"/>
+                <line x1="125" y1="20" x2="180" y2="70" stroke="#34495e" stroke-width="2"/> <circle cx="180" cy="70" r="15" fill="#f1c40f"/>
+                <line x1="70" y1="70" x2="40" y2="120" stroke="#34495e" stroke-width="2"/> <circle cx="40" cy="120" r="10" fill="#3498db"/>
+                <line x1="70" y1="70" x2="100" y2="120" stroke="#34495e" stroke-width="2"/> <circle cx="100" cy="120" r="10" fill="#3498db"/>
+                <line x1="180" y1="70" x2="150" y2="120" stroke="#34495e" stroke-width="2"/> <circle cx="150" cy="120" r="10" fill="#3498db"/>
+                <line x1="180" y1="70" x2="210" y2="120" stroke="#34495e" stroke-width="2"/> <circle cx="210" cy="120" r="10" fill="#3498db"/>
+            </svg>
+        </div>
+        <ul>
+            <li><strong>Výhody:</strong> Snadné rozšiřování, izolace větví.</li>
+            <li><strong>Zástupce:</strong> USB (víceúrovňová hvězda tvořící strom).</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3>Mřížková (Mesh)</h3>
+        <p>Uzly jsou vzájemně propojeny (částečně nebo plně).</p>
+        <div class="img-container">
+            <svg width="250" height="150" viewBox="0 0 250 150">
+                <line x1="70" y1="40" x2="180" y2="40" stroke="#34495e" stroke-width="2"/>
+                <line x1="70" y1="110" x2="180" y2="110" stroke="#34495e" stroke-width="2"/>
+                <line x1="70" y1="40" x2="70" y2="110" stroke="#34495e" stroke-width="2"/>
+                <line x1="180" y1="40" x2="180" y2="110" stroke="#34495e" stroke-width="2"/>
+                <line x1="70" y1="40" x2="180" y2="110" stroke="#34495e" stroke-width="2"/>
+                <line x1="70" y1="110" x2="180" y2="40" stroke="#34495e" stroke-width="2"/>
+                <circle cx="70" cy="40" r="15" fill="#3498db"/>
+                <circle cx="180" cy="40" r="15" fill="#3498db"/>
+                <circle cx="70" cy="110" r="15" fill="#3498db"/>
+                <circle cx="180" cy="110" r="15" fill="#3498db"/>
+            </svg>
+        </div>
+        <ul>
+            <li><strong>Výhody:</strong> Vysoká odolnost (redundance tras).</li>
+            <li><strong>Zástupce:</strong> ZigBee, IQMESH.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ======================================================= -->
+<!-- DRÁTOVÉ SBĚRNICE -->
+<!-- ======================================================= -->
+<h2>2. Drátové sběrnice a jejich vlastnosti</h2>
+
+<!-- CAN -->
+<div class="card">
+    <h3>CAN (Controller Area Network)</h3>
+    <p>Multimaster sběrnice původně vyvinutá pro automobilový průmysl. Využívá diferenciální přenos, je vysoce odolná vůči rušení. Řešení kolizí probíhá nedestruktivní bitovou arbitráží (CSMA/CD+AMP), kde <span class="highlight">dominatní úroveň vždy přebije recesivní</span>.</p>
+    
+    <div class="grid2">
+        <div>
+            <h4>Zapojení</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <line x1="30" y1="50" x2="320" y2="50" stroke="#c0392b" stroke-width="3"/> <text x="325" y="55" font-size="12">CAN_H</text>
+                    <line x1="30" y1="90" x2="320" y2="90" stroke="#2980b9" stroke-width="3"/> <text x="325" y="95" font-size="12">CAN_L</text>
+                    <rect x="30" y="45" width="10" height="50" fill="#7f8c8d"/> <text x="5" y="75" font-size="10">120Ω</text>
+                    <rect x="310" y="45" width="10" height="50" fill="#7f8c8d"/> <text x="325" y="75" font-size="10">120Ω</text>
+                    
+                    <rect x="100" y="110" width="40" height="30" fill="#f1c40f"/> <text x="105" y="130" font-size="12">Node</text>
+                    <line x1="110" y1="110" x2="110" y2="50" stroke="black"/>
+                    <line x1="130" y1="110" x2="130" y2="90" stroke="black"/>
+                    
+                    <rect x="200" y="110" width="40" height="30" fill="#f1c40f"/> <text x="205" y="130" font-size="12">Node</text>
+                    <line x1="210" y1="110" x2="210" y2="50" stroke="black"/>
+                    <line x1="230" y1="110" x2="230" y2="90" stroke="black"/>
+                </svg>
+            </div>
+        </div>
+        <div>
+            <h4>Napěťové úrovně a Rámec</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <!-- Base 2.5V -->
+                    <line x1="20" y1="80" x2="330" y2="80" stroke="#7f8c8d" stroke-dasharray="4"/>
+                    <text x="0" y="85" font-size="10">2.5V</text>
+                    
+                    <!-- CAN_H -->
+                    <path d="M 30,80 L 80,80 L 90,40 L 170,40 L 180,80 L 230,80 L 240,40 L 280,40 L 290,80 L 330,80" stroke="#c0392b" fill="none" stroke-width="2"/>
+                    <text x="110" y="30" font-size="10" fill="#c0392b">CAN_H (3.5V)</text>
+                    
+                    <!-- CAN_L -->
+                    <path d="M 30,80 L 80,80 L 90,120 L 170,120 L 180,80 L 230,80 L 240,120 L 280,120 L 290,80 L 330,80" stroke="#2980b9" fill="none" stroke-width="2"/>
+                    <text x="110" y="140" font-size="10" fill="#2980b9">CAN_L (1.5V)</text>
+                    
+                    <text x="35" y="100" font-size="10">Rec. 1</text>
+                    <text x="110" y="100" font-size="10" font-weight="bold">Dom. 0</text>
+                    <text x="190" y="100" font-size="10">Rec. 1</text>
+                    <text x="245" y="100" font-size="10" font-weight="bold">Dom. 0</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <table>
+        <tr><th>Stav sběrnice</th><th>Logická hodnota</th><th>Diferenční napětí (H - L)</th><th>Arbitráž</th></tr>
+        <tr><td><span class="badge-dom">Dominantní</span></td><td>Logická 0</td><td>&gt; 1.5 V (Typicky 2.0 V)</td><td>Přebíjí recesivní</td></tr>
+        <tr><td><span class="badge-rec">Recesivní</span></td><td>Logická 1</td><td>~ 0 V (obě na 2.5V)</td><td>Ustupuje dominantnímu</td></tr>
+    </table>
+    <p><strong>Rámec (Standard 2.0A):</strong> SOF (1 bit, dom.) &rarr; 11-bit ID &rarr; RTR &rarr; IDE &rarr; r0 &rarr; DLC (4 bity) &rarr; DATA (0-8 Bytů) &rarr; CRC (15 bitů) &rarr; ACK &rarr; EOF.</p>
+</div>
+
+<!-- I2C -->
+<div class="card">
+    <h3>I²C (Inter-Integrated Circuit)</h3>
+    <p>Sériová dvouvodičová synchronní sběrnice (SDA - data, SCL - clock). Multimaster, využívá otevřený kolektor s pull-up rezistory. Logická jednička je tvořena rezistorem (recesivní), logickou nulu aktivně stahuje tranzistor do GND (dominantní).</p>
+    
+    <div class="grid2">
+        <div>
+            <h4>Zapojení</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <line x1="40" y1="20" x2="310" y2="20" stroke="#e74c3c" stroke-width="2"/> <text x="10" y="25" font-size="12">Vcc</text>
+                    <rect x="80" y="20" width="8" height="30" fill="#7f8c8d"/> <text x="60" y="40" font-size="10">Rp</text>
+                    <rect x="120" y="20" width="8" height="30" fill="#7f8c8d"/> <text x="135" y="40" font-size="10">Rp</text>
+                    
+                    <line x1="40" y1="70" x2="310" y2="70" stroke="#2980b9" stroke-width="2"/> <text x="10" y="75" font-size="12">SDA</text>
+                    <line x1="40" y1="100" x2="310" y2="100" stroke="#27ae60" stroke-width="2"/> <text x="10" y="105" font-size="12">SCL</text>
+                    
+                    <line x1="84" y1="50" x2="84" y2="70" stroke="black"/>
+                    <line x1="124" y1="50" x2="124" y2="100" stroke="black"/>
+                    
+                    <rect x="160" y="120" width="60" height="25" fill="#f39c12"/> <text x="165" y="138" font-size="12">Master</text>
+                    <line x1="170" y1="120" x2="170" y2="70" stroke="black"/>
+                    <line x1="200" y1="120" x2="200" y2="100" stroke="black"/>
+                    
+                    <rect x="240" y="120" width="60" height="25" fill="#8e44ad"/> <text x="250" y="138" font-size="12" fill="white">Slave</text>
+                    <line x1="250" y1="120" x2="250" y2="70" stroke="black"/>
+                    <line x1="280" y1="120" x2="280" y2="100" stroke="black"/>
+                </svg>
+            </div>
+        </div>
+        <div>
+            <h4>Rámec přenosu</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <text x="10" y="35" font-size="12">SDA</text>
+                    <!-- START condition: SDA goes low while SCL is high -->
+                    <path d="M 40,20 L 70,20 L 80,45 L 320,45" stroke="#2980b9" fill="none" stroke-width="2"/>
+                    <text x="10" y="85" font-size="12">SCL</text>
+                    <path d="M 40,70 L 90,70 L 100,95 L 120,95 L 130,70 L 150,70 L 160,95 L 180,95 L 190,70 L 210,70" stroke="#27ae60" fill="none" stroke-width="2"/>
+                    
+                    <line x1="75" y1="10" x2="75" y2="110" stroke="#e74c3c" stroke-dasharray="3"/>
+                    <text x="60" y="125" font-size="10" fill="#e74c3c">START</text>
+                    
+                    <text x="120" y="35" font-size="10">Addr (7 bit)</text>
+                    <text x="210" y="35" font-size="10">R/W</text>
+                    <text x="260" y="35" font-size="10">ACK</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <table>
+        <tr><th>Stav sběrnice</th><th>Logická hodnota</th><th>Fyzická úroveň</th><th>Typ budiče</th></tr>
+        <tr><td><span class="badge-dom">Dominantní</span></td><td>Logická 0</td><td>0 V (stáhnuto k GND)</td><td>Tranzistor (Open-drain)</td></tr>
+        <tr><td><span class="badge-rec">Recesivní</span></td><td>Logická 1</td><td><span class="math">V_{CC}</span></td><td>Pull-up rezistor</td></tr>
+    </table>
+</div>
+
+<!-- SPI -->
+<div class="card">
+    <h3>SPI (Serial Peripheral Interface)</h3>
+    <p>Plně duplexní, synchronní čtyřvodičová sběrnice (MOSI, MISO, SCK, CS/SS) pro komunikaci na krátkou vzdálenost. Architektura 1 Master - N Slaves. Nemá daný pevný protokol/rámec, data se synchronizují náběžnou nebo sestupnou hranou hodin.</p>
+    
+    <div class="grid2">
+        <div>
+            <h4>Zapojení</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <rect x="20" y="20" width="70" height="110" fill="#3498db"/> <text x="30" y="40" font-size="14" fill="white">Master</text>
+                    <rect x="240" y="20" width="60" height="40" fill="#9b59b6"/> <text x="250" y="45" font-size="12" fill="white">Slave 1</text>
+                    <rect x="240" y="80" width="60" height="40" fill="#9b59b6"/> <text x="250" y="105" font-size="12" fill="white">Slave 2</text>
+                    
+                    <!-- MOSI -->
+                    <line x1="90" y1="30" x2="240" y2="30" stroke="black"/> <text x="150" y="25" font-size="10">MOSI</text>
+                    <line x1="200" y1="30" x2="200" y2="90" stroke="black"/> <line x1="200" y1="90" x2="240" y2="90" stroke="black"/>
+                    
+                    <!-- MISO -->
+                    <line x1="90" y1="50" x2="240" y2="50" stroke="blue"/> <text x="150" y="45" font-size="10" fill="blue">MISO</text>
+                    <line x1="220" y1="50" x2="220" y2="110" stroke="blue"/> <line x1="220" y1="110" x2="240" y2="110" stroke="blue"/>
+                    
+                    <!-- SCK -->
+                    <line x1="90" y1="70" x2="210" y2="70" stroke="green"/> <text x="150" y="65" font-size="10" fill="green">SCK</text>
+                    <line x1="210" y1="70" x2="210" y2="25" stroke="green"/> <line x1="210" y1="25" x2="240" y2="25" stroke="green"/>
+                    <line x1="210" y1="70" x2="210" y2="85" stroke="green"/> <line x1="210" y1="85" x2="240" y2="85" stroke="green"/>
+                    
+                    <!-- CS -->
+                    <line x1="90" y1="90" x2="180" y2="90" stroke="red"/> <line x1="180" y1="90" x2="180" y2="55" stroke="red"/> <line x1="180" y1="55" x2="240" y2="55" stroke="red"/> <text x="100" y="85" font-size="10" fill="red">CS1</text>
+                    <line x1="90" y1="110" x2="240" y2="110" stroke="red"/> <text x="100" y="105" font-size="10" fill="red">CS2</text>
+                </svg>
+            </div>
+        </div>
+        <div>
+            <h4>Průběh signálů (Rámec)</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <text x="10" y="25" font-size="12">CS</text>
+                    <path d="M 40,15 L 60,15 L 70,40 L 300,40 L 310,15 L 340,15" stroke="red" fill="none" stroke-width="2"/>
+                    
+                    <text x="10" y="75" font-size="12">SCK</text>
+                    <path d="M 40,85 L 80,85 L 80,60 L 100,60 L 100,85 L 120,85 L 120,60 L 140,60 L 140,85 L 160,85 L 160,60 L 180,60 L 180,85 L 200,85" stroke="green" fill="none" stroke-width="2"/>
+                    
+                    <text x="10" y="125" font-size="12">MOSI</text>
+                    <path d="M 40,135 L 70,135 L 80,110 L 100,110 L 110,135 L 130,135 L 140,110 L 160,110 L 170,135 L 200,135" stroke="black" fill="none" stroke-width="2"/>
+                    
+                    <line x1="90" y1="50" x2="90" y2="140" stroke="#bdc3c7" stroke-dasharray="3"/>
+                    <text x="85" y="45" font-size="10">bit 7</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <p>Na sběrnici SPI neexistuje stav <em>dominantní/recesivní</em> z hlediska arbitráže. Linky jsou natvrdo buzeny zapojenými piny obvodů (push-pull). Kolizím se předchází signálem <strong>Chip Select (CS)</strong>, kdy Master vybere, který Slave smí v danou chvíli vysílat na linku MISO.</p>
+</div>
+
+<!-- 1-WIRE -->
+<div class="card">
+    <h3>1-Wire</h3>
+    <p>Sběrnice firmy Dallas Semiconductor. Používá jediný datový vodič (DQ) pro obousměrný datový přenos i parazitní napájení senzorů. Komunikace probíhá ve striktních časových slotech (délka 60 µs až 120 µs).</p>
+    <ul class="checklist" style="margin-bottom: 15px;">
+        <li><strong>Zápis logické 1 (Write 1):</strong> Řídicí zařízení (Master) stáhne datový vodič k logické 0 na velmi krátkou dobu (1 µs až 15 µs) a poté jej uvolní, aby pull-up rezistor obnovil úroveň logické 1 na zbytek slotu.</li>
+        <li><strong>Zápis logické 0 (Write 0):</strong> Řídicí zařízení stáhne sběrnici k logické 0 a drží ji v tomto stavu po celou dobu trvání časového slotu (tj. 60 µs až 120 µs).</li>
+    </ul>
+    <table>
+        <tr><th>Stav sběrnice</th><th>Logická hodnota</th><th>Fyzická úroveň</th></tr>
+        <tr><td><span class="badge-dom">Dominantní</span></td><td>Logická 0</td><td>0 V (stáhnuto Masterem/Slavem)</td></tr>
+        <tr><td><span class="badge-rec">Recesivní</span></td><td>Logická 1 / Klid</td><td>~Vcc (přes 4.7kΩ pull-up)</td></tr>
+    </table>
+    <p><strong>Parazitní napájení:</strong> Senzor si "nabíjí" vnitřní kondenzátor během doby, kdy je linka v log 1. Během A/D převodu u teploměru (např. DS18B20) je nutné zapnout "silný" (Strong) pull-up tranzistor MOSFET, protože proud stoupne až na 1.5 mA a vnitřní kondenzátor by se vybil.</p>
+</div>
+
+<!-- RS232 -->
+<div class="card">
+    <h3>RS-232</h3>
+    <p>Klasický standard pro sériový přenos bod-bod (point-to-point) v režimu full-duplex. Přenáší se nesymetrickými napěťovými úrovněmi vůči společné zemi, je náchylný na rušení při delších vzdálenostech. Využívá aktivní buzení linky, tedy ne dominantní a recesivní stav v pravém slova smyslu, ale klidovým stavem je úroveň log. 1 (-V).</p>
+    
+    <div class="grid2">
+        <div>
+            <h4>Zapojení</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <rect x="20" y="30" width="80" height="90" fill="#3498db"/> <text x="35" y="80" font-size="14" fill="white">PC (DTE)</text>
+                    <rect x="250" y="30" width="80" height="90" fill="#9b59b6"/> <text x="260" y="80" font-size="14" fill="white">Device</text>
+                    
+                    <!-- TX-RX -->
+                    <line x1="100" y1="50" x2="250" y2="70" stroke="black"/> <text x="110" y="45" font-size="10">TxD</text> <text x="220" y="65" font-size="10">RxD</text>
+                    <!-- RX-TX -->
+                    <line x1="100" y1="70" x2="250" y2="50" stroke="blue"/> <text x="110" y="85" font-size="10" fill="blue">RxD</text> <text x="220" y="45" font-size="10" fill="blue">TxD</text>
+                    <!-- GND -->
+                    <line x1="100" y1="100" x2="250" y2="100" stroke="green"/> <text x="150" y="95" font-size="10" fill="green">GND</text>
+                </svg>
+            </div>
+        </div>
+        <div>
+            <h4>Rámec přenosu</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <line x1="20" y1="75" x2="330" y2="75" stroke="#7f8c8d" stroke-dasharray="4"/>
+                    <text x="0" y="30" font-size="10">+V (0)</text>
+                    <text x="0" y="120" font-size="10">-V (1)</text>
+                    
+                    <path d="M 30,120 L 70,120 L 80,30 L 110,30 L 120,120 L 150,120 L 160,30 L 190,30 L 200,120 L 270,120 L 280,30 L 320,30" stroke="#c0392b" fill="none" stroke-width="2"/>
+                    
+                    <text x="80" y="140" font-size="10">Start</text>
+                    <text x="130" y="140" font-size="10">Data bits</text>
+                    <text x="210" y="140" font-size="10">Parity</text>
+                    <text x="280" y="140" font-size="10">Stop</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <table>
+        <tr><th>Označení</th><th>Logická hodnota</th><th>Napěťová úroveň</th><th>Popis</th></tr>
+        <tr><td><strong>Space</strong></td><td>Logická 0</td><td>+3 V až +15 V</td><td>Start bit</td></tr>
+        <tr><td><strong>Mark</strong></td><td>Logická 1</td><td>-3 V až -15 V</td><td>Klidový stav linky (Stop bit)</td></tr>
+    </table>
+    <p><em>Rámec asynchronního přenosu:</em> Start bit (log. 0) &rarr; 5-8 bitů dat (LSB first) &rarr; Paritní bit (volitelně) &rarr; Stop bit(y) (log. 1).</p>
+</div>
+
+<!-- RS-485 -->
+<div class="card">
+    <h3>RS-485 (Porovnání s RS-232)</h3>
+    <p>Na rozdíl od <strong>RS-232</strong>, která je určena pro dvobodové spojení na krátké vzdálenosti a využívá asymetrický přenos náchylný k rušení, je <strong>RS-485</strong> průmyslovým standardem určeným pro robustní sběrnicovou topologii (multidrop pro desítky uzlů na jednom kabelu).</p>
+    
+    <div class="grid2">
+        <div>
+            <h4>Zapojení sítě (Sběrnice)</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <line x1="30" y1="50" x2="320" y2="50" stroke="#c0392b" stroke-width="2"/> <text x="325" y="55" font-size="10">A (D+)</text>
+                    <line x1="30" y1="80" x2="320" y2="80" stroke="#2980b9" stroke-width="2"/> <text x="325" y="85" font-size="10">B (D-)</text>
+                    <rect x="30" y="45" width="10" height="40" fill="#7f8c8d"/> <text x="5" y="70" font-size="10">Rt</text>
+                    <rect x="310" y="45" width="10" height="40" fill="#7f8c8d"/> <text x="325" y="70" font-size="10">Rt</text>
+                    
+                    <rect x="80" y="110" width="50" height="25" fill="#f39c12"/> <text x="90" y="125" font-size="10">Node 1</text>
+                    <line x1="95" y1="110" x2="95" y2="50" stroke="black"/>
+                    <line x1="115" y1="110" x2="115" y2="80" stroke="black"/>
+                    
+                    <rect x="160" y="110" width="50" height="25" fill="#f39c12"/> <text x="170" y="125" font-size="10">Node 2</text>
+                    <line x1="175" y1="110" x2="175" y2="50" stroke="black"/>
+                    <line x1="195" y1="110" x2="195" y2="80" stroke="black"/>
+
+                    <text x="225" y="125" font-size="12">...</text>
+
+                    <rect x="250" y="110" width="50" height="25" fill="#f39c12"/> <text x="255" y="125" font-size="10">Node 32</text>
+                    <line x1="265" y1="110" x2="265" y2="50" stroke="black"/>
+                    <line x1="285" y1="110" x2="285" y2="80" stroke="black"/>
+                </svg>
+            </div>
+            <p style="font-size: 0.85em; color: #7f8c8d; margin-top:-5px;">Na obou koncích kroucené dvojlinky se nacházejí zakončovací rezistory (Rt) eliminující odrazy signálu na dlouhém vedení.</p>
+        </div>
+        <div>
+            <h4>Porovnání: RS-485 vs RS-232</h4>
+            <ul class="checklist">
+                <li><strong>Odolnost a signál:</strong> RS-485 využívá diferenciální přenos po kroucené dvojlince. K detekci logického stavu stačí rozdíl napětí 0,2 V, přičemž souhlasné rušení z okolí je zrušeno komparátorem. RS-232 měří asymetricky napětí signálu vůči GND (±12 V), celý drát tak působí jako anténa pro rušení.</li>
+                <li><strong>Vzdálenost a rychlost:</strong> RS-485 bez problémů obslouží komunikaci na vzdálenost přes 1200 m (při rychlosti 100 kbps), nebo na krátké vzdálenosti dokáže přenášet rychlostí 10 Mbit/s. Limit RS-232 je v praxi pouhých 15 metrů.</li>
+                <li><strong>Topologie:</strong> RS-485 funguje jako sběrnice s polovičním duplexem (2 vodiče pro až 32 uzlů). RS-232 obslouží vždy jen spojení 2 zařízení napřímo (point-to-point, full-duplex).</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- USB -->
+<div class="card">
+    <h3>USB (Universal Serial Bus)</h3>
+    <p>Komplexní víceúrovňová stromová topologie řízená vždy jedním Host řadičem (Master). Fyzicky využívá diferenciální pár (D+, D-) s push-pull budiči a linkovým kódováním NRZI. Řízení datového toku je plně v režii Host řadiče (Polling), podřízená zařízení nesmí vysílat samy od sebe.</p>
+    <div class="grid2">
+        <div>
+            <h4>Signály a Kódování (NRZI)</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <!-- Grid -->
+                    <line x1="50" y1="20" x2="50" y2="140" stroke="#ecf0f1" stroke-dasharray="2"/>
+                    <line x1="90" y1="20" x2="90" y2="140" stroke="#ecf0f1" stroke-dasharray="2"/>
+                    <line x1="130" y1="20" x2="130" y2="140" stroke="#ecf0f1" stroke-dasharray="2"/>
+                    <line x1="170" y1="20" x2="170" y2="140" stroke="#ecf0f1" stroke-dasharray="2"/>
+                    <line x1="210" y1="20" x2="210" y2="140" stroke="#ecf0f1" stroke-dasharray="2"/>
+                    <line x1="250" y1="20" x2="250" y2="140" stroke="#ecf0f1" stroke-dasharray="2"/>
+                    <line x1="290" y1="20" x2="290" y2="140" stroke="#ecf0f1" stroke-dasharray="2"/>
+                    
+                    <text x="70" y="30" font-size="12" text-anchor="middle">0</text>
+                    <text x="110" y="30" font-size="12" text-anchor="middle">1</text>
+                    <text x="150" y="30" font-size="12" text-anchor="middle">0</text>
+                    <text x="190" y="30" font-size="12" text-anchor="middle">0</text>
+                    <text x="230" y="30" font-size="12" text-anchor="middle">1</text>
+                    <text x="270" y="30" font-size="12" text-anchor="middle">1</text>
+
+                    <!-- NRZI D+ -->
+                    <text x="10" y="70" font-size="12" fill="#c0392b">D+</text>
+                    <path d="M 30,50 L 50,50 L 50,90 L 90,90 L 130,90 L 130,50 L 170,50 L 170,90 L 210,90 L 250,90 L 290,90 L 310,90" stroke="#c0392b" fill="none" stroke-width="2"/>
+                    
+                    <!-- NRZI D- -->
+                    <text x="10" y="120" font-size="12" fill="#2980b9">D-</text>
+                    <path d="M 30,100 L 50,100 L 50,60 L 90,60 L 130,60 L 130,100 L 170,100 L 170,60 L 210,60 L 250,60 L 290,60 L 310,60" stroke="#2980b9" fill="none" stroke-width="2"/>
+                </svg>
+            </div>
+            <p style="font-size: 0.85em; color: #7f8c8d; margin-top:-5px;">V NRZI kódování (u USB 1.1 a 2.0) znamená logická 0 změnu stavu úrovně signálu, logická 1 znamená setrvání v předchozím stavu.</p>
+        </div>
+        <div>
+            <h4>Základní charakteristika</h4>
+            <table>
+                <tr><th>Vlastnost</th><th>Popis</th></tr>
+                <tr><td><strong>Topologie</strong></td><td>Stromová (point-to-point mezi Huby/Zařízeními), 1 Master (Host).</td></tr>
+                <tr><td><strong>Napěťové úrovně</strong></td><td>0 V až 3.3V (Diferenciální), na sběrnici nedochází ke kolizím (Host řídí provoz).</td></tr>
+                <tr><td><strong>Rámec (Paket)</strong></td><td>SYNC &rarr; PID &rarr; Adresa &rarr; Endpoint &rarr; CRC &rarr; EOP.</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- GPIB -->
+<div class="card">
+    <h3>GPIB (IEEE-488)</h3>
+    <p>Starší paralelní sběrnice určená primárně pro propojení měřicích přístrojů. Umožňuje lineární nebo hvězdicové zapojení. Má 8 datových vodičů, 3 vodiče pro handshake a 5 vodičů pro správu sběrnice. Pracuje v TTL úrovních a obvykle využívá negovanou logiku.</p>
+</div>
+
+
+<!-- ======================================================= -->
+<!-- BEZDRÁTOVÉ SBĚRNICE -->
+<!-- ======================================================= -->
+<h2>3. Bezdrátové sběrnice a sítě</h2>
+
+<div class="grid2">
+    <div class="card">
+        <h3>Wi-Fi (IEEE 802.11)</h3>
+        <p>Pracuje v bezlicenčních pásmech 2.4 GHz a 5 GHz. Používá protokol přístupu na médium <strong>CSMA/CA</strong> (Carrier Sense Multiple Access / Collision Avoidance). Typicky tvoří hvězdicovou strukturu (Access Point + klienti) nebo mesh.</p>
+    </div>
+    
+    <div class="card">
+        <h3>Bluetooth (IEEE 802.15.1)</h3>
+        <p>Sdílí 2.4 GHz pásmo s Wi-Fi. Pro odolnost proti rušení využívá <strong>FHSS</strong> (Frequency-Hopping Spread Spectrum) - přeskakuje 79 frekvenčních kanálů 1600krát za sekundu. Tvoří struktury zvané Piconet (1 Master + až 7 aktivních slaves).</p>
+    </div>
+
+    <div class="card">
+        <h3>ZigBee (IEEE 802.15.4)</h3>
+        <p>Sítě zaměřené na nízkou spotřebu, malou přenosovou rychlost a spolehlivost u chytrých budov a IoT. Výhodou je samoorganizující se <strong>Mesh topologie</strong>, kde každý trvale napájený uzel funguje jako router.</p>
+    </div>
+    
+    <div class="card">
+        <h3>IQRF</h3>
+        <p>Česká bezdrátová technologie (868 / 916 MHz) vyvinutá pro spolehlivý MESH přenos s minimální spotřebou energie. Srdcem sítě je Coordinator a síť může obsahovat stovky Nodů pracujících na principu řízeného směrování (IQMESH).</p>
+    </div>
+
+    <div class="card">
+        <h3>LoRa (Long Range)</h3>
+        <p>Technologie patřící do rodiny LPWAN (Low Power Wide Area Network). Využívá modulaci <strong>CSS</strong> (Chirp Spread Spectrum), což jí dává obrovskou odolnost proti rušení a dosah na kilometry, avšak za cenu velmi nízké přenosové rychlosti (stovky bps). Typická topologie je hvězdicová (uzly komunikují přímo s bránou - Gateway).</p>
+        <ul class="checklist">
+            <li><strong>Třída A (bateriová):</strong> Uzel komunikuje asynchronně jen když potřebuje vysílat (ALOHA). Následně krátce naslouchá odpovědi (nejnižší spotřeba, největší výdrž baterie).</li>
+            <li><strong>Třída B:</strong> Probouzí se a naslouchá v definovaných časových oknech synchronizovaných přes majáky (Beacons) vysílané bránou.</li>
+            <li><strong>Třída C (trvale napájená):</strong> Uzel trvale naslouchá, což umožňuje okamžité doručení příkazu z brány, ale vyžaduje trvalé napájení (není pro běh z baterie).</li>
+        </ul>
+    </div>
+    
+    <div class="card">
+        <h3>GPRS (2.5G mobilní síť)</h3>
+        <p>Slouží pro přenos dat v GSM sítích pomocí přepojování paketů (účtuje se objem přenesených dat, nikoli čas připojení). Rychlost max do ~100 kbps, u novější nadstavby EDGE až 296 kbps. Není garantována propustnost v reálném čase, využívané pro starší M2M komunikaci vzdálených senzorů.</p>
+    </div>
+</div>
+
+
+<!-- ======================================================= -->
+<!-- SHRNUTÍ -->
+<!-- ======================================================= -->
+<h2>4. Co určitě umět říct u státnic</h2>
+<div class="note">
+    <ul class="checklist">
+        <li><strong>Rozdíly topologií:</strong> Znát, co je sběrnice, hvězda, kruh a mesh. Rozumět jejich vlivu na spolehlivost (např. hvězda = výpadek jednoho spoje neshodí síť, ale závisí na centrále; mesh = vysoká redundance tras).</li>
+        <li><strong>Arbitráž na CANu:</strong> Probíhá nedestruktivně bit po bitu na základě metody CSMA/CD+AMP. Zpráva s nižším identifikátorem (více nul = více dominantních bitů) vždy vyhraje přístup na sběrnici bez poškození vlastní zprávy. Dominantní stav (rozdíl > 1.5V), recesivní stav (rozdíl ~ 0V).</li>
+        <li><strong>I2C vs SPI:</strong> I2C má dva dráty (SDA, SCL), je multimaster, používá fyzické 7-bit adresy zařízení a otevřený kolektor s pull-up rezistory. SPI má čtyři dráty (MOSI, MISO, SCK, CS), jeden master a výběr komunikujícího slave uzlu probíhá vodičem CS (Chip Select). SPI je podstatně rychlejší (push-pull) a plně duplexní.</li>
+        <li><strong>1-Wire a časování:</strong> 1-Wire obstarává napájení i data po jednom pinu (DQ). Komunikace využívá časové sloty. Pro zápis nuly se linka stahuje k 0 V na celý slot (až 120 µs), pro zápis jedničky jen na krátký okamžik (max 15 µs).</li>
+        <li><strong>RS-232 vs RS-485:</strong> RS-232 se používá pro dvobodová spojení s krátkým dosahem (asymetrický signál). RS-485 je pro sběrnicová spojení v průmyslu s vysokým dosahem a odolností (diferenciální signál a až 32 zařízení na lince).</li>
+        <li><strong>Bluetooth FHSS vs. Wi-Fi:</strong> Obě technologie koexistují na pásmu 2.4 GHz. Bluetooth se vyhýbá rušení tím, že velmi rychle mění komunikační frekvenci 1600x za sekundu (Frequency-Hopping Spread Spectrum - metoda FHSS) přes svých 79 kanálů.</li>
+        <li><strong>LoRa třídy (A, B, C):</strong> LoRa je LPWAN síť s CSS modulací. Třída A vysílá asynchronně a je nejúspornější (senzorové uzly na baterii). Třída B má synchronizovaná přijímací okna. Třída C přijímá nepřetržitě (vyžaduje síťový napájecí zdroj např. ovládané ventily).</li>
+    </ul>
+</div>
+</div>
+
+</body>
+</html>
