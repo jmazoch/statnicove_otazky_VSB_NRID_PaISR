@@ -1,0 +1,98 @@
+(function () {
+  // Fetch and inject the navbar
+  const navbarHTML = `<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="Hlavní stránka">
+      <strong>Státnicové otázky</strong>
+      <span>README a přehled vypracovaných HTML otázek</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="index.html">Main</a>
+      <a href="index.html#otazky">Otázky</a>
+      
+      <div class="nav-item" id="nav-rs">
+        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="#" class="nav-disabled">3. Stavová regulace</a>
+          <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="#" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-pmzs">
+        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
+          <a href="12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="#" class="nav-disabled">13. Převod analogové...</a>
+          <a href="#" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-ms">
+        <a href="index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#">15. Vlastnosti měřicího systému</a>
+          <a href="#">16. Příčiny chyb...</a>
+          <a href="#">17. Statistické parametry...</a>
+          <a href="#">18. Statické a dynamické...</a>
+          <a href="#">19. Drátové a bezdrátové...</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-paisr">
+        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="#" class="nav-disabled">SWI</a>
+          <a href="mobilni_platformy_statnice.html">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>`;
+
+  // Insert navbar at the beginning of body
+  if (document.body) {
+    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+    });
+  }
+
+  // Mobile menu toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const navToggle = document.getElementById('navToggle');
+    const topbar = document.getElementById('topbar');
+    
+    if (navToggle) {
+      navToggle.addEventListener('click', function() {
+        topbar.classList.toggle('is-open');
+        navToggle.setAttribute('aria-expanded', topbar.classList.contains('is-open'));
+      });
+    }
+
+    // Close menu on link click
+    const navLinks = document.querySelectorAll('.nav-links a, .nav-dropdown a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        topbar.classList.remove('is-open');
+        if (navToggle) {
+          navToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  });
+})();
