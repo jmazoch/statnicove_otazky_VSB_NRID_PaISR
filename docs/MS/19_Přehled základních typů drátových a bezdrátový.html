@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
@@ -53,12 +53,12 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
 .badge-dom { display: inline-block; padding: 3px 8px; background: #e74c3c; color: white; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
 .badge-rec { display: inline-block; padding: 3px 8px; background: #3498db; color: white; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
 </style>
-<link rel="stylesheet" href="shared/navbar-styles.css">
+<link rel="stylesheet" href="../shared/navbar-styles.css">
 </head>
 <body>
 <header class="topbar" id="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="index.html" aria-label="Hlavní stránka">
+    <a class="brand" href="../index.html" aria-label="Hlavní stránka">
       <strong>Státnicové otázky</strong>
       <span>README a přehled vypracovaných HTML otázek</span>
     </a>
@@ -66,11 +66,11 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
       <span aria-hidden="true"></span>
     </button>
     <nav class="nav-links" id="site-nav">
-      <a href="index.html">Main</a>
-      <a href="index.html#otazky">Otázky</a>
+      <a href="../index.html">Main</a>
+      <a href="../index.html#otazky">Otázky</a>
       
       <div class="nav-item" id="nav-rs">
-        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <a href="../index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
           <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
           <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
@@ -83,36 +83,36 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
       </div>
       
       <div class="nav-item" id="nav-pmzs">
-        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <a href="../index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
-          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
-          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
-          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
-          <a href="#" class="nav-disabled">11. Amplitudové modulace...</a>
-          <a href="12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="../PMZS/8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="../PMZS/9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="../PMZS/10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="../PMZS/11_Amplitudové analogové modulace, úhlové analogové modulace.html">11. Amplitudové modulace...</a>
+          <a href="../PMZS/12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
           <a href="#" class="nav-disabled">13. Převod analogové...</a>
           <a href="#" class="nav-disabled">14. Digitální modulace</a>
         </div>
       </div>
       
       <div class="nav-item" id="nav-ms">
-        <a href="index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <a href="../index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
-          <a href="#">15. Vlastnosti měřicího systému</a>
-          <a href="#">16. Příčiny chyb...</a>
-          <a href="#">17. Statistické parametry...</a>
-          <a href="#">18. Statické a dynamické...</a>
+          <a href="#" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="#" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="#" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="#" class="nav-disabled">18. Statické a dynamické...</a>
           <a href="#">19. Drátové a bezdrátové...</a>
           <a href="20_EMC.html">20. EMC a kvalita signálu</a>
         </div>
       </div>
       
       <div class="nav-item" id="nav-paisr">
-        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <a href="../index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
-          <a href="statnice_freertos.html">FreeRTOS</a>
+          <a href="../PaISR/statnice_freertos.html">FreeRTOS</a>
           <a href="#" class="nav-disabled">SWI</a>
-          <a href="mobilni_platformy_statnice.html">Android</a>
+          <a href="../PaISR/mobilni_platformy_statnice.html">Android</a>
         </div>
       </div>
     </nav>
@@ -629,8 +629,6 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
     </ul>
 </div>
 </div>
-
-<script defer src="shared/nav-links.js"></script>
 <script>
     const topbar = document.getElementById('topbar');
     const navToggle = document.getElementById('navToggle');

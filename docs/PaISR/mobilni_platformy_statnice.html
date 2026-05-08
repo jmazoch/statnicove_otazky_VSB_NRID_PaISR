@@ -1,10 +1,23 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mobilní platformy a jejich využití v řídicích a průmyslových aplikacích</title>
 <style>
+:root {
+  --bg: #f6f1e8;
+  --bg-alt: #ebe3d4;
+  --surface: rgba(255, 252, 246, 0.92);
+  --surface-strong: #fffdf8;
+  --text: #1f241f;
+  --muted: #5f665c;
+  --line: rgba(31, 36, 31, 0.12);
+  --brand: #25533b;
+  --brand-strong: #173627;
+  --accent: #c26d2c;
+  --shadow: 0 18px 55px rgba(39, 52, 43, 0.12);
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
 .topbar {
   position: sticky;
@@ -83,7 +96,11 @@
 .nav-dropdown a:hover { background: rgba(37, 83, 59, 0.08); }
 .nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s ease; }
 .nav-links a.nav-disabled { color: #5f665c; opacity: 0.7; pointer-events: none; }
-body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background:
+    radial-gradient(circle at top left, rgba(194, 109, 44, 0.16), transparent 34%),
+    radial-gradient(circle at right 20%, rgba(37, 83, 59, 0.12), transparent 28%),
+    linear-gradient(180deg, var(--bg), var(--bg-alt));
+  min-height: 100vh; }
 .page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
 h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
 .subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
@@ -151,7 +168,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 <body>
 <header class="topbar" id="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="index.html" aria-label="Hlavní stránka">
+    <a class="brand" href="../index.html" aria-label="Hlavní stránka">
       <strong>Státnicové otázky</strong>
       <span>README a přehled vypracovaných HTML otázek</span>
     </a>
@@ -159,52 +176,52 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
       <span aria-hidden="true"></span>
     </button>
     <nav class="nav-links" id="site-nav">
-      <a href="index.html">Main</a>
-      <a href="index.html#otazky">Otázky</a>
+      <a href="../index.html">Main</a>
+      <a href="../index.html#otazky">Otázky</a>
 
       <div class="nav-item" id="nav-rs">
-        <a href="index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <a href="../index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
-          <a href="index.html#rs" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
-          <a href="index.html#rs" class="nav-disabled">2. Praktické aspekty PID...</a>
-          <a href="index.html#rs" class="nav-disabled">3. Stavová regulace</a>
-          <a href="index.html#rs" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
-          <a href="index.html#rs" class="nav-disabled">5. Syntéza nelineárních...</a>
-          <a href="index.html#rs" class="nav-disabled">6. Statická optimalizace</a>
-          <a href="index.html#rs" class="nav-disabled">7. Dynamická optimalizace</a>
+          <a href="../index.html#rs" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="../index.html#rs" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="../index.html#rs" class="nav-disabled">3. Stavová regulace</a>
+          <a href="../index.html#rs" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="../index.html#rs" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="../index.html#rs" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="../index.html#rs" class="nav-disabled">7. Dynamická optimalizace</a>
         </div>
       </div>
 
       <div class="nav-item" id="nav-pmzs">
-        <a href="index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <a href="../index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
-          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
-          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
-          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
-          <a href="index.html#pmzs" class="nav-disabled">11. Amplitudové modulace...</a>
-          <a href="12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
-          <a href="index.html#pmzs" class="nav-disabled">13. Převod analogové...</a>
-          <a href="index.html#pmzs" class="nav-disabled">14. Digitální modulace</a>
+          <a href="../PMZS/8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="../PMZS/9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="../PMZS/10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="../PMZS/11_Amplitudové analogové modulace, úhlové analogové modulace.html">11. Amplitudové modulace...</a>
+          <a href="../PMZS/12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="../index.html#pmzs" class="nav-disabled">13. Převod analogové...</a>
+          <a href="../index.html#pmzs" class="nav-disabled">14. Digitální modulace</a>
         </div>
       </div>
 
       <div class="nav-item" id="nav-ms">
-        <a href="index.html#ms" class="nav-disabled">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <a href="../index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
-          <a href="index.html#ms" class="nav-disabled">15. Vlastnosti měřicího systému</a>
-          <a href="index.html#ms" class="nav-disabled">16. Příčiny chyb...</a>
-          <a href="index.html#ms" class="nav-disabled">17. Statistické parametry...</a>
-          <a href="index.html#ms" class="nav-disabled">18. Statické a dynamické...</a>
-          <a href="index.html#ms" class="nav-disabled">19. Drátové a bezdrátové...</a>
-          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+          <a href="../index.html#ms" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="../index.html#ms" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="../index.html#ms" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="../index.html#ms" class="nav-disabled">18. Statické a dynamické...</a>
+          <a href="../MS/19_Přehled základních typů drátových a bezdrátový.html">19. Drátové a bezdrátové sběrnice</a>
+          <a href="../MS/20_EMC.html">20. EMC a kvalita signálu</a>
         </div>
       </div>
 
       <div class="nav-item" id="nav-paisr">
-        <a href="index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <a href="../index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
           <a href="statnice_freertos.html">FreeRTOS</a>
-          <a href="index.html#paisr" class="nav-disabled">SWI</a>
+          <a href="../index.html#paisr" class="nav-disabled">SWI</a>
           <a href="mobilni_platformy_statnice.html">Android</a>
         </div>
       </div>
@@ -818,7 +835,6 @@ if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
 </div>
 
 </div>
-<script defer src="shared/nav-links.js"></script>
 <script>
   const topbar = document.getElementById('topbar');
   const navToggle = document.getElementById('navToggle');

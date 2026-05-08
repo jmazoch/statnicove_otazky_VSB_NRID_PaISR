@@ -1,12 +1,12 @@
 (function () {
   const enabledByNumber = {
-    "8": "8_statnice_okenni_funkce.html",
-    "9": "9_statnice_frekvencni.html",
-    "10": "10_frekvencni_spektra_modulace.html",
-    "11": "11_Amplitudové analogové modulace, úhlové analogové modulace.html",
-    "12": "12_Systémy pro zpracování signálu.html",
-    "19": "19_Přehled základních typů drátových a bezdrátový.html",
-    "20": "20_EMC.html"
+    "8": "PMZS/8_statnice_okenni_funkce.html",
+    "9": "PMZS/9_statnice_frekvencni.html",
+    "10": "PMZS/10_frekvencni_spektra_modulace.html",
+    "11": "PMZS/11_Amplitudové analogové modulace, úhlové analogové modulace.html",
+    "12": "PMZS/12_Systémy pro zpracování signálu.html",
+    "19": "MS/19_Přehled základních typů drátových a bezdrátový.html",
+    "20": "MS/20_EMC.html"
   };
 
   const fallbackByNumber = {

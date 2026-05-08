@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\Jan Zenbook\\\\Documents\\\\Statnice\\\\WEB_OTAZKY\\\\statnicove_otazky_VSB_NRID_PaISR\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\Jan Zenbook\\\\Documents\\\\Statnice\\\\WEB_OTAZKY\\\\statnicove_otazky_VSB_NRID_PaISR\" -Recurse | Where-Object { $_.PSIsContainer } | Sort-Object FullName)"
+    ]
+  }
+}
