@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Státnicová otázka 18 – Statické a dynamické vlastnosti měřicího informačního systému</title>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* Barvy — sdílené s celým webem podle šablony */
+:root {
+  --bg: #f6f1e8; --bg-alt: #ebe3d4;
+  --surface: rgba(255,252,246,0.92); --surface-strong: #fffdf8;
+  --text: #1f241f; --muted: #5f665c;
+  --line: rgba(31,36,31,0.12);
+  --brand: #25533b; --brand-strong: #173627;
+  --accent: #c26d2c;
+  --shadow: 0 18px 55px rgba(39,52,43,0.12);
+}
+
+body { 
+  font-family: Georgia, serif; 
+  font-size: 15px; 
+  line-height: 1.75; 
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(194,109,44,0.16), transparent 34%),
+    radial-gradient(circle at right 20%, rgba(37,83,59,0.12), transparent 28%),
+    linear-gradient(180deg, var(--bg), var(--bg-alt));
+  min-height: 100vh; 
+}
+a { color: inherit; }
+
+/* Navbar */
+.topbar { position: sticky; top: 0; z-index: 30; backdrop-filter: blur(14px);
+  background: rgba(246,241,232,0.82); border-bottom: 1px solid var(--line); }
+.topbar-inner { max-width: 1180px; margin: 0 auto; padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; flex-direction: column; gap: 2px; text-decoration: none; color: var(--brand-strong); }
+.brand strong { font-size: 18px; letter-spacing: 0.02em; }
+.brand span { font-size: 12px; color: var(--muted); }
+.nav-toggle { display: none; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 14px;
+  background: var(--surface-strong); color: var(--brand-strong); cursor: pointer; }
+.nav-toggle span, .nav-toggle span::before, .nav-toggle span::after {
+  display: block; width: 20px; height: 2px; background: currentColor;
+  border-radius: 999px; position: relative; transition: transform 0.25s ease, opacity 0.25s ease; }
+.nav-toggle span::before, .nav-toggle span::after { content: ""; position: absolute; left: 0; }
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+.nav-links { display: flex; align-items: center; gap: 10px; }
+.nav-item { position: relative; display: flex; align-items: center; }
+.nav-links a, .nav-item > a { text-decoration: none; font-family: Arial, sans-serif; font-size: 14px;
+  font-weight: 700; color: var(--brand-strong); padding: 10px 14px; border-radius: 999px;
+  transition: background 0.2s, color 0.2s, transform 0.2s; display: flex; align-items: center; gap: 6px; }
+.nav-links a:hover, .nav-item > a:hover { background: rgba(37,83,59,0.08); color: var(--brand); transform: translateY(-1px); }
+.nav-dropdown { position: absolute; top: 100%; left: 0; background: var(--surface-strong);
+  min-width: 220px; border-radius: 12px; border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: none; flex-direction: column; z-index: 999; }
+.nav-item:hover .nav-dropdown, .nav-item.is-open .nav-dropdown { display: flex; }
+.nav-dropdown a { padding: 10px 14px; border-radius: 0; background: transparent;
+  font-size: 13px; border-bottom: 1px solid var(--line); }
+.nav-dropdown a:last-child { border-bottom: none; }
+.nav-dropdown a:hover { background: rgba(37,83,59,0.08); }
+.nav-links a.nav-disabled { color: var(--muted); opacity: 0.7; pointer-events: none; }
+.nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s; }
+
+/* Obsah stránky */
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px 60px;
+  background: #fff; box-shadow: var(--shadow); }
+h1 { font-size: 26px; font-weight: 700; color: var(--brand-strong);
+  border-bottom: 3px solid var(--brand); padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: var(--muted); margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: var(--brand-strong);
+  margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid var(--brand); }
+h3 { font-size: 15px; font-weight: 700; color: var(--text); margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+
+/* Komponenty pro obsah 18. otázky */
+.info-box { background: rgba(37,83,59,0.06); border-left: 4px solid var(--brand);
+  padding: 15px 20px; margin: 12px 0; border-radius: 0 6px 6px 0; font-style: normal; }
+.math-box { background: var(--surface); border: 1px solid var(--line);
+  padding: 15px; margin: 15px 0; border-radius: 6px; overflow-x: auto; }
+.important { font-weight: bold; color: var(--brand-strong); }
+.svg-container { width: 100%; text-align: center; margin: 30px 0; background: var(--surface-strong); border: 1px solid var(--line); border-radius: 8px; padding: 15px; }
+.svg-container svg { max-width: 100%; height: auto; }
+.svg-container img { max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.svg-title { font-weight: bold; fill: var(--brand-strong); font-family: Arial, sans-serif; }
+
+.summary-list { background: rgba(37,83,59,0.04); padding: 25px 25px 25px 45px; border-radius: 8px; border: 1px solid var(--line); margin-top: 20px; }
+.summary-list li { margin-bottom: 12px; }
+.summary-list li::marker { color: var(--brand-strong); font-size: 1.2em; font-weight: bold; }
+
+@media (max-width: 820px) {
+  .topbar-inner { align-items: flex-start; flex-wrap: wrap; }
+  .nav-toggle { display: inline-flex; }
+  .nav-links { display: none; width: 100%; padding: 10px 0 4px;
+    flex-direction: column; align-items: stretch; gap: 6px; }
+  .topbar.is-open .nav-links { display: flex; }
+  .nav-links a, .nav-item > a { padding: 12px 14px; border-radius: 16px;
+    background: rgba(255,255,255,0.72); border: 1px solid var(--line); }
+  .nav-item { flex-direction: column; align-items: stretch; }
+  .nav-dropdown { position: static; border: none; box-shadow: none; display: none;
+    background: rgba(37,83,59,0.04); }
+  .page { padding: 24px 20px 40px; }
+}
+@media print { body { background: #fff; } .page { box-shadow: none; padding: 24px 36px; } }
+</style>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="Hlavní stránka">
+      <strong>Státnicové otázky</strong>
+      <span>README a přehled vypracovaných HTML otázek</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="../index.html">Main</a>
+      <a href="../index.html#otazky">Otázky</a>
+
+      <div class="nav-item" id="nav-rs">
+        <a href="../index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../index.html#rs" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="../index.html#rs" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="../index.html#rs" class="nav-disabled">3. Stavová regulace</a>
+          <a href="../index.html#rs" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="../index.html#rs" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="../index.html#rs" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="../index.html#rs" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-pmzs">
+        <a href="../index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../PMZS/8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="../PMZS/9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="../PMZS/10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="../PMZS/11_Amplitudové analogové modulace, úhlové analogové modulace.html">11. Amplitudové modulace...</a>
+          <a href="../PMZS/12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="../index.html#pmzs" class="nav-disabled">13. Převod analogové...</a>
+          <a href="../index.html#pmzs" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-ms">
+        <a href="../index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../index.html#ms" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="../index.html#ms" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="../index.html#ms" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="18_Statické_a_dynamické_vlastnosti_MIS.html">18. Statické a dynamické...</a>
+          <a href="19_Přehled základních typů drátových a bezdrátový.html">19. Drátové a bezdrátové sběrnice</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-paisr">
+        <a href="../index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../PaISR/statnice_freertos.html">FreeRTOS</a>
+          <a href="../index.html#paisr" class="nav-disabled">SWI</a>
+          <a href="../PaISR/mobilni_platformy_statnice.html">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="page">
+    <h1>18. Statické a dynamické vlastnosti měřicího informačního systému. Metody měření vlastností.</h1>
+    <p class="subtitle">Vypracovaná státnicová otázka · NMgr. Řídicí a informační systémy 2026 · Zdroj: Skripta MS Kapitoly 3 a 4</p>
+    
+    <div class="info-box">
+        Znalost statických a dynamických vlastností, stejně jako jejich matematického popisu (včetně linearizace a optimalizace), tvoří absolutní základ pro návrh spolehlivých Měřicích a informačních systémů (MIS).
+    </div>
+
+    <h2>1. Matematický model a principiální rozdíl vlastností</h2>
+    <p>Vlastnosti měřicích informačních systémů (MIS) jsou z matematického hlediska dány závislostí výstupní veličiny \( y(t) \) na vstupní veličině \( x(t) \) v čase. Obecně lze systém popsat nelineární diferenciální rovnicí vyjadřující bilanci extenzivních veličin:</p>
+    
+    <div class="math-box">
+        $$ f(y, y', y'', \dots, y^{(n)}, x, x', x'', \dots, x^{(m)}) = 0 $$
+    </div>
+
+    <p>Pro reálné systémy (splňující princip kauzality) vždy platí \( n \ge m \). U jednoduchých měřicích řetězců se koeficienty u derivací vstupu často zanedbávají. Za předpokladu linearizace lze systém popsat <strong>lineární diferenciální rovnicí s konstantními koeficienty</strong>:</p>
+
+    <div class="math-box">
+        $$ a_n y^{(n)} + a_{n-1} y^{(n-1)} + \dots + a_1 y' + a_0 y = b_m x^{(m)} + \dots + b_1 x' + b_0 x $$
+    </div>
+
+    <ul>
+        <li><span class="important">Statické vlastnosti</span> definují systém v <strong>ustáleném stavu</strong> (kvazistacionárním). Všechny časové derivace vstupů i výstupů jsou rovny nule (\( \frac{d}{dt} = 0 \)). Rovnice přechází na algebraický tvar \( a_0 y = b_0 x \), což popisuje statickou přenosovou charakteristiku.</li>
+        <li><span class="important">Dynamické vlastnosti</span> definují systém v <strong>přechodových dějích</strong> (mimo rovnovážné stavy). Určují, jak rychle a s jakým zpožděním či kmitáním systém reaguje na změnu na vstupu.</li>
+    </ul>
+
+    <h2>2. Statické vlastnosti a statická charakteristika reálného MIS</h2>
+    <p>Ideální měřicí systém má dokonale lineární charakteristiku \( y = K \cdot x \), kde \( K \) je citlivost. Reálný systém však obsahuje vady, které do měření zanáší <strong>statické chyby</strong>.</p>
+    
+    <p><strong>Základní hodnocené odchylky od linearity:</strong></p>
+    <ul>
+        <li><strong>Chyba linearity (Nelinearita):</strong> Maximální odchylka skutečné nelineární křivky od ideální (optimalizované) přímky. U aproximace se minimalizuje max. odchylka (minimalizace maximální chyby podle Čebyševova kritéria).</li>
+        <li><strong>Počáteční necitlivost (Pásmo necitlivosti):</strong> Zóna u nuly, kde změna vstupu nevyvolá žádnou změnu výstupu (např. suché tření v mechanice).</li>
+        <li><strong>Hystereze a chyba reverzibility:</strong> Systém vykazuje jiné výstupní hodnoty pro stejný vstup v závislosti na tom, zda měřená veličina narůstá, nebo klesá (vzniká hysterezní smyčka).</li>
+        <li><strong>Drift:</strong> Pomalá samovolná změna (posun) výstupní hodnoty v čase při konstantním vstupu (např. teplotní drift nuly).</li>
+        <li><strong>Potlačený rozsah:</strong> Systém začíná měřit až od určité nenulové prahové hodnoty vstupu.</li>
+    </ul>
+
+    <div class="svg-container">
+        <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <marker id="arrow-axis" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <polygon points="0,0 6,3 0,6" fill="#333"/>
+                </marker>
+            </defs>
+            
+            <g transform="translate(50, 40)">
+                <text x="30" y="-15" class="svg-title">Nelinearita a její minimalizace</text>
+                <line x1="0" y1="200" x2="220" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/>
+                <line x1="0" y1="200" x2="0" y2="10" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/>
+                <text x="210" y="220" font-family="sans-serif">x</text>
+                <text x="-15" y="20" font-family="sans-serif">y</text>
+                <path d="M0,200 Q100,60 200,40" fill="none" stroke="#d9534f" stroke-width="3"/>
+                <line x1="0" y1="200" x2="200" y2="20" stroke="#5bc0de" stroke-width="2" stroke-dasharray="6,4"/>
+                <line x1="100" y1="120" x2="100" y2="100" stroke="#333" stroke-width="1"/>
+                <circle cx="100" cy="110" r="3" fill="#333"/>
+                <text x="110" y="115" font-size="12">Δy (chyba)</text>
+            </g>
+
+            <g transform="translate(350, 40)">
+                <text x="50" y="-15" class="svg-title">Hystereze (Reverzibilita)</text>
+                <line x1="0" y1="200" x2="220" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/>
+                <line x1="0" y1="200" x2="0" y2="10" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/>
+                <text x="210" y="220" font-family="sans-serif">x</text>
+                <path d="M20,180 L160,40" fill="none" stroke="#d9534f" stroke-width="2"/>
+                <path d="M60,180 L200,40" fill="none" stroke="#2a6347" stroke-width="2"/>
+                <line x1="20" y1="180" x2="60" y2="180" stroke="#333" stroke-width="2"/>
+                <line x1="160" y1="40" x2="200" y2="40" stroke="#333" stroke-width="2"/>
+                <polygon points="100,100 110,110 95,115" fill="#d9534f"/>
+                <polygon points="120,100 110,90 125,85" fill="#2a6347"/>
+            </g>
+
+            <g transform="translate(650, 40)">
+                <text x="10" y="-15" class="svg-title">Necitlivost a potlačený rozsah</text>
+                <line x1="0" y1="200" x2="220" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/>
+                <line x1="0" y1="200" x2="0" y2="10" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/>
+                <text x="210" y="220" font-family="sans-serif">x</text>
+                <path d="M0,200 L50,200 L180,70" fill="none" stroke="#d9534f" stroke-width="3"/>
+                <text x="20" y="190" font-size="12" fill="#d9534f">Zóna necitlivosti</text>
+            </g>
+        </svg>
+    </div>
+
+    <h3>Matematické vyjádření nelinearity – Linearizace (Taylorův rozvoj)</h3>
+    <p>Pro matematické zpracování nelineárních měřicích systémů používáme lokální linearizaci v pracovním bodě \( (x_0, u_0) \) pomocí Taylorova rozvoje prvního řádu (zanedbání vyšších derivací). Nelineární stavový model:</p>
+    <div class="math-box">
+        $$ \dot{x}(t) = f(x, u, t) $$
+        $$ y(t) = g(x, u, t) $$
+    </div>
+    <p>Linearizací pro malé odchylky \( \Delta x = x - x_0 \) a \( \Delta u = u - u_0 \) získáváme klasický lineární stavový popis tvořený Jacobiho maticemi:</p>
+    <div class="math-box">
+        $$ \Delta \dot{x} = A \cdot \Delta x + B \cdot \Delta u \quad \text{kde} \quad A = \left. \frac{\partial f}{\partial x} \right|_{x_0, u_0}, \quad B = \left. \frac{\partial f}{\partial u} \right|_{x_0, u_0} $$
+        $$ \Delta y = C \cdot \Delta x + D \cdot \Delta u \quad \text{kde} \quad C = \left. \frac{\partial g}{\partial x} \right|_{x_0, u_0}, \quad D = \left. \frac{\partial g}{\partial u} \right|_{x_0, u_0} $$
+    </div>
+
+    <h2>3. Popis dynamických vlastností v čase a ve frekvenci</h2>
+    <p>Dynamické chyby (\( \varepsilon_d \)) vznikají při rychlých dějích a jsou dány nedokonalostí přenosu vysoko-frekvenčních složek měřeného signálu.</p>
+
+    <h3>A) Časová oblast (Přechodová charakteristika)</h3>
+    <p>Měří se jako odezva na jednotkový skok. Dynamická chyba členu 1. řádu je analyticky definována vztahem:</p>
+    <div class="math-box">
+        $$ \varepsilon_d(t) = - k \cdot x_1 \cdot e^{-\frac{t}{T}} $$
+    </div>
+    <p>V inženýrské praxi hodnotíme parametry z grafu přechodové charakteristiky. Doby průtahu a náběhu se u soustav vyšších řádů exaktně určují zkonstruováním tečny v <strong>inflexním bodě</strong> křivky:</p>
+    <ul>
+        <li><strong>Dopravní zpoždění (\( T_d \)):</strong> Čas od změny na vstupu do první reakce na výstupu (signál se šíří konečnou rychlostí). V Laplaceově obrazu se projeví členem \( e^{-p T_d} \).</li>
+        <li><strong>Doba průtahu (\( T_p \)):</strong> Odpovídá průsečíku tečny z inflexního bodu s osou času. Vyjadřuje akumulační setrvačnost systému.</li>
+        <li><strong>Doba náběhu (\( T_n \)):</strong> Úsek ohraničený průsečíkem tečny z inflexního bodu s osou času a přímkou ustálené hodnoty.</li>
+        <li><strong>Doba ustálení (\( T_u \)):</strong> Doba, po které se výstup trvale udrží v pásmu tolerance (např. ±5 %) od ustálené hodnoty.</li>
+    </ul>
+
+    <div class="svg-container">
+        <h4 style="margin-bottom: 12px; color: var(--brand-strong); font-family: Arial, sans-serif;">Přechodová charakteristika s vyznačením časových úseků</h4>
+        <img src="image_91321c.png" alt="Přechodová charakteristika se zobrazením překmitu, inflexního bodu a časových charakteristik" />
+    </div>
+
+    <h3>B) Frekvenční oblast (Bodeho a Nyquistovy diagramy)</h3>
+    <p>Vznikne dosazením operátoru \( p = j\omega \) do přenosové funkce. Přenos je komplexní funkce \( F(j\omega) = f_1(\omega) + j\cdot f_2(\omega) \).</p>
+    
+    <ul>
+        <li><strong>Bodeho amplitudová charakteristika:</strong> Poměr výstupní a vstupní amplitudy v závislosti na frekvenci (kreslená v decibelech, sklon -20dB/dekádu pro člen 1. řádu). Kritickým bodem je <strong>mezní frekvence (\( f_m \))</strong>, při které signál poklesne o 3 dB (výkonový pokles na polovinu).</li>
+        <li><strong>Bodeho fázová charakteristika:</strong> Změna fáze v závislosti na frekvenci (pro člen 1. řádu od 0° po -90°).</li>
+        <li><strong>Nyquistův diagram (Frekvenční charakteristika v komplexní rovině):</strong> Proporcionální člen 1. řádu (např. jednoduchý RC článek nebo teplotní senzor) vykreslí v komplexní rovině přesnou <strong>půlkružnici</strong> v 4. kvadrantu.</li>
+    </ul>
+
+    <div class="svg-container">
+        <svg viewBox="0 0 900 350" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(50, 40)">
+                <text x="40" y="-15" class="svg-title">Bode: Amplitudová char.</text>
+                <line x1="0" y1="120" x2="300" y2="120" stroke="#333" stroke-width="2"/> <line x1="0" y1="140" x2="0" y2="0" stroke="#333" stroke-width="2"/> <text x="310" y="125">ω [rad/s]</text>
+                <text x="-35" y="10" font-size="12">|G| [dB]</text>
+                
+                <path d="M0,30 L150,30 C180,30 200,45 280,110" fill="none" stroke="#d9534f" stroke-width="3"/>
+                <line x1="0" y1="45" x2="175" y2="45" stroke="#999" stroke-dasharray="4,4"/>
+                <circle cx="175" cy="45" r="4" fill="#173627"/>
+                <line x1="175" y1="45" x2="175" y2="120" stroke="#173627" stroke-dasharray="4,4"/>
+                <text x="180" y="110" fill="#173627" font-weight="bold">ω_m (-3dB)</text>
+                <line x1="150" y1="30" x2="260" y2="140" stroke="#5bc0de" stroke-width="2" stroke-dasharray="6,4"/>
+                <text x="210" y="70" font-size="11" fill="#5bc0de" transform="rotate(45, 210, 70)">-20 dB/dec</text>
+            </g>
+
+            <g transform="translate(480, 40)">
+                <text x="40" y="-15" class="svg-title">Nyquist: Frekv. char. v komplex. rovině</text>
+                <line x1="0" y1="40" x2="250" y2="40" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/> <line x1="40" y1="0" x2="40" y2="160" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/> <text x="260" y="45">Re</text>
+                <text x="25" y="10">j</text>
+                
+                <path d="M40,40 A 80 80 0 0 0 200 40" fill="none" stroke="#2a6347" stroke-width="3"/>
+                <circle cx="40" cy="40" r="4" fill="#333"/>
+                <text x="15" y="35" font-size="12">ω→∞</text>
+                <circle cx="200" cy="40" r="4" fill="#333"/>
+                <text x="210" y="35" font-size="12">ω=0</text>
+                <circle cx="120" cy="120" r="4" fill="#d9534f"/>
+                <text x="110" y="140" font-size="12">ω = 1/T</text>
+                <line x1="40" y1="40" x2="160" y2="105" stroke="#999" stroke-width="1"/>
+                <text x="70" y="65" font-size="14">φ</text>
+            </g>
+        </svg>
+    </div>
+
+    <h2>4. Kritéria jakosti (Optimalizace MS)</h2>
+    <p>Vlivem nedokonalých statických a dynamických vlastností vznikají chyby. Úkolem optimalizace Měřicího Informačního Systému je zmenšit tuto chybu definovanou jako rozdíl ideální \( u_{o,id}(t) \) a skutečně naměřené \( u_{o,re}(t) \) hodnoty. Základním a nejběžnějším inženýrským měřítkem pro vyjádření celkové vady je <strong>střední kvadratická chyba přenosu (MSE)</strong>:</p>
+    <div class="math-box">
+        $$ V = \lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T [u_{o,re}(t) - u_{o,id}(t)]^2 dt $$
+    </div>
+
+    <h2>5. Metody měření statických a dynamických vlastností</h2>
+    <ul>
+        <li><strong>Měření statických vlastností:</strong> Kalibrace krok po kroku. Do senzoru přivádíme statický (neměnný) vstupní signál od 0 % do 100 % jmenovitého rozsahu a měříme ustálený výstup. Klíčové je následně měřit <strong>zpětným chodem</strong> od 100 % do 0 %. Rozdíl mezi těmito dvěma chody v jakémkoliv bodě prokazuje <strong>hysterezi</strong> přístroje.</li>
+        <li><strong>Měření přechodové charakteristiky v čase:</strong> Zavedení <strong>jednotkového skoku</strong> na vstup (např. náhlé připojení napětí, bleskové přemístění teploměru z bodu mrazu do bodu varu). Osciloskopem (nebo A/D převodníkem při splnění Shannonova teorému $f_{vz} > 2 \cdot f_{max}$) záznam výstupu a analytické určení $T_d$, $T_p$, $T_n$ tečnou v inflexním bodě.</li>
+        <li><strong>Měření frekvenční charakteristiky:</strong> Zavedení harmonického signálu proměnné frekvence (funkční generátor s režimem <em>sweep</em>) na vstup. Měříme útlum a zpoždění výstupu, z čehož na spektrálním analyzátoru nebo vektorovém analyzátoru zkonstruujeme Bodeho či Nyquistovy diagramy.</li>
+    </ul>
+
+    <h2>Co určitě umět říct u státnic</h2>
+    <div class="summary-list">
+        <ul>
+            <li><span class="important">Rozdíl statika a dynamika:</span> Statické vlastnosti popisují měřicí systém v ustáleném stavu (časové derivace jsou nula, uplatňuje se statická převodní charakteristika). Dynamické vlastnosti popisují chování při změnách v čase (náběhy, překmity) a jsou řešeny diferenciálními rovnicemi.</li>
+            <li><span class="important">Matematický model a Linearizace:</span> Reálné systémy jsou nelineární (mají hysterzi, pásma necitlivosti). Lze je aproximovat pro malý rozkmit v pracovním bodě pomocí Taylorova rozvoje (vzniknou Jacobiho matice \( A, B, C, D \) pro stavový popis).</li>
+            <li><span class="important">Odchylky reálného měřidla:</span> Patří sem chyba linearity, počáteční necitlivost, hystereze a drift (samovolná změna v čase bez změny měřené veličiny). Hysterezi prokážu měřením hodnot plynule nahoru a ihned plynule dolů.</li>
+            <li><span class="important">Přechodová charakteristika:</span> Z odezvy na skok určujeme dopravní zpoždění (\( T_d \)), dobu průtahu (\( T_p \)) a dobu náběhu (\( T_n \)). Exaktní definice \( T_p \) a \( T_n \) se provádí proložením <strong>tečny v inflexním bodě</strong>!</li>
+            <li><span class="important">Frekvenční charakteristika:</span> Graficky se zobrazuje Nyquistovým diagramem (v komplexní rovině, kde ideální přenos 1. řádu je půlkružnice) nebo Bodeho charakteristikou (důležitá je mezní frekvence \( f_m \) představující pokles o 3 dB).</li>
+            <li><span class="important">Optimalizace přenosu:</span> Chyby reálného MIS minimalizujeme vyhodnocením <strong>střední kvadratické chyby</strong> integrálem z kvadrátu odchylky reálného a ideálního signálu.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+  const topbar = document.getElementById('topbar');
+  const navToggle = document.getElementById('navToggle');
+  const navItems = document.querySelectorAll('.nav-item');
+  const navLinks = document.querySelectorAll('#site-nav > a');
+
+  function setMenu(open) {
+    topbar.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+  }
+
+  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
+  navLinks.forEach(l => l.addEventListener('click', () => setMenu(false)));
+
+  navItems.forEach(item => {
+    const link = item.querySelector('a:first-child');
+    if (link) {
+      link.addEventListener('click', e => {
+        if (window.innerWidth <= 820 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
+          e.preventDefault();
+          item.classList.toggle('is-open');
+        }
+      });
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle'))
+      navItems.forEach(i => i.classList.remove('is-open'));
+  });
+</script>
+</body>
+</html>
