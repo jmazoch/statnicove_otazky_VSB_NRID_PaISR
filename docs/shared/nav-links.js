@@ -4,6 +4,7 @@
     "10": "PMZS/10_frekvencni_spektra_modulace.html",
     "11": "PMZS/11_Amplitudové analogové modulace, úhlové analogové modulace.html",
     "12": "PMZS/12_Systémy pro zpracování signálu.html",
+    "17": "MS/17_Statistické_parametry_měřícího_signálu.html",
     "18": "MS/18_Statické_a_dynamické_vlastnosti_MIS.html",
     "19": "MS/19_Přehled základních typů drátových a bezdrátový.html",
     "20": "MS/20_EMC.html"};
