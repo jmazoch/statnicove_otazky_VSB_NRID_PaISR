@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Státnicová otázka 17 – Statistické parametry měřícího signálu</title>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* Barvy — sdílené s celým webem podle šablony */
+:root {
+  --bg: #f6f1e8; --bg-alt: #ebe3d4;
+  --surface: rgba(255,252,246,0.92); --surface-strong: #fffdf8;
+  --text: #1f241f; --muted: #5f665c;
+  --line: rgba(31,36,31,0.12);
+  --brand: #25533b; --brand-strong: #173627;
+  --accent: #c26d2c;
+  --shadow: 0 18px 55px rgba(39,52,43,0.12);
+}
+
+body { 
+  font-family: Georgia, serif; 
+  font-size: 15px; 
+  line-height: 1.75; 
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(194,109,44,0.16), transparent 34%),
+    radial-gradient(circle at right 20%, rgba(37,83,59,0.12), transparent 28%),
+    linear-gradient(180deg, var(--bg), var(--bg-alt));
+  min-height: 100vh; 
+}
+a { color: inherit; }
+
+/* Navbar */
+.topbar { position: sticky; top: 0; z-index: 30; backdrop-filter: blur(14px);
+  background: rgba(246,241,232,0.82); border-bottom: 1px solid var(--line); }
+.topbar-inner { max-width: 1180px; margin: 0 auto; padding: 14px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; flex-direction: column; gap: 2px; text-decoration: none; color: var(--brand-strong); }
+.brand strong { font-size: 18px; letter-spacing: 0.02em; }
+.brand span { font-size: 12px; color: var(--muted); }
+.nav-toggle { display: none; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border: 1px solid var(--line); border-radius: 14px;
+  background: var(--surface-strong); color: var(--brand-strong); cursor: pointer; }
+.nav-toggle span, .nav-toggle span::before, .nav-toggle span::after {
+  display: block; width: 20px; height: 2px; background: currentColor;
+  border-radius: 999px; position: relative; transition: transform 0.25s ease, opacity 0.25s ease; }
+.nav-toggle span::before, .nav-toggle span::after { content: ""; position: absolute; left: 0; }
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+.nav-links { display: flex; align-items: center; gap: 10px; }
+.nav-item { position: relative; display: flex; align-items: center; }
+.nav-links a, .nav-item > a { text-decoration: none; font-family: Arial, sans-serif; font-size: 14px;
+  font-weight: 700; color: var(--brand-strong); padding: 10px 14px; border-radius: 999px;
+  transition: background 0.2s, color 0.2s, transform 0.2s; display: flex; align-items: center; gap: 6px; }
+.nav-links a:hover, .nav-item > a:hover { background: rgba(37,83,59,0.08); color: var(--brand); transform: translateY(-1px); }
+.nav-dropdown { position: absolute; top: 100%; left: 0; background: var(--surface-strong);
+  min-width: 220px; border-radius: 12px; border: 1px solid var(--line);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12); display: none; flex-direction: column; z-index: 999; }
+.nav-item:hover .nav-dropdown, .nav-item.is-open .nav-dropdown { display: flex; }
+.nav-dropdown a { padding: 10px 14px; border-radius: 0; background: transparent;
+  font-size: 13px; border-bottom: 1px solid var(--line); }
+.nav-dropdown a:last-child { border-bottom: none; }
+.nav-dropdown a:hover { background: rgba(37,83,59,0.08); }
+.nav-links a.nav-disabled { color: var(--muted); opacity: 0.7; pointer-events: none; }
+.nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s; }
+
+/* Obsah stránky */
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px 60px;
+  background: #fff; box-shadow: var(--shadow); }
+h1 { font-size: 26px; font-weight: 700; color: var(--brand-strong);
+  border-bottom: 3px solid var(--brand); padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: var(--muted); margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: var(--brand-strong);
+  margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid var(--brand); }
+h3 { font-size: 15px; font-weight: 700; color: var(--text); margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+
+/* Komponenty pro obsah */
+.info-box { background: rgba(37,83,59,0.06); border-left: 4px solid var(--brand);
+  padding: 15px 20px; margin: 12px 0; border-radius: 0 6px 6px 0; font-style: normal; }
+.note { background: rgba(194,109,44,0.08); border-left: 4px solid var(--accent);
+  padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a;
+  padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.math-box { background: var(--surface); border: 1px solid var(--line);
+  padding: 15px; margin: 15px 0; border-radius: 6px; overflow-x: auto; }
+.svg-container { width: 100%; text-align: center; margin: 30px 0; background: var(--surface-strong); border: 1px solid var(--line); border-radius: 8px; padding: 15px; }
+.svg-container svg { max-width: 100%; height: auto; }
+.svg-container img { max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.svg-title { font-weight: bold; fill: var(--brand-strong); font-family: Arial, sans-serif; }
+
+.toc { background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 16px 20px; margin: 24px 0; }
+.toc h3 { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+.toc ol { padding-left: 20px; }
+.toc li { margin: 4px 0; font-size: 14px; }
+.toc a { color: var(--brand); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: var(--brand-strong); margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: var(--brand-strong); color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:nth-child(even) td { background: rgba(37,83,59,0.04); }
+
+hr.sec { border: none; border-top: 2px solid var(--line); margin: 36px 0; }
+
+@media (max-width: 820px) {
+  .topbar-inner { align-items: flex-start; flex-wrap: wrap; }
+  .nav-toggle { display: inline-flex; }
+  .nav-links { display: none; width: 100%; padding: 10px 0 4px;
+    flex-direction: column; align-items: stretch; gap: 6px; }
+  .topbar.is-open .nav-links { display: flex; }
+  .nav-links a, .nav-item > a { padding: 12px 14px; border-radius: 16px;
+    background: rgba(255,255,255,0.72); border: 1px solid var(--line); }
+  .nav-item { flex-direction: column; align-items: stretch; }
+  .nav-dropdown { position: static; border: none; box-shadow: none; display: none;
+    background: rgba(37,83,59,0.04); }
+  .page { padding: 24px 20px 40px; }
+}
+@media print { body { background: #fff; } .page { box-shadow: none; padding: 24px 36px; } }
+</style>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="Hlavní stránka">
+      <strong>Státnicové otázky</strong>
+      <span>README a přehled vypracovaných HTML otázek</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="../index.html">Main</a>
+      <a href="../index.html#otazky">Otázky</a>
+
+      <div class="nav-item" id="nav-rs">
+        <a href="../index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../index.html#rs" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="../index.html#rs" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="../index.html#rs" class="nav-disabled">3. Stavová regulace</a>
+          <a href="../index.html#rs" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="../index.html#rs" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="../index.html#rs" class="nav-disabled">6. Statická optimalizace</a>
+          <a href="../index.html#rs" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-pmzs">
+        <a href="../index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../PMZS/8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="../PMZS/9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="../PMZS/10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="../PMZS/11_Amplitudové analogové modulace, úhlové analogové modulace.html">11. Amplitudové modulace...</a>
+          <a href="../PMZS/12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="../index.html#pmzs" class="nav-disabled">13. Převod analogové...</a>
+          <a href="../index.html#pmzs" class="nav-disabled">14. Digitální modulace</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-ms">
+        <a href="../index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../index.html#ms" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="../index.html#ms" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="17_Statistické_parametry_měřícího_signálu.html">17. Statistické parametry...</a>
+          <a href="18_Statické_a_dynamické_vlastnosti_MIS.html">18. Statické a dynamické...</a>
+          <a href="19_Přehled základních typů drátových a bezdrátový.html">19. Drátové a bezdrátové sběrnice</a>
+          <a href="20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+
+      <div class="nav-item" id="nav-paisr">
+        <a href="../index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../PaISR/statnice_freertos.html">FreeRTOS</a>
+          <a href="../index.html#paisr" class="nav-disabled">SWI</a>
+          <a href="../PaISR/mobilni_platformy_statnice.html">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="page">
+
+  <h1>17. Statistické parametry měřícího signálu</h1>
+  <p class="subtitle">Vypracovaná státnicová otázka · NMgr. Řídicí a informační systémy 2026 · Zdroj: Metrologie a přesná měření</p>
+
+  <div class="toc">
+    <h3>Obsah</h3>
+    <ol>
+      <li><a href="#s1">Signál jako náhodný proces</a></li>
+      <li><a href="#s2">Výsledek měření jako náhodná veličina a její charakteristiky</a></li>
+      <li><a href="#s3">Distribuční funkce F(u)</a></li>
+      <li><a href="#s4">Funkce rozložení hustoty pravděpodobnosti p(u)</a></li>
+      <li><a href="#s5">Co určitě umět říct u státnic</a></li>
+    </ol>
+  </div>
+
+  <h2 id="s1">1. Signál jako náhodný proces</h2>
+  <div class="info-box">
+    <strong>Náhodný proces</strong> je model pro děje, které mají z principu náhodný charakter. Je matematicky definován jako funkce dvou proměnných – času a realizace (konkrétního jevu).
+  </div>
+  <p>Veškeré reálné děje, které fyzikálně měříme, mají ve své podstatě určitý náhodný charakter, a to převážně vlivem šumů, nedokonalostí a poruch. Nejsme tak schopni zjistit přesnou, deterministickou hodnotu bez jakékoliv chyby.</p>
+  
+  <p>Náhodný proces je tvořen nekonečně mnoha možnými časovými průběhy. Tento koncept nám umožňuje provést takzvanou <strong>metodu řezů</strong>:</p>
+  <ul>
+    <li><strong>Zafixování realizace:</strong> Získáme jeden konkrétní, spojitý časový průběh (například záznam z jednoho měření v čase na osciloskopu).</li>
+    <li><strong>Zafixování času:</strong> Získáme takzvanou <em>náhodnou veličinu</em>. Lze si to představit tak, že daný děj buď měříme v jednom přesném okamžiku s nekonečně mnoha opakováními, nebo pozorujeme nekonečně mnoho paralelních realizací stejného děje v daném čase.</li>
+  </ul>
+  <hr class="sec">
+
+  <h2 id="s2">2. Výsledek měření jako náhodná veličina a její charakteristiky</h2>
+  <div class="info-box">
+    <strong>Náhodná veličina</strong> představuje číselné vyjádření výsledku náhodného pokusu – reálné číslo, zjištěné opakováním měření v podmínkách opakovatelnosti.
+  </div>
+  <p>Po eliminaci hrubých chyb a po provedení korekcí na chyby systematické je výsledek měření typicky vnímán jako náhodná veličina. Měření jako takové tedy chápeme z pohledu teorie pravděpodobnosti jako náhodný pokus.</p>
+
+  <p>Náhodnou veličinu je nejlepší popsat jejími momenty – <strong>číselnými charakteristikami</strong>:</p>
+  
+  <div class="grid2">
+    <div class="card">
+      <h4>Střední hodnota</h4>
+      <p>Představuje nejlepší odhad výsledku měření (bod ležící uprostřed symetrických rozdělení). Zjišťujeme ho typicky aritmetickým (nebo výběrovým) průměrem z konečného počtu měření.</p>
+    </div>
+    <div class="card">
+      <h4>Rozptyl (Variance)</h4>
+      <p>Udává, jak moc jsou naměřené hodnoty rozptýleny kolem střední hodnoty. Jde o teoretickou míru z nekonečného počtu měření. V reálné metrologické praxi ale používáme výběrový rozptyl pro konečný počet měření <em>n</em>.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Důležité:</strong> Samotný rozptyl má pro fyzikální interpretaci nevyhovující jednotky, protože jednotka výsledku je umocněna na druhou. Např. pro měření napětí by rozptyl měl jednotku V². Z tohoto důvodu se pro reálnou praxi a pro vyčíslení nejistoty používá zásadně <strong>Směrodatná odchylka</strong>.
+  </div>
+
+  <p><strong>Směrodatná odchylka</strong> je odmocnina z rozptylu. Výrazně lépe se s ní pracuje, neboť kompenzuje předchozí umocnění a vrací chybu (nejistotu) do původních fyzikálních jednotek. Slouží mimo jiné i jako základ pro vyčíslení standardní nejistoty typu A.</p>
+
+  <hr class="sec">
+
+  <h2 id="s3">3. Distribuční funkce F(u)</h2>
+  <div class="info-box">
+    <strong>Distribuční funkce F(u)</strong> udává pravděpodobnost, že hodnota náhodné veličiny U nabude hodnoty, která je menší (nebo rovna) určité zadané hodnotě <em>u</em>.
+  </div>
+  
+  <p>Základní vlastnosti distribuční funkce F(u):</p>
+  <ul>
+    <li>Jedná se o funkci <strong>neklesající</strong> (může být pouze rostoucí, nebo konstantní).</li>
+    <li>Pro limitu v minus nekonečnu má vždy hodnotu 0 (0 % pravděpodobnost výskytu).</li>
+    <li>Pro limitu v plus nekonečnu má vždy hodnotu 1 (100 % pravděpodobnost výskytu).</li>
+  </ul>
+
+  <div class="svg-container">
+    <svg viewBox="0 0 400 220" width="400">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#1a1a1a" />
+        </marker>
+      </defs>
+      <line x1="30" y1="180" x2="380" y2="180" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowhead)" />
+      <line x1="40" y1="190" x2="40" y2="20" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowhead)" />
+      <line x1="35" y1="40" x2="370" y2="40" stroke="#888" stroke-dasharray="4,4" stroke-width="1" />
+      <text x="10" y="44" font-family="sans-serif" font-size="12" fill="#1a1a1a">1.0</text>
+      <text x="10" y="184" font-family="sans-serif" font-size="12" fill="#1a1a1a">0.0</text>
+      <path d="M 40 180 C 180 180, 180 40, 360 40" fill="none" stroke="#1a4a8a" stroke-width="3" />
+      <text x="385" y="184" font-family="sans-serif" font-size="13" font-style="italic">u</text>
+      <text x="35" y="10" font-family="sans-serif" font-size="13" font-style="italic">F(u)</text>
+    </svg>
+    <p style="font-size: 12px; color: #666; margin-top: 8px; font-style: italic;">Graf 1: Typický průběh distribuční funkce F(u) pro normální rozdělení. Hodnoty se asymptoticky blíží k 1.</p>
+  </div>
+
+  <div class="danger">
+    <strong>Chyták: Pravděpodobnost přesného bodu</strong><br>
+    Z distribuční funkce vyplývá jeden zcela stěžejní teoretický fakt. Zkoumáme-li u spojitých signálů pravděpodobnost, že naměříme naprosto jednu <em>absolutně přesnou</em> hodnotu u, je tato pravděpodobnost z principu <strong>nulová</strong>. Je to dáno matematicky jako F(u) - F(u) = 0. U spojitých veličin má smysl vždy zkoumat pouze pravděpodobnost toho, že hodnota spadne do určitého zadaného intervalu &lt;u1, u2&gt;.
+  </div>
+
+  <hr class="sec">
+
+  <h2 id="s4">4. Funkce rozložení hustoty pravděpodobnosti p(u)</h2>
+  <div class="info-box">
+    <strong>Hustota pravděpodobnosti p(u)</strong> je matematicky definována jako derivace distribuční funkce F(u). Udává nám frekvenci výskytu určitých naměřených hodnot signálu.
+  </div>
+
+  <p>Protože distribuční funkce je neklesající, její derivace, neboli funkce hustoty pravděpodobnosti, bude mít vždy jen kladné hodnoty (nebo nulové). Integrací funkce rozložení hustoty pravděpodobnosti v mezích od minus nekonečna do plus nekonečna získáme celkovou plochu pod grafem, která je přesně rovna číslu 1 (vyjadřující 100% jistotu jevu).</p>
+
+  <h3>Příklady významných rozdělení:</h3>
+  <table>
+    <tr>
+      <th>Typ rozdělení</th>
+      <th>Popis a praktické využití</th>
+    </tr>
+    <tr>
+      <td><strong>Normální (Gaussovo)</strong></td>
+      <td>Nejčastější případ pro reálná měření, u kterých existuje celá řada náhodných drobných vlivů. Tvar je klasická "zvonovitá" křivka. Čím je tato Gaussova křivka "hubenější" a "vyšší", tím je měření kvalitnější a má menší směrodatnou odchylku (tedy i menší chybovost/nejistotu).</td>
+    </tr>
+  </table>
+
+  <div class="svg-container">
+    <svg viewBox="0 0 500 250" width="500">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#1a1a1a" />
+        </marker>
+        <marker id="arrow-start" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 Z" fill="#1a1a1a" />
+        </marker>
+      </defs>
+      <line x1="20" y1="210" x2="480" y2="210" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowhead)" />
+      <path d="M 40 208 C 150 208, 190 30, 250 30 C 310 30, 350 208, 460 208" fill="#eef4ff" stroke="#1a4a8a" stroke-width="3" />
+      <line x1="250" y1="30" x2="250" y2="210" stroke="#c8960c" stroke-width="2" stroke-dasharray="6,4" />
+      <text x="245" y="228" font-family="sans-serif" font-size="14" font-weight="bold">μ</text>
+      <line x1="190" y1="120" x2="190" y2="210" stroke="#888" stroke-dasharray="3,3" />
+      <line x1="310" y1="120" x2="310" y2="210" stroke="#888" stroke-dasharray="3,3" />
+      <line x1="194" y1="170" x2="246" y2="170" stroke="#1a1a1a" stroke-width="1.5" marker-start="url(#arrow-start)" marker-end="url(#arrow)" />
+      <text x="210" y="162" font-family="sans-serif" font-size="13">-1σ</text>
+      <line x1="254" y1="170" x2="306" y2="170" stroke="#1a1a1a" stroke-width="1.5" marker-start="url(#arrow-start)" marker-end="url(#arrow)" />
+      <text x="270" y="162" font-family="sans-serif" font-size="13">+1σ</text>
+      <text x="485" y="214" font-family="sans-serif" font-size="13" font-style="italic">u</text>
+      <text x="20" y="20" font-family="sans-serif" font-size="13" font-style="italic">p(u)</text>
+    </svg>
+    <p style="font-size: 12px; color: #666; margin-top: 8px; font-style: italic;">Graf 2: Hustota pravděpodobnosti p(u) pro normální rozdělení s vyznačenou střední hodnotou (μ) a směrodatnou odchylkou (σ).</p>
+  </div>
+
+  <table>
+    <tr>
+      <td><strong>Rovnoměrné (Pravoúhlé)</strong></td>
+      <td>Grafem je konstantní funkce mezi dvěma definovanými body, mimo něž je hodnota nulová. Obvykle se využívá pro modelování dějů, kde je pravděpodobnost výskytu odchylky konstantní všude ve vymezeném intervalu. Typickým využitím je například vyčíslení nejistoty z kvantizačního kroku (nejméně významného bitu LSB) A/D převodníků.</td>
+    </tr>
+  </table>
+
+  <div class="svg-container">
+    <svg viewBox="0 0 400 200" width="400">
+      <line x1="40" y1="160" x2="380" y2="160" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowhead)" />
+      <line x1="50" y1="170" x2="50" y2="20" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrowhead)" />
+      <rect x="120" y="60" width="180" height="100" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2" />
+      <line x1="50" y1="160" x2="120" y2="160" stroke="#1a4a8a" stroke-width="3" />
+      <line x1="300" y1="160" x2="360" y2="160" stroke="#1a4a8a" stroke-width="3" />
+      <line x1="120" y1="60" x2="120" y2="160" stroke="#1a4a8a" stroke-width="3" />
+      <line x1="300" y1="60" x2="300" y2="160" stroke="#1a4a8a" stroke-width="3" />
+      <text x="115" y="180" font-family="sans-serif" font-size="14" font-weight="bold">a</text>
+      <text x="295" y="180" font-family="sans-serif" font-size="14" font-weight="bold">b</text>
+      <line x1="45" y1="60" x2="55" y2="60" stroke="#1a1a1a" stroke-width="1.5" />
+      <text x="8" y="64" font-family="sans-serif" font-size="12">1 / (b-a)</text>
+      <text x="385" y="164" font-family="sans-serif" font-size="13" font-style="italic">u</text>
+      <text x="45" y="10" font-family="sans-serif" font-size="13" font-style="italic">p(u)</text>
+    </svg>
+    <p style="font-size: 12px; color: #666; margin-top: 8px; font-style: italic;">Graf 3: Hustota pravděpodobnosti p(u) rovnoměrného (pravoúhlého) rozdělení.</p>
+  </div>
+
+  <hr class="sec">
+
+  <h2 id="s5">Co určitě umět říct u státnic</h2>
+  <ul>
+    <li><strong>Rozdíl mezi veličinou a procesem:</strong> Signál zkoumaný v delším čase modelujeme jako náhodný proces o dvou proměnných (čas a realizace). Metodou "zastavení času" získáme náhodnou veličinu, kterou zkoumáme statistickými momenty.</li>
+    <li><strong>Proč nelze naměřit přesný bod:</strong> Vysvětlete přes distribuční funkci. Pravděpodobnost se u spojité náhodné veličiny zkoumá výhradně pro určitý <em>interval</em>. Pravděpodobnost jedné jediné, naprosto přesné hodnoty je teoreticky 0.</li>
+    <li><strong>Distribuční vs. hustotní fce:</strong> Distribuční je neklesající s limitami 0 a 1. Hustotní fce je její derivace a proto nemůže být záporná. Celková plocha pod křivkou hustoty musí být rovna přesně jedné (100 %).</li>
+    <li><strong>Odůvodnění směrodatné odchylky:</strong> Vysvětlit, proč se v praxi (a pro nejistoty typu A) používá pro disperzi směrodatná odchylka namísto rozptylu — vrací hodnotu na stejnou fyzikální jednotku, kterou nese měřený signál (odmocňuje kvadratické jednotky rozptylu).</li>
+  </ul>
+
+  <hr class="sec">
+  <div style="background:var(--brand-strong);color:white;padding:18px 24px;border-radius:8px;margin-top:24px;">
+    <p style="color:white;font-size:13px;margin:0;text-align:center;">
+      <strong>17. Statistické parametry měřícího signálu</strong> · Řídicí a informační systémy<br>
+      Podklady: Skripta Metrologie a přesná měření (2012), Státnicové otázky (2021)
+    </p>
+  </div>
+
+</div><!-- /.page -->
+
+<script>
+  const topbar = document.getElementById('topbar');
+  const navToggle = document.getElementById('navToggle');
+  const navItems = document.querySelectorAll('.nav-item');
+  const navLinks = document.querySelectorAll('#site-nav > a');
+
+  function setMenu(open) {
+    topbar.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+  }
+
+  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
+  navLinks.forEach(l => l.addEventListener('click', () => setMenu(false)));
+
+  navItems.forEach(item => {
+    const link = item.querySelector('a:first-child');
+    if (link) {
+      link.addEventListener('click', e => {
+        if (window.innerWidth <= 820 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
+          e.preventDefault();
+          item.classList.toggle('is-open');
+        }
+      });
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle'))
+      navItems.forEach(i => i.classList.remove('is-open'));
+  });
+</script>
+</body>
+</html>

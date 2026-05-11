@@ -68,7 +68,7 @@ NAV_TEMPLATE = '''(function () {{
   const allAnchors = document.querySelectorAll(".nav-dropdown a");
   allAnchors.forEach((anchor) => {{
     const text = (anchor.textContent || "").trim();
-    const match = text.match(/^(\\d+)\./);
+    const match = text.match(/^(\\d+)\\./);
     if (!match) {{
       return;
     }}
@@ -88,11 +88,12 @@ NAV_TEMPLATE = '''(function () {{
 }})();
 '''
 
-FALLBACKS = {{
+# FIXED: Changed {{ ... }} to { ... }
+FALLBACKS = {
   '1':'index.html#rs','2':'index.html#rs','3':'index.html#rs','4':'index.html#rs','5':'index.html#rs','6':'index.html#rs','7':'index.html#rs',
   '13':'index.html#pmzs','14':'index.html#pmzs',
   '15':'index.html#ms','16':'index.html#ms','17':'index.html#ms','18':'index.html#ms'
-}}
+}
 
 def write_nav_js(enabled_map):
     SHARED.mkdir(parents=True, exist_ok=True)
