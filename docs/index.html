@@ -274,8 +274,8 @@
         <div class="nav-dropdown">
           <a href="#" class="nav-disabled">15. Vlastnosti měřicího systému</a>
           <a href="#" class="nav-disabled">16. Příčiny chyb...</a>
-          <a href="#" class="nav-disabled">17. Statistické parametry...</a>
-          <a href="#" class="nav-disabled">18. Statické a dynamické...</a>
+          <a href="MS/17_Statistické_parametry_měřícího_signálu.html" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="MS/18_Statické_a_dynamické_vlastnosti_MIS.html" class="nav-disabled">18. Statické a dynamické...</a>
           <a href="MS/19_Přehled základních typů drátových a bezdrátový.html">19. Drátové a bezdrátové...</a>
           <a href="MS/20_EMC.html">20. EMC a kvalita signálu</a>
         </div>
@@ -285,7 +285,7 @@
         <a href="#paisr">PaISR <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
           <a href="PaISR/statnice_freertos.html">FreeRTOS</a>
-          <a href="#" class="nav-disabled">SWI</a>
+          <a href="PaISR/SW_Engineering.html">SWI</a>
           <a href="PaISR/mobilni_platformy_statnice.html">Android</a>
         </div>
       </div>
@@ -331,36 +331,36 @@
       <h3 id="pmzs">Pokročilé metody zpracování signálů (PMZS 8–14)</h3>
       <!-- AUTO:PMZS-START -->
       <div class="question-list">
-        <a class="question-card" href="PMZS/8_statnice_okenni_funkce.html">
-          <span class="tag">Otázka 8</span>
-          <h3>Váhové okenní funkce signálu</h3>
-          <p>Zakreslení zpracovaného diskrétního signálu v časové a frekvenční oblasti; průměrování a překrývání spekter.</p>
-        </a>
-        <a class="question-card" href="PMZS/9_statnice_frekvencni.html">
-          <span class="tag">Otázka 9</span>
-          <h3>Frekvenční a oktávová analýza signálu</h3>
-          <p>Frekvenční analýza diskrétního signálu a oktávová analýza signálu.</p>
-        </a>
         <a class="question-card" href="PMZS/10_frekvencni_spektra_modulace.html">
-          <span class="tag">Otázka 10</span>
-          <h3>Frekvenční spektra NF a VF signálu</h3>
-          <p>Magnitudové a fázové spektrum, šířka pásma a Nyquistovy teorémy vzorkování signálu.</p>
-        </a>
+  <span class="tag">Otázka 10</span>
+  <h3>Otázka 10 – Frekvenční spektra NF a VF modulovaného signálu</h3>
+  <p>U odpovědi je vhodné postupovat od jednoduchého signálu k modulovanému signálu. Nejdříve vysvětlit spektrum nízkofrekvenčního signálu, potom magnitudu a fázi, n...</p>
+</a>
         <a class="question-card" href="PMZS/11_Amplitudové analogové modulace, úhlové analogové modulace.html">
-          <span class="tag">Otázka 11</span>
-          <h3>Amplitudové a úhlové analogové modulace</h3>
-          <p>Analýza modulovaného vysokofrekvenčního signálu v časové a frekvenční oblasti; AM, DSB-SC, SSB-AM, QM, PM, FM.</p>
-        </a>
+  <span class="tag">Otázka 11</span>
+  <h3>Otázka 11: Amplitudové a úhlové analogové modulace</h3>
+  <p>v(t) = R(t) &middot; cos(&omega;ct + &theta;(t))</p>
+</a>
         <a class="question-card" href="PMZS/12_Systémy pro zpracování signálu.html">
-          <span class="tag">Otázka 12</span>
-          <h3>Systémy pro zpracování signálu</h3>
-          <p>Zpracování signálu pomocí omezovače, směšovače, detektoru obálky, FM detektoru, multiplikativního detektoru a přijímače.</p>
-        </a>
+  <span class="tag">Otázka 12</span>
+  <h3>Systémy pro zpracování signálu</h3>
+  <p>V předmětu PMZS se tato otázka týká hlavně pásmových signálů, tedy signálů, jejichž spektrum neleží kolem nulové frekvence, ale v okolí nosné frekvence fc. Typi...</p>
+</a>
         <a class="question-card" href="PMZS/13_prevody_PCM_PAM_PWM_PPM_PNM.html">
-          <span class="tag">Otázka 13</span>
-          <h3>Metody převodu analogového a digitálního signálu</h3>
-          <p>Principy zpracování a převodu signálu pomocí PCM, PAM, PWM, PPM, PNM; vzorkovací teorém a kvantizační chyba.</p>
-        </a>
+  <span class="tag">Otázka 13</span>
+  <h3>Metody převodu analogového a digitálního signálu</h3>
+  <p>V systémech zpracování signálu se informace často získává z analogových fyzikálních veličin, například z napětí, teploty, vibrací, tlaku nebo zvuku. Analogový s...</p>
+</a>
+        <a class="question-card" href="PMZS/8_statnice_okenni_funkce.html">
+  <span class="tag">Otázka 8</span>
+  <h3>Otázka 8 – Váhové okenní funkce signálu</h3>
+  <p>Předpokladem DFT je, že průběh signálu w[n] se opakuje s periodou rovnou počtu vzorků N. V určitých zvolených kmitočtech pak koeficienty Wk odpovídají hodnotám ...</p>
+</a>
+        <a class="question-card" href="PMZS/9_statnice_frekvencni.html">
+  <span class="tag">Otázka 9</span>
+  <h3>Otázka 9 – Frekvenční a oktávová analýza diskrétního signálu</h3>
+  <p>V časové oblasti vidíme, jak se hodnota signálu mění v čase. Ve frekvenční oblasti vidíme, z čeho je ten signál složen. Při použití celé komplexní DFT lze signá...</p>
+</a>
       </div>
       <!-- AUTO:PMZS-END -->
 
@@ -396,7 +396,7 @@
         <a class="question-card" href="PaISR/SW_Engineering.html">
   <span class="tag">Otázka PaISR</span>
   <h3>Softwarové inženýrství</h3>
-  <p>Vývoj softwarového systému zahrnuje celou řadu faktorů nutných k úspěšnému vytvoření požadovaného produktu:</p>
+  <p>Hlavním cílem této disciplíny je vytvořit vysoce kvalitní software v přesně vymezeném čase a v rámci stanoveného rozpočtu. Úspěch rozsáhlých projektů závisí na ...</p>
 </a>
         <a class="question-card" href="PaISR/mobilni_platformy_statnice.html">
   <span class="tag">Otázka PaISR</span>
