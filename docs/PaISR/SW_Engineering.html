@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicová otázka: Softwarové inženýrství</title>
+        <link rel="stylesheet" href="../shared/navbar-styles.css">
+    <style>
+            :root {
+                --bg: #f6f1e8;
+                --bg-alt: #ebe3d4;
+                --surface: rgba(255, 252, 246, 0.92);
+                --text: #1a1a1a;
+                --line: rgba(31, 36, 31, 0.12);
+                --brand-strong: #173627;
+            }
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body {
+                font-family: 'Georgia', serif;
+                font-size: 15px;
+                line-height: 1.75;
+                color: var(--text);
+                background:
+                    radial-gradient(circle at top left, rgba(194, 109, 44, 0.16), transparent 34%),
+                    radial-gradient(circle at right 20%, rgba(37, 83, 59, 0.12), transparent 28%),
+                    linear-gradient(180deg, var(--bg), var(--bg-alt));
+            }
+                a { color: inherit; }
+                .topbar {
+                        position: sticky;
+                        top: 0;
+                        z-index: 30;
+                        backdrop-filter: blur(14px);
+                        background: rgba(246, 241, 232, 0.82);
+                        border-bottom: 1px solid var(--line);
+                }
+                .topbar-inner {
+                        max-width: 1180px;
+                        margin: 0 auto;
+                        padding: 14px 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 16px;
+                }
+                .brand {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2px;
+                        text-decoration: none;
+                        color: var(--brand-strong);
+                }
+                .brand strong { font-size: 18px; letter-spacing: 0.02em; }
+                .brand span { font-size: 12px; color: #5f665c; }
+                .nav-toggle {
+                        display: none;
+                        align-items: center;
+                        justify-content: center;
+                        width: 46px;
+                        height: 46px;
+                        border: 1px solid rgba(31, 36, 31, 0.12);
+                        border-radius: 14px;
+                        background: #fffdf8;
+                        color: #173627;
+                        cursor: pointer;
+                }
+                .nav-toggle span,
+                .nav-toggle span::before,
+                .nav-toggle span::after {
+                        display: block;
+                        width: 20px;
+                        height: 2px;
+                        background: currentColor;
+                        border-radius: 999px;
+                        position: relative;
+                        transition: transform 0.25s ease, opacity 0.25s ease;
+                }
+                .nav-toggle span::before,
+                .nav-toggle span::after { content: ""; position: absolute; left: 0; }
+                .nav-toggle span::before { top: -6px; }
+                .nav-toggle span::after { top: 6px; }
+                .nav-links { display: flex; align-items: center; gap: 10px; }
+                .nav-item { position: relative; display: flex; align-items: center; }
+                .nav-links a, .nav-item > a {
+                        text-decoration: none;
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: #173627;
+                        padding: 10px 14px;
+                        border-radius: 999px;
+                        transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                }
+                .nav-links a:hover, .nav-item > a:hover { background: rgba(37, 83, 59, 0.08); color: #25533b; transform: translateY(-1px); }
+                .nav-dropdown {
+                        position: absolute;
+                        top: 100%;
+                        left: 0;
+                        background: #fffdf8;
+                        min-width: 220px;
+                        border-radius: 12px;
+                        border: 1px solid rgba(31, 36, 31, 0.12);
+                        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+                        display: none;
+                        flex-direction: column;
+                        z-index: 999;
+                }
+                .nav-item:hover .nav-dropdown { display: flex; }
+                .nav-item.is-open .nav-dropdown { display: flex; }
+                .nav-dropdown a { padding: 10px 14px; border-radius: 0; background: transparent; font-size: 13px; border-bottom: 1px solid rgba(31, 36, 31, 0.12); }
+                .nav-dropdown a:last-child { border-bottom: none; }
+                .nav-dropdown a:hover { background: rgba(37, 83, 59, 0.08); }
+                .nav-links a.nav-disabled { color: #5f665c; opacity: 0.7; pointer-events: none; }
+                .nav-item > a .nav-chevron { font-size: 10px; transition: transform 0.2s ease; }
+
+                .page {
+                        max-width: 900px;
+                        margin: 28px auto 40px;
+                        padding: 40px 48px;
+                        background: #fff;
+                        box-shadow: 0 2px 24px rgba(0,0,0,0.08);
+                }
+                .subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
+                h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 8px; }
+                h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+                h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+                p { margin: 8px 0 10px; text-align: justify; }
+                .def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+                .note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+                .trap { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+        .flow { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 25px 0; flex-wrap: wrap; }
+                .fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; color: #1a4a8a; padding: 8px 14px; border-radius: 6px; text-align: center; font-weight: 600; }
+        .arrow { font-size: 24px; color: #718096; }
+        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+                .card { background: #f5f8ff; border: 1px solid #c8d8f0; padding: 20px; border-radius: 8px; }
+        .terms-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .term-badge { background: #edf2f7; border: 1px solid #cbd5e0; padding: 4px 10px; border-radius: 15px; font-size: 0.9em; color: #2d3748; }
+                table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+                th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+                td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+                tr:nth-child(even) td { background: #f5f8ff; }
+                code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+        pre { background: #1a202c; color: #a0aec0; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: 'Consolas', monospace; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+                .svg-container { text-align: center; margin: 30px 0; background: #f8fbff; padding: 20px; border: 1px solid #d8e3f4; border-radius: 8px; }
+        .svg-container svg { max-width: 100%; height: auto; }
+                .svg-caption { font-size: 0.9em; color: #53698f; margin-top: 10px; font-style: italic; }
+                .term-list dt { font-weight: bold; color: #1a4a8a; margin-top: 10px; }
+        .term-list dd { margin-left: 20px; margin-bottom: 10px; }
+
+                .terms-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 12px;
+                    margin-top: 12px;
+                }
+                .term-item {
+                    background: #ffffff;
+                    border: 1px solid #d4e1f5;
+                    border-radius: 10px;
+                    padding: 12px 14px;
+                    box-shadow: 0 1px 4px rgba(26, 74, 138, 0.08);
+                }
+                .term-item h5 {
+                    font-size: 14px;
+                    color: #1a4a8a;
+                    margin-bottom: 6px;
+                }
+                .term-item p {
+                    margin: 0;
+                    font-size: 13px;
+                    line-height: 1.6;
+                    text-align: left;
+                }
+                .term-meta {
+                    display: block;
+                    margin-top: 4px;
+                }
+                .term-meta strong {
+                    color: #1a4a8a;
+                    font-weight: 700;
+                }
+                .term-symbol {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 42px;
+                    height: 28px;
+                    margin-top: 8px;
+                    padding: 0 10px;
+                    border-radius: 8px;
+                    border: 1px solid #b9cdea;
+                    background: #eef4ff;
+                    color: #173627;
+                    font-family: 'Courier New', monospace;
+                    font-size: 15px;
+                    font-weight: 700;
+                    letter-spacing: 0.01em;
+                }
+
+                @media (max-width: 820px) {
+                        .topbar-inner { align-items: flex-start; flex-wrap: wrap; }
+                        .nav-toggle { display: inline-flex; }
+                        .nav-links { display: none; width: 100%; padding: 10px 0 4px; flex-direction: column; align-items: stretch; gap: 6px; }
+                        .topbar.is-open .nav-links { display: flex; }
+                        .topbar.is-open .nav-toggle span { transform: rotate(45deg); }
+                        .topbar.is-open .nav-toggle span::before { top: 0; transform: rotate(0deg); opacity: 0; }
+                        .topbar.is-open .nav-toggle span::after { top: 0; transform: rotate(-90deg); }
+                        .nav-links a, .nav-item > a { padding: 12px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.72); border: 1px solid rgba(31, 36, 31, 0.12); }
+                        .nav-item { flex-direction: column; align-items: stretch; }
+                        .nav-dropdown { position: static; border: none; box-shadow: none; background: rgba(37, 83, 59, 0.04); display: none; }
+                        .page { margin: 16px auto 24px; padding: 24px 20px; }
+                        .grid2 { grid-template-columns: 1fr; }
+                }
+    </style>
+</head>
+<body>
+
+<header class="topbar" id="topbar">
+    <div class="topbar-inner">
+        <a class="brand" href="../index.html" aria-label="Hlavní stránka">
+            <strong>Státnicové otázky</strong>
+            <span>README a přehled vypracovaných HTML otázek</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+            <span aria-hidden="true"></span>
+        </button>
+        <nav class="nav-links" id="site-nav">
+            <a href="../index.html">Main</a>
+            <a href="../index.html#otazky">Otázky</a>
+
+            <div class="nav-item" id="nav-rs">
+                <a href="../index.html#rs" class="nav-disabled">RS (1–7) <span class="nav-chevron">▼</span></a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+                    <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+                    <a href="#" class="nav-disabled">3. Stavová regulace</a>
+                    <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+                    <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+                    <a href="#" class="nav-disabled">6. Statická optimalizace</a>
+                    <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+                </div>
+            </div>
+
+            <div class="nav-item" id="nav-pmzs">
+                <a href="../index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+                <div class="nav-dropdown">
+                    <a href="../PMZS/8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+                    <a href="../PMZS/9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+                    <a href="../PMZS/10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+                    <a href="../PMZS/11_Amplitudové analogové modulace, úhlové analogové modulace.html">11. Amplitudové modulace...</a>
+                    <a href="../PMZS/12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+                    <a href="#" class="nav-disabled">13. Převod analogové...</a>
+                    <a href="#" class="nav-disabled">14. Digitální modulace</a>
+                </div>
+            </div>
+
+            <div class="nav-item" id="nav-ms">
+                <a href="../index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+                    <a href="#" class="nav-disabled">16. Příčiny chyb...</a>
+                    <a href="#" class="nav-disabled">17. Statistické parametry...</a>
+                    <a href="#" class="nav-disabled">18. Statické a dynamické...</a>
+                    <a href="../MS/19_Přehled základních typů drátových a bezdrátový.html">19. Drátové a bezdrátové...</a>
+                    <a href="../MS/20_EMC.html">20. EMC a kvalita signálu</a>
+                </div>
+            </div>
+
+            <div class="nav-item" id="nav-paisr">
+                <a href="../index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+                <div class="nav-dropdown">
+                    <a href="statnice_freertos.html">FreeRTOS</a>
+                    <a href="#" class="nav-disabled">SWI</a>
+                    <a href="mobilni_platformy_statnice.html">Android</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="page">
+
+<h1>Softwarové inženýrství</h1>
+<p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · PaISR</p>
+
+<h2>1. Úvod do softwarového inženýrství</h2>
+<div class="def">
+    Softwarové inženýrství je systematický a disciplinovaný přístup k vývoji softwaru. Zahrnuje nejen samotné programování, ale řídí celý proces od prvotních požadavků přes návrh, implementaci, rozsáhlé testování až po finální provoz a údržbu.
+</div>
+<p>Hlavním cílem této disciplíny je vytvořit vysoce kvalitní software v přesně vymezeném čase a v rámci stanoveného rozpočtu. Úspěch rozsáhlých projektů závisí na mnoha faktorech mimo pouhé psaní kódu. Důležitá je podrobná dokumentace, transparentní komunikace, precizní řízení změn a samozřejmě týmová spolupráce. Vývojový proces obvykle vyžaduje součinnost různých rolí, mezi které patří analytik, architekt, vývojář, tester, projektový manažer, DevOps specialista, a samozřejmě zákazník i koncový uživatel.</p>
+
+<div class="svg-container">
+    <svg width="600" height="250" viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg">
+        <rect x="200" y="90" width="200" height="70" rx="10" fill="#3182ce" />
+        <text x="300" y="130" font-family="Arial" font-size="16" font-weight="bold" fill="white" text-anchor="middle">Softwarový Projekt</text>
+        
+        <circle cx="100" cy="50" r="40" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+        <text x="100" y="55" font-family="Arial" font-size="12" text-anchor="middle">Zákazník</text>
+        <line x1="135" y1="70" x2="200" y2="105" stroke="#2b6cb0" stroke-width="2" marker-end="url(#arrow)"/>
+        
+        <circle cx="500" cy="50" r="40" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+        <text x="500" y="55" font-family="Arial" font-size="12" text-anchor="middle">Analytik</text>
+        <line x1="465" y1="70" x2="400" y2="105" stroke="#2b6cb0" stroke-width="2"/>
+        
+        <circle cx="100" cy="200" r="40" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+        <text x="100" y="205" font-family="Arial" font-size="12" text-anchor="middle">Vývojář</text>
+        <line x1="135" y1="180" x2="200" y2="145" stroke="#2b6cb0" stroke-width="2"/>
+        
+        <circle cx="500" cy="200" r="40" fill="#edf2f7" stroke="#2b6cb0" stroke-width="2"/>
+        <text x="500" y="205" font-family="Arial" font-size="12" text-anchor="middle">Tester</text>
+        <line x1="465" y1="180" x2="400" y2="145" stroke="#2b6cb0" stroke-width="2"/>
+    </svg>
+    <div class="svg-caption">Obrázek 1.1: Interakce klíčových rolí v softwarovém inženýrství podílejících se na společném projektu.</div>
+</div>
+
+<div class="note">
+    U komise důrazně vysvětlete, že softwarové inženýrství není jen programování. Zatímco programátor řeší algoritmizaci a kód, softwarový inženýr se musí starat o životní cyklus, náklady na údržbu, a škálovatelnost celého řešení.
+</div>
+
+<h2>2. Analýza a požadavky</h2>
+<div class="def">
+    Analytická fáze se zaměřuje primárně na sběr požadavků. Jejím jádrem je detailní zjištění, co přesně má systém dělat, přičemž vůbec neřeší, jakým způsobem to bude programově implementováno. Výstupem této klíčové fáze je komplexní systémová specifikace.
+</div>
+<p>Během analýzy probíhá intenzivní komunikace se všemi zúčastněnými stranami (tzv. stakeholdery), zákazníky a koncovými uživateli. Neúplná nebo chybná analýza vede ke vzniku drahých chyb, které se v pozdějších fázích projektu (např. při testování nebo provozu) jen těžko a nákladně odstraňují.</p>
+
+<div class="grid2">
+    <div class="card">
+        <h3>Funkční požadavky</h3>
+        <p>Jednoznačně určují chování systému. Definuje se jimi, <strong>co systém reálně dělá</strong>.</p>
+        <ul>
+            <li>Uživatel se může bezpečně přihlásit do systému.</li>
+            <li>Zákazník může vytvořit a spravovat objednávku.</li>
+            <li>Systém přesně vypočítá cenu kalibračního měření Keysight osciloskopů.</li>
+            <li>Administrátor má práva spravovat katalog produktů.</li>
+        </ul>
+    </div>
+    <div class="card">
+        <h3>Nefunkční požadavky</h3>
+        <p>Určují omezující kritéria systému. Definuje se jimi, <strong>jak dobře systém funguje</strong>.</p>
+        <ul>
+            <li>Výkon a maximální rychlost odezvy systému.</li>
+            <li>Vysoká bezpečnost a spolehlivost.</li>
+            <li>Dostupnost služby a robustní zálohování.</li>
+            <li>Legislativní požadavky a celková kompatibilita.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="svg-container">
+    <svg width="700" height="300" viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="250" y="20" width="200" height="50" rx="5" fill="#4a5568" />
+        <text x="350" y="50" font-family="Arial" font-size="14" font-weight="bold" fill="white" text-anchor="middle">Softwarové požadavky</text>
+        
+        <path d="M 350 70 L 350 100 L 150 100 L 150 130" fill="none" stroke="#4a5568" stroke-width="2"/>
+        <path d="M 350 70 L 350 100 L 550 100 L 550 130" fill="none" stroke="#4a5568" stroke-width="2"/>
+
+        <rect x="50" y="130" width="200" height="40" rx="5" fill="#3182ce" />
+        <text x="150" y="155" font-family="Arial" font-size="14" fill="white" text-anchor="middle">Funkční (CO?)</text>
+
+        <rect x="450" y="130" width="200" height="40" rx="5" fill="#e53e3e" />
+        <text x="550" y="155" font-family="Arial" font-size="14" fill="white" text-anchor="middle">Nefunkční (JAK DOBŘE?)</text>
+
+        <rect x="20" y="200" width="260" height="80" rx="5" fill="#edf2f7" stroke="#3182ce"/>
+        <text x="150" y="225" font-family="Arial" font-size="12" text-anchor="middle">Systém exportuje G-code</text>
+        <text x="150" y="245" font-family="Arial" font-size="12" text-anchor="middle">Slicer automaticky kalibruje flow</text>
+        <text x="150" y="265" font-family="Arial" font-size="12" text-anchor="middle">Uživatel vybere materiál PETG</text>
+
+        <rect x="420" y="200" width="260" height="80" rx="5" fill="#fff5f5" stroke="#e53e3e"/>
+        <text x="550" y="225" font-family="Arial" font-size="12" text-anchor="middle">Výpočet slicingu do 5 vteřin</text>
+        <text x="550" y="245" font-family="Arial" font-size="12" text-anchor="middle">Spotřeba RAM max 2GB</text>
+        <text x="550" y="265" font-family="Arial" font-size="12" text-anchor="middle">Podpora pro Windows a Linux</text>
+    </svg>
+    <div class="svg-caption">Obrázek 2.1: Rozpad softwarových požadavků na funkční a nefunkční větve.</div>
+</div>
+
+<div class="trap">
+    Zcela zásadní je rozdíl mezi fází analýzy a návrhu. Analýza specifikuje a dokumentuje, <strong>co má systém dělat</strong>. Naopak návrh detailně řeší, <strong>jak bude systém realizován</strong> na technologické a architektonické úrovni.
+</div>
+
+<h2>3. Systémová specifikace (SRS)</h2>
+<div class="def">
+    Systémová specifikace (zkráceně SRS — Software Requirements Specification) představuje klíčový dokument, který tvoří hlavní výstup analytické fáze. Jde o ucelený dokument požadavků a popis hranic systému.
+</div>
+<p>Kompletní SRS dokument obsahuje detailní účel a cíle systému, rozsáhlý popis koncových uživatelů a aktérů. Nezbytnou součástí jsou roztříděné funkční i nefunkční požadavky, Use Case scénáře, datový model, systémová omezení a předpoklady. Rovněž specifikuje požadavky na rozhraní a jasně stanovitelná, testovatelná akceptační kritéria. Tento obsáhlý dokument často slouží jako formální dohoda či kontrakt mezi zákazníkem a vývojovým týmem a tvoří základ pro veškerý následný návrh, samotnou implementaci a závěrečné testování.</p>
+
+<div class="svg-container">
+    <svg width="600" height="220" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+        <rect x="200" y="20" width="200" height="180" rx="5" fill="#f7fafc" stroke="#cbd5e0" stroke-width="2"/>
+        <text x="300" y="50" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#2d3748">SRS Dokument</text>
+        <line x1="220" y1="65" x2="380" y2="65" stroke="#a0aec0" stroke-width="1"/>
+        <text x="220" y="90" font-family="Arial" font-size="12" fill="#4a5568">1. Účel a rozsah systému</text>
+        <text x="220" y="115" font-family="Arial" font-size="12" fill="#4a5568">2. Funkční požadavky</text>
+        <text x="220" y="140" font-family="Arial" font-size="12" fill="#4a5568">3. Nefunkční omezení</text>
+        <text x="220" y="165" font-family="Arial" font-size="12" fill="#4a5568">4. Datové modely</text>
+        <text x="220" y="190" font-family="Arial" font-size="12" fill="#4a5568">5. Akceptační kritéria</text>
+        
+        <path d="M 120 110 L 190 110" fill="none" stroke="#3182ce" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="100" y="105" font-family="Arial" font-size="12" font-weight="bold" fill="#3182ce" text-anchor="middle">Analýza</text>
+        
+        <path d="M 410 110 L 480 110" fill="none" stroke="#dd6b20" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="500" y="90" font-family="Arial" font-size="12" font-weight="bold" fill="#dd6b20" text-anchor="middle">Návrh</text>
+        <text x="500" y="110" font-family="Arial" font-size="12" font-weight="bold" fill="#dd6b20" text-anchor="middle">Implementace</text>
+        <text x="500" y="130" font-family="Arial" font-size="12" font-weight="bold" fill="#dd6b20" text-anchor="middle">Testování</text>
+    </svg>
+    <div class="svg-caption">Obrázek 3.1: Struktura SRS dokumentu a jeho pozice mezi analýzou a následnými fázemi.</div>
+</div>
+
+<h2>4. Význam modelování software</h2>
+<div class="def">
+    Modelování představuje tvorbu abstrakce, která slouží jako zjednodušené zobrazení reality. Umožňuje komplexní vizualizaci systému ještě před započetím implementace.
+</div>
+<p>Hlavním přínosem modelování je efektivní komunikace v rámci týmu i se zákazníkem a detailní dokumentace navrženého řešení. Zásadním způsobem pomáhá odhalit závažné chyby v návrhu dříve, než by jejich oprava byla nákladná. Pomocí modelovacích jazyků (zejména UML) můžeme na systém nahlížet z různých úhlů prostřednictvím pohledů, jakými jsou strukturální, behaviorální, interakční nebo časový pohled. Využívá se kontinuálně během analytické fáze i fáze návrhu.</p>
+
+<div class="svg-container">
+    <svg width="500" height="200" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="60" fill="#e2e8f0" stroke="#718096" stroke-width="2" stroke-dasharray="5,5"/>
+        <text x="100" y="105" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Složitá Realita</text>
+        
+        <path d="M 180 100 C 210 50, 290 50, 320 100" fill="none" stroke="#3182ce" stroke-width="3" marker-end="url(#arrow)"/>
+        <text x="250" y="60" font-family="Arial" font-size="12" font-style="italic" fill="#3182ce" text-anchor="middle">Proces Abstrakce</text>
+
+        <rect x="340" y="50" width="120" height="100" rx="8" fill="#bee3f8" stroke="#2b6cb0" stroke-width="2"/>
+        <text x="400" y="105" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">UML Model</text>
+    </svg>
+    <div class="svg-caption">Obrázek 4.1: Abstrakce reality do uchopitelného softwarového modelu.</div>
+</div>
+
+<h2>5. Životní cyklus software</h2>
+<div class="def">
+    Životní cyklus software (SDLC — Software Development Life Cycle) je formální definice všech fází vývoje od prvotní myšlenky a vzniku požadavků až po jeho finální vyřazení (ukončení systému) a řízení změn.
+</div>
+<p>Běžný SDLC se skládá ze šesti hlavních, na sebe navazujících či se prolínajících fází. První je fáze <strong>Analýzy</strong> zaměřená na sběr požadavků a pochopení problému. Následuje zpracování architektury a databáze v rámci <strong>Návrhu</strong>. Třetí fází je <strong>Implementace</strong>, zahrnující programování a tvorbu kódu. Čtvrtá fáze představuje <strong>Testování</strong> a ověření funkčnosti i hledání defektů. Pátým krokem je produkční <strong>Nasazení</strong> systému do ostrého provozu. Cyklus se uzavírá fází <strong>Údržby</strong>, kde probíhají opravy chyb a nezbytné úpravy či rozšiřování.</p>
+
+<div class="flow">
+    <div class="fbox">1. Analýza</div><div class="arrow">➔</div>
+    <div class="fbox">2. Návrh</div><div class="arrow">➔</div>
+    <div class="fbox">3. Implementace</div><div class="arrow">➔</div>
+    <div class="fbox">4. Testování</div><div class="arrow">➔</div>
+    <div class="fbox">5. Nasazení</div><div class="arrow">➔</div>
+    <div class="fbox">6. Údržba</div>
+</div>
+
+<div class="note">
+    Důležité je upozornit komisi na fakt, že fáze údržby bývá statisticky nejdelší a na spotřebu zdrojů a financí zdaleka nejdražší částí životního cyklu. Dále nezapomeňte zmínit, že testování by nemělo probíhat pouze jednorázově na samém konci, ale mělo by být integrální součástí každého kroku.
+</div>
+
+<h3>Srovnání metodik vývoje</h3>
+<table>
+    <tr>
+        <th>Vodopádový model (Waterfall)</th>
+        <th>Agilní metodiky (Scrum, Kanban)</th>
+    </tr>
+    <tr>
+        <td>Přísně lineární model s jasně ohraničenými fázemi.</td>
+        <td>Iterativní a vysoce flexibilní přístup.</td>
+    </tr>
+    <tr>
+        <td>Nelze se vracet zpět. Fáze musí být dokončena před začátkem další.</td>
+        <td>Práce probíhá v krátkých iteracích (sprintech), častá zpětná vazba.</td>
+    </tr>
+    <tr>
+        <td>Vhodné pro systémy s rigidními specifikacemi (např. embedded systémy, zdravotnictví).</td>
+        <td>Vhodné pro komerční vývoj webů a aplikací, kde se požadavky rychle mění.</td>
+    </tr>
+</table>
+
+<div class="svg-container">
+    <svg width="700" height="250" viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg">
+        <text x="150" y="30" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Vodopádový model</text>
+        <rect x="50" y="50" width="100" height="30" fill="#3182ce" />
+        <rect x="100" y="80" width="100" height="30" fill="#2b6cb0" />
+        <rect x="150" y="110" width="100" height="30" fill="#2c5282" />
+        <rect x="200" y="140" width="100" height="30" fill="#1a365d" />
+        
+        <line x1="350" y1="20" x2="350" y2="230" stroke="#cbd5e0" stroke-dasharray="5,5"/>
+
+        <text x="550" y="30" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Agilní vývoj (Iterace)</text>
+        <circle cx="550" cy="120" r="60" fill="none" stroke="#dd6b20" stroke-width="4"/>
+        <path d="M 550 60 A 60 60 0 0 1 610 120" fill="none" stroke="#3182ce" stroke-width="6"/>
+        <path d="M 610 120 A 60 60 0 0 1 550 180" fill="none" stroke="#e53e3e" stroke-width="6"/>
+        <path d="M 550 180 A 60 60 0 0 1 490 120" fill="none" stroke="#38a169" stroke-width="6"/>
+        <text x="550" y="115" font-family="Arial" font-size="12" text-anchor="middle">Návrh, Vývoj,</text>
+        <text x="550" y="135" font-family="Arial" font-size="12" text-anchor="middle">Test, Release</text>
+    </svg>
+    <div class="svg-caption">Obrázek 5.1: Srovnání lineárního postupu vodopádového modelu s iterativní povahou agilního vývoje.</div>
+</div>
+
+<h2>6. Strukturované metody návrhu software</h2>
+<div class="def">
+    Strukturovaný návrh je postaven na procedurálním přístupu, kde se komplexní a složitý systém řeší pomocí hierarchického rozkladu (dekompozice) na menší a snáze udržovatelné procesy a moduly.
+</div>
+<p>Základní vizí tohoto principu je, že strukturovaný přístup přísně rozkládá systém na autonomní funkce a procesy. Je naprosto stěžejní, že u těchto metod jsou zpracovávaná data a manipulující funkce vždy koncepčně oddělené. K tomu se využívají návrhové modely jako DFD (Data Flow Diagram) pro definici toku dat a ER diagram (Entity-Relationship) definující datová úložiště, entity, jejich atributy a relace včetně postupů normalizace. Tento styl je obzvláště vhodný pro precizní popis toků dat a návrh databázových struktur a typicky se implementuje v jazycích podporujících procedurální přístup (např. C pro programování STM32 mikrokontrolérů).</p>
+
+<div class="svg-container">
+    <svg width="600" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="40" fill="#fff" stroke="#333" stroke-width="2"/>
+        <text x="100" y="105" font-family="Arial" font-size="12" text-anchor="middle">Senzor</text>
+        
+        <path d="M 140 100 L 250 100" fill="none" stroke="#3182ce" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="195" y="90" font-family="Arial" font-size="10" fill="#3182ce" text-anchor="middle">Raw Data</text>
+
+        <rect x="260" y="70" width="80" height="60" rx="10" fill="#e2e8f0" stroke="#333" stroke-width="2"/>
+        <text x="300" y="105" font-family="Arial" font-size="12" text-anchor="middle">Zpracování</text>
+
+        <path d="M 340 100 L 450 100" fill="none" stroke="#3182ce" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="395" y="90" font-family="Arial" font-size="10" fill="#3182ce" text-anchor="middle">Výsledek</text>
+
+        <line x1="460" y1="80" x2="550" y2="80" stroke="#333" stroke-width="2"/>
+        <line x1="460" y1="120" x2="550" y2="120" stroke="#333" stroke-width="2"/>
+        <text x="505" y="105" font-family="Arial" font-size="12" text-anchor="middle">Úložiště DB</text>
+    </svg>
+    <div class="svg-caption">Obrázek 6.1: Zjednodušená ukázka konceptu toku dat (Data Flow Diagram).</div>
+</div>
+
+<h2>7. Objektově orientované metody návrhu</h2>
+<div class="def">
+    Objektově orientované metody (OOP) představují komplexní přístup k vývoji, kde základní entitou návrhu není funkce, nýbrž <strong>objekt</strong>. Objekt funguje jako ucelený prvek, který zcela přirozeně sdružuje svá data (stav/atributy) a své chování (metody) do jednoho logického celku. Třída zde figuruje coby univerzální šablona a objekt představuje její konkrétní instanci v paměti.
+</div>
+
+<div class="card">
+    <h3>Základní pilíře a principy OOP:</h3>
+    <ul>
+        <li><strong>Zapouzdření (Encapsulation):</strong> Zajišťuje skrytí vnitřní struktury a implementačních detailů objektu. Okolní svět komunikuje s objektem výhradně přes pečlivě definované a veřejně dostupné rozhraní. Chrání data před neoprávněnou manipulací.</li>
+        <li><strong>Dědičnost (Inheritance):</strong> Umožňuje vytvářet nové třídy na základě již existujících (tvorba hierarchií). Odvozená třída (potomek) dědí vlastnosti předka, čímž podporuje silnou znovupoužitelnost softwarového kódu.</li>
+        <li><strong>Polymorfismus:</strong> Týká se schopnosti objektů odvozených z různých tříd sdílet stejné rozhraní a reagovat na naprosto stejné volání metody svým vlastním, specifikovaným způsobem (např. metoda <code>init_display()</code> může být volána bez znalosti toho, zda v pozadí funguje přesně pro řadič US2066 nebo pro jiný typ).</li>
+        <li><strong>Abstrakce:</strong> Koncept zaměření se striktně na podstatné vlastnosti analyzovaného objektu z pohledu řešené aplikační domény, s plným ignorováním irelevantních detailů.</li>
+    </ul>
+</div>
+
+<div class="svg-container">
+    <svg width="600" height="250" viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg">
+        <rect x="200" y="20" width="200" height="80" rx="0" fill="#fff" stroke="#333" stroke-width="2"/>
+        <text x="300" y="40" font-family="Arial" font-weight="bold" font-size="14" text-anchor="middle">«Třída Šablona»</text>
+        <text x="300" y="60" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Displej</text>
+        <line x1="200" y1="70" x2="400" y2="70" stroke="#333"/>
+        <text x="210" y="90" font-family="Arial" font-size="12">- rozliseni</text>
+        
+        <path d="M 300 100 L 300 130" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        
+        <rect x="50" y="150" width="160" height="60" rx="10" fill="#bee3f8" stroke="#3182ce" stroke-width="2"/>
+        <text x="130" y="175" font-family="Arial" font-size="14" text-anchor="middle">Objekt A: LCD</text>
+        <text x="130" y="195" font-family="Arial" font-size="12" text-anchor="middle">rozliseni = 128x64</text>
+        
+        <rect x="390" y="150" width="160" height="60" rx="10" fill="#c6f6d5" stroke="#38a169" stroke-width="2"/>
+        <text x="470" y="175" font-family="Arial" font-size="14" text-anchor="middle">Objekt B: OLED</text>
+        <text x="470" y="195" font-family="Arial" font-size="12" text-anchor="middle">rozliseni = 1024x768</text>
+        
+        <path d="M 300 130 L 130 150" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+        <path d="M 300 130 L 470 150" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="4,4"/>
+    </svg>
+    <div class="svg-caption">Obrázek 7.1: Ilustrace principu instanciace - vytvoření konkrétních objektů z abstraktní třídy.</div>
+</div>
+
+<h2>8. UML (Unified Modeling Language)</h2>
+<div class="def">
+    UML se profiluje jako dominantní a standardizovaný vizuální modelovací jazyk. Primárně se používá pro specifikaci struktury, přesnou vizualizaci vazeb, tvorbu a konstrukci a rozsáhlou dokumentaci softwarových i nesystemových procesů. UML diagramy přehledně rozdělujeme do dvou stěžejních skupin: strukturální a behaviorální diagramy.
+</div>
+
+<h3>8.1 Strukturální diagramy (Class diagram)</h3>
+<p>Strukturální pohled se soustředí na trvalou, statickou kostru systému. Dominantním zástupcem je diagram tříd (Class diagram), který modeluje existující třídy, jejich datové atributy, nabízené metody a znázorňuje statické vztahy.</p>
+
+<div class="card">
+    <h4>Důležité pojmy:</h4>
+    <dl style="margin-top:10px;">
+        <dt>třída</dt>
+        <dd>Co to je: Šablona definující vlastnosti a chování (atributy a metody). K čemu se používá: Modelování konceptů domény a tvorba objektů. Jak se vyznačuje: Obsahuje seznam atributů a metod a obvykle má jméno v nominativu.</dd>
+
+        <dt>atribut</dt>
+        <dd>Co to je: Proměnná nebo vlastnost třídy, uchovává stav objektu. K čemu se používá: Ukládání dat relevantních pro objekt. Jak se vyznačuje: Má datový typ a viditelnost (public/private).</dd>
+
+        <dt>metoda</dt>
+        <dd>Co to je: Funkce spojená s třídou, provádí operace nad objektem. K čemu se používá: Implementace chování objektu. Jak se vyznačuje: Má název, parametry a návratový typ.</dd>
+
+        <dt>datový typ</dt>
+        <dd>Co to je: Definice množiny hodnot a operací nad nimi. K čemu se používá: Určuje formát a operace pro atributy a parametry. Jak se vyznačuje: Např. int, string, boolean nebo uživatelsky definované typy.</dd>
+
+        <dt>návratový typ</dt>
+        <dd>Co to je: Typ hodnoty vrácené metodou. K čemu se používá: Specifikuje, co metoda vrátí volajícímu. Jak se vyznačuje: Uveden vedle názvu metody nebo v její signatuře.</dd>
+
+        <dt>asociace</dt>
+        <dd>Co to je: Vztah mezi dvěma třídami vyjadřující propojení. K čemu se používá: Modelování vztahů typu "má" nebo "používá". Jak se vyznačuje: Čára mezi třídami s volitelnou multiplicitou.</dd>
+
+        <dt>dědičnost / generalizace</dt>
+        <dd>Co to je: Mechanismus, kdy jedna třída (potomek) přebírá vlastnosti jiné (předek). K čemu se používá: Znovupoužitelnost a hierarchie typů. Jak se vyznačuje: Šipka s plnou hlavou směřující k rodiči.</dd>
+
+        <dt>realizace rozhraní</dt>
+        <dd>Co to je: Implementace smlouvy definované rozhraním. K čemu se používá: Zaručuje, že třída poskytuje určité metody. Jak se vyznačuje: Pruhovaná čára se šipkou k rozhraní (stereo type &lt;&lt;interface&gt;&gt;).</dd>
+
+        <dt>agregace</dt>
+        <dd>Co to je: Slabší vztah celek-část, část může existovat samostatně. K čemu se používá: Modelování volné kompozice. Jak se vyznačuje: Čára s prázdným kosočtvercem u celku.</dd>
+
+        <dt>kompozice</dt>
+        <dd>Co to je: Silný vztah celek-část, část bez celku obvykle nemá smysl. K čemu se používá: Modelování vlastnictví a životnosti. Jak se vyznačuje: Čára s plným kosočtvercem u celku.</dd>
+
+        <dt>závislost</dt>
+        <dd>Co to je: Dočasné použití jedné třídy druhou (např. jako parametr). K čemu se používá: Vyjádření slabé vazby nebo krátkodobých interakcí. Jak se vyznačuje: Pruhovaná čára s šipkou.</dd>
+
+        <dt>abstraktní třída</dt>
+        <dd>Co to je: Třída, která nemůže být instanciována a může obsahovat abstraktní metody. K čemu se používá: Definice společného rozhraní a dílčí implementace pro potomky. Jak se vyznačuje: Označení kursívou nebo klíčovým slovem 'abstract'.</dd>
+
+        <dt>rozhraní</dt>
+        <dd>Co to je: Sada metod bez implementace definovaná jako smlouva. K čemu se používá: Odtržení specifikace od implementace a podpora polymorfismu. Jak se vyznačuje: Stereo type &lt;&lt;interface&gt;&gt; a pouze signatury metod.</dd>
+    </dl>
+    <ul style="margin-top: 10px; font-size: 0.95em;">
+        <li><strong>Viditelnost:</strong> public (<code>+</code>), private (<code>-</code>), protected (<code>#</code>), package (<code>~</code>)</li>
+        <li><strong>Multiplicita:</strong> <code>1</code>, <code>0..1</code>, <code>0..*</code>, <code>1..*</code>, <code>*</code></li>
+    </ul>
+</div>
+
+<div class="svg-container">
+    <svg width="500" height="220" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+        <rect x="50" y="30" width="140" height="110" fill="#fff" stroke="#333" stroke-width="2"/>
+        <text x="120" y="50" font-family="Arial" font-weight="bold" font-size="14" text-anchor="middle">3DTiskarna</text>
+        <line x1="50" y1="60" x2="190" y2="60" stroke="#333"/>
+        <text x="60" y="80" font-family="Arial" font-size="12">- model: string</text>
+        <text x="60" y="95" font-family="Arial" font-size="12">- hotendTemp: int</text>
+        <line x1="50" y1="105" x2="190" y2="105" stroke="#333"/>
+        <text x="60" y="125" font-family="Arial" font-size="12">+ nahrejSoubor()</text>
+
+        <rect x="300" y="30" width="140" height="110" fill="#fff" stroke="#333" stroke-width="2"/>
+        <text x="370" y="50" font-family="Arial" font-weight="bold" font-size="14" text-anchor="middle">Material</text>
+        <line x1="300" y1="60" x2="440" y2="60" stroke="#333"/>
+        <text x="310" y="80" font-family="Arial" font-size="12">- typ: string = "PETG"</text>
+        <line x1="300" y1="105" x2="440" y2="105" stroke="#333"/>
+        <text x="310" y="125" font-family="Arial" font-size="12">+ nastavTeplotu()</text>
+        
+        <polygon points="190,85 205,80 220,85 205,90" fill="white" stroke="black"/>
+        <line x1="220" y1="85" x2="300" y2="85" stroke="#333" stroke-width="2"/>
+        <text x="260" y="75" font-family="Arial" font-size="12">1..*</text>
+    </svg>
+    <div class="svg-caption">Obrázek 8.1: Class diagram demonstrující agregaci. Tiskárna "má" materiál, avšak materiál přežije i zánik objektu tiskárny.</div>
+</div>
+
+<h3>8.2 Behaviorální diagramy (Use Case, Activity diagram)</h3>
+<p>Zobrazují dynamiku, události a průběžné chování celého řešení v průběhu času.</p>
+
+<h4>Use Case diagram</h4>
+<p>Vysoce srozumitelný model pro zákazníky, který ukazuje interakci (vnější pohled) mezi uživateli (aktéry) a funkcionalitami systému.</p>
+<div class="card" style="margin-bottom: 20px;">
+    <strong>Důležité pojmy (Use Case):</strong>
+    <dl style="margin-top:10px;">
+        <dt>aktér</dt>
+        <dd>Co to je: Externí entita (uživatel nebo systém) interagující se systémem. K čemu se používá: Identifikace rolí, které využívají funkcionalitu. Jak se vyznačuje: Zobrazen jako postavička (stickman) v diagramech.</dd>
+
+        <dt>případ užití</dt>
+        <dd>Co to je: Sada kroků vedoucích k dosažení cíle uživatele. K čemu se používá: Popis konkrétní funkce z pohledu aktéra. Jak se vyznačuje: Označen elipsou s názvem akce.</dd>
+
+        <dt>hranice systému</dt>
+        <dd>Co to je: Vymezení, co je součástí systému a co je externí. K čemu se používá: Omezí rozsah diagramu a ukáže interakce. Jak se vyznačuje: Rámeček kolem případů užití s popiskem systému.</dd>
+
+        <dt>asociace</dt>
+        <dd>Co to je: Spojení mezi aktérem a případem užití. K čemu se používá: Vyjadřuje, kdo initiiuje danou funkci. Jak se vyznačuje: Čára spojující aktéra a elipsu případu užití.</dd>
+
+        <dt>&lt;&lt;include&gt;&gt;</dt>
+        <dd>Co to je: Vztah, kdy jeden případ užití vždy volá jiný. K čemu se používá: Znovupoužití společného chování mezi případy užití. Jak se vyznačuje: Šipka s &lt;&lt;include&gt;&gt; směrem k zahrnutému případu.</dd>
+
+        <dt>&lt;&lt;extend&gt;&gt;</dt>
+        <dd>Co to je: Volitelný vztah umožňující rozšíření chování základního případu. K čemu se používá: Modelování alternativních nebo okrajových chování. Jak se vyznačuje: Šipka s &lt;&lt;extend&gt;&gt; od rozšíření k základnímu případu.</dd>
+
+        <dt>generalizace aktérů</dt>
+        <dd>Co to je: Hierarchie mezi aktéry, kdy potomek dědí role předka. K čemu se používá: Zjednodušení modelu a sdílení chování. Jak se vyznačuje: Šipka generalizace mezi aktéry.</dd>
+
+        <dt>hlavní scénář</dt>
+        <dd>Co to je: Standardní, nejpravděpodobnější průběh případu užití. K čemu se používá: Základní cesta k dosažení cíle. Jak se vyznačuje: Popis kroků v primárním scénáři.</dd>
+
+        <dt>alternativní scénář</dt>
+        <dd>Co to je: Odbočky od hlavního scénáře z důvodu zvláštních podmínek. K čemu se používá: Pokrytí chybových nebo okrajových situací. Jak se vyznačuje: Označen jako alternativní kroky nebo větve v dokumentaci.</dd>
+    </dl>
+</div>
+
+<div class="svg-container">
+    <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="100" r="15" fill="none" stroke="#333" stroke-width="2"/>
+        <line x1="50" y1="115" x2="50" y2="150" stroke="#333" stroke-width="2"/>
+        <line x1="50" y1="125" x2="30" y2="140" stroke="#333" stroke-width="2"/>
+        <line x1="50" y1="125" x2="70" y2="140" stroke="#333" stroke-width="2"/>
+        <line x1="50" y1="150" x2="30" y2="180" stroke="#333" stroke-width="2"/>
+        <line x1="50" y1="150" x2="70" y2="180" stroke="#333" stroke-width="2"/>
+        <text x="50" y="195" font-family="Arial" font-size="12" text-anchor="middle">Uživatel</text>
+        
+        <rect x="150" y="20" width="200" height="160" fill="none" stroke="#3182ce" stroke-width="2" stroke-dasharray="5,5"/>
+        <text x="250" y="40" font-family="Arial" font-size="12" fill="#3182ce" text-anchor="middle">Systém Orca Slicer</text>
+        
+        <ellipse cx="250" cy="80" rx="80" ry="25" fill="#e2e8f0" stroke="#333"/>
+        <text x="250" y="85" font-family="Arial" font-size="12" text-anchor="middle">Spustit kalibraci tiskárny</text>
+        
+        <ellipse cx="250" cy="140" rx="80" ry="25" fill="#e2e8f0" stroke="#333"/>
+        <text x="250" y="145" font-family="Arial" font-size="12" text-anchor="middle">Vygenerovat G-code</text>
+        
+        <line x1="75" y1="110" x2="170" y2="85" stroke="#333" stroke-width="1"/>
+        <line x1="75" y1="110" x2="170" y2="135" stroke="#333" stroke-width="1"/>
+    </svg>
+    <div class="svg-caption">Obrázek 8.2: Use Case diagram vizualizující možnosti uživatele v programu.</div>
+</div>
+
+<h4>Activity diagram</h4>
+<p>Algoritmický pohled představující tok činností, procesů (workflow) či interní logiky a matematických postupů. Podobá se klasickému vývojovému diagramu včetně možností paralelního zpracování.</p>
+<div class="card" style="margin-bottom: 20px;">
+    <strong>Důležité pojmy (Activity):</strong>
+    <dl style="margin-top:10px;">
+        <dt>aktivita</dt>
+        <dd>Co to je: Základní krok nebo činnost v procesu. K čemu se používá: Reprezentuje provedení určité práce. Jak se vyznačuje: Blok nebo obdélník v diagramu s popisem akce.</dd>
+
+        <dt>počáteční uzel</dt>
+        <dd>Co to je: Označuje začátek procesu. K čemu se používá: Definuje vstupní bod workflow. Jak se vyznačuje: Plný černý kruh.</dd>
+
+        <dt>koncový uzel</dt>
+        <dd>Co to je: Označuje ukončení procesu. K čemu se používá: Signalizuje konec flow. Jak se vyznačuje: Kroužek s vnitřním vyplněným bodem nebo speciální symbol konce.</dd>
+
+        <dt>rozhodovací uzel (decision)</dt>
+        <dd>Co to je: Místo, kde se volí větev podle podmínky. K čemu se používá: Rozvětvení toku na základě podmínek. Jak se vyznačuje: Kosočtverec s odchozími větvemi označenými podmínkami.</dd>
+
+        <dt>sloučení větví (merge)</dt>
+        <dd>Co to je: Sjednocení více alternativních toků zpět do jednoho. K čemu se používá: Vrací průběh do jednoho toku. Jak se vyznačuje: Kosočtverec, který sbírá větve bez podmínky.</dd>
+
+        <dt>fork</dt>
+        <dd>Co to je: Bod, kde se proces rozdělí na paralelní větve. K čemu se používá: Paralelní zpracování aktivit. Jak se vyznačuje: Tlustá vodorovná nebo svislá čára s více odbočkami.</dd>
+
+        <dt>join</dt>
+        <dd>Co to je: Slučovací bod paralelních větví do jednoho toku. K čemu se používá: Synchronizace paralelních aktivit. Jak se vyznačuje: Tlustá čára sbírající více vstupů.</dd>
+
+        <dt>paralelní tok</dt>
+        <dd>Co to je: Současné provádění více aktivit. K čemu se používá: Zrychlení nebo oddělení nezávislých aktivit. Jak se vyznačuje: Více větví vzniklých z fork uzlu.</dd>
+
+        <dt>swimlane</dt>
+        <dd>Co to je: Pruhové rozdělení diagramu podle odpovědnosti. K čemu se používá: Přidělení aktivit konkrétním rolím nebo komponentám. Jak se vyznačuje: Vertikální nebo horizontální pásy s popiskem vlastníka.</dd>
+
+        <dt>workflow</dt>
+        <dd>Co to je: Celkový sled aktivit tvořící obchodní nebo technický proces. K čemu se používá: Mapování celého procesu a jeho optimalizace. Jak se vyznačuje: Sekvence aktivit znázorněná v diagramu.</dd>
+
+        <dt>podmínka</dt>
+        <dd>Co to je: Výraz rozhodující směr toku. K čemu se používá: Řízení větvení a rozhodnutí v procesu. Jak se vyznačuje: Zapsaná u odchozích hran rozhodovacího uzlu (např. [Ano]/[Ne]).</dd>
+    </dl>
+</div>
+
+<div class="svg-container">
+    <svg width="600" height="300" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="150" r="12" fill="#333"/>
+        <path d="M 62 150 L 100 150" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        
+        <rect x="100" y="130" width="100" height="40" rx="10" fill="#e2e8f0" stroke="#333" stroke-width="2"/>
+        <text x="150" y="155" font-family="Arial" font-size="12" text-anchor="middle">Načtení 3D modelu</text>
+        <path d="M 200 150 L 240 150" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <polygon points="260,130 280,150 260,170 240,150" fill="#fff" stroke="#333" stroke-width="2"/>
+        <text x="260" y="120" font-family="Arial" font-size="10" text-anchor="middle">Je model v pořádku?</text>
+
+        <path d="M 260 170 L 260 220 L 320 220" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="275" y="210" font-family="Arial" font-size="10" fill="#e53e3e">[Ne]</text>
+        <rect x="320" y="200" width="100" height="40" rx="10" fill="#fff5f5" stroke="#e53e3e" stroke-width="2"/>
+        <text x="370" y="225" font-family="Arial" font-size="12" text-anchor="middle">Zobrazit chybovou hlášku</text>
+
+        <path d="M 280 150 L 320 150" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="295" y="140" font-family="Arial" font-size="10" fill="#38a169">[Ano]</text>
+
+        <rect x="320" y="80" width="5" height="140" fill="#333"/>
+        
+        <path d="M 325 100 L 360 100" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="360" y="80" width="100" height="40" rx="10" fill="#e2e8f0" stroke="#333" stroke-width="2"/>
+        <text x="410" y="105" font-family="Arial" font-size="12" text-anchor="middle">Slicing (vrstvy)</text>
+
+        <path d="M 325 150 L 360 150" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="360" y="130" width="100" height="40" rx="10" fill="#e2e8f0" stroke="#333" stroke-width="2"/>
+        <text x="410" y="155" font-family="Arial" font-size="12" text-anchor="middle">Výpočet času tisku</text>
+
+        <path d="M 460 100 L 495 100" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <path d="M 460 150 L 495 150" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <rect x="500" y="80" width="5" height="90" fill="#333"/>
+
+        <path d="M 505 125 L 530 125" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+        <circle cx="550" cy="125" r="15" fill="#fff" stroke="#333" stroke-width="2"/>
+        <circle cx="550" cy="125" r="8" fill="#333"/>
+
+        <path d="M 420 220 L 550 220 L 550 145" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#333" />
+            </marker>
+        </defs>
+    </svg>
+    <div class="svg-caption">Obrázek 8.3: Activity diagram ilustrující rozhodovací uzly a paralelní zpracování (fork/join).</div>
+</div>
+
+
+<h3>8.3 Interakční diagramy (Sequence diagram)</h3>
+<p>Interakční diagramy se úzce zaměřují na toky zpráv a pořadí volání mezi objekty. Výkladní skříní je <strong>Sequence diagram (Sekvenční diagram)</strong>. Jeho účelem je podrobně zaznamenat chronologickou komunikaci instancí objektů v postupném běhu času. Vertikální osa určuje plynoucí čas, horizontální předávání zpráv mezi takzvanými lifelines (čarami života) jednotlivých objektů.</p>
+
+<div class="card" style="margin-bottom: 20px;">
+    <strong>Důležité pojmy (Sequence):</strong>
+    <dl style="margin-top:10px;">
+        <dt>účastník</dt>
+        <dd>Co to je: Entita (uživatel nebo systém), která iniciuje interakce. K čemu se používá: Vymezení rolí v sekvenci zpráv. Jak se vyznačuje: Zobrazen jako stickman nebo název účastníka nahoře.</dd>
+
+        <dt>objekt</dt>
+        <dd>Co to je: Instance třídy zapojená do komunikace. K čemu se používá: Představuje prvky, které si posílají zprávy. Jak se vyznačuje: Box s názvem nad lifeline.</dd>
+
+        <dt>lifeline</dt>
+        <dd>Co to je: Vertikální čára znázorňující životnost objektu v čase. K čemu se používá: Ukazuje, kdy je objekt aktivní nebo pasivní. Jak se vyznačuje: Pruhovaná nebo plná čára pod objektem.</dd>
+
+        <dt>aktivace</dt>
+        <dd>Co to je: Úsek na lifeline označující prováděnou operaci. K čemu se používá: Zobrazení doby, kdy objekt vykonává činnost. Jak se vyznačuje: Tenčí obdélník přes lifeline.</dd>
+
+        <dt>zpráva</dt>
+        <dd>Co to je: Komunikace mezi objekty (volání metody nebo signálu). K čemu se používá: Popis interakcí a pořadí volání. Jak se vyznačuje: Šipka mezi lifelines s popisem volané metody.</dd>
+
+        <dt>synchronní zpráva</dt>
+        <dd>Co to je: Blokující volání, čeká se na dokončení. K čemu se používá: Modelování synchronní komunikace (např. metoda). Jak se vyznačuje: Plná šipka s plnou čarou.</dd>
+
+        <dt>asynchronní zpráva</dt>
+        <dd>Co to je: Neblokující volání, odesílatel nečeká. K čemu se používá: Modelování událostí nebo zpracování na pozadí. Jak se vyznačuje: Šipka s pruhovanou linií nebo otevřenou šipkou.</dd>
+
+        <dt>návratová zpráva</dt>
+        <dd>Co to je: Odpověď volané metody s výsledkem. K čemu se používá: Indikuje návrat hodnoty nebo potvrzení. Jak se vyznačuje: Přerušovaná šipka zpět k volajícímu.</dd>
+
+        <dt>vytvoření objektu</dt>
+        <dd>Co to je: Událost, při které je instance vytvořena během scénáře. K čemu se používá: Zobrazení okamžiku, kdy začíná existovat nový objekt. Jak se vyznačuje: Šipka vedoucí k začátku lifeline (krok vytváření).</dd>
+
+        <dt>zánik objektu</dt>
+        <dd>Co to je: Okamžik ukončení existence objektu. K čemu se používá: Označení konce životnosti instance. Jak se vyznačuje: Křížek nebo symbol ukončení na konci lifeline.</dd>
+
+        <dt>alt</dt>
+        <dd>Co to je: Fragment představující alternativy (if-else). K čemu se používá: Modelování podmíněných větví v komunikaci. Jak se vyznačuje: Rámeček operačního fragmentu s označením 'alt' a sekcemi.</dd>
+
+        <dt>opt</dt>
+        <dd>Co to je: Volitelný fragment provedení (optional). K čemu se používá: Jedna podmíněná větev bez alternativy. Jak se vyznačuje: Operační fragment označený 'opt'.</dd>
+
+        <dt>loop</dt>
+        <dd>Co to je: Fragment vyjadřující opakování. K čemu se používá: Modelování opakovaných volání nebo smyček. Jak se vyznačuje: Rámeček s označením 'loop' a podmínkou nebo počtem opakování.</dd>
+
+        <dt>par</dt>
+        <dd>Co to je: Fragment pro paralelní provádění. K čemu se používá: Zobrazení paralelních sekvencí zpráv. Jak se vyznačuje: Rámeček 'par' s rozdělenými sekcemi běhu paralelních částí.</dd>
+    </dl>
+</div>
+
+<div class="svg-container">
+    <svg width="500" height="250" viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
+        <rect x="50" y="20" width="100" height="30" fill="#edf2f7" stroke="#333"/>
+        <text x="100" y="40" font-family="Arial" font-size="12" text-anchor="middle">:MCU (STM32)</text>
+        <line x1="100" y1="50" x2="100" y2="230" stroke="#333" stroke-dasharray="4,4"/>
+
+        <rect x="350" y="20" width="100" height="30" fill="#edf2f7" stroke="#333"/>
+        <text x="400" y="40" font-family="Arial" font-size="12" text-anchor="middle">:OLED Display</text>
+        <line x1="400" y1="50" x2="400" y2="230" stroke="#333" stroke-dasharray="4,4"/>
+
+        <rect x="95" y="70" width="10" height="140" fill="#3182ce"/>
+        <rect x="395" y="90" width="10" height="50" fill="#3182ce"/>
+
+        <path d="M 105 90 L 390 90" fill="none" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="250" y="80" font-family="Arial" font-size="12" text-anchor="middle">init_SPI_comm()</text>
+
+        <path d="M 390 130 L 105 130" fill="none" stroke="#333" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+        <text x="250" y="125" font-family="Arial" font-size="12" text-anchor="middle">ACK (Ready)</text>
+
+        <path d="M 105 170 L 395 170" fill="none" stroke="#333" stroke-width="1" marker-end="url(#arrow)"/>
+        <text x="250" y="160" font-family="Arial" font-size="12" text-anchor="middle">send_data_buffer()</text>
+    </svg>
+    <div class="svg-caption">Obrázek 8.4: Sekvenční diagram zobrazující zasílání zpráv (metod) mezi mikrokontrolérem a displejem v průběhu času.</div>
+</div>
+
+<h3>8.4 Časové diagramy (Timing diagram)</h3>
+<p>Specifická odnož behaviorálních modelů pro časově kritické systémy. Mapují přechody logických stavů objektu nebo signálů napříč přesně danou časovou osou s uvedením pevných časových omezení (důležité při návrhu embedded systémů či specifikacích HW-SW hranic a modulačních technik).</p>
+
+<h3>8.5 Stavové diagramy (State Machine diagram)</h3>
+<p>Ztvárňují stavy celého reaktivního bloku nebo jednoho složitého objektu (typické v řídicích logikách zařízení) a podněty, které vyvolají transformaci z jednoho stavu do nového.</p>
+<div class="card" style="margin-bottom: 20px;">
+    <strong>Důležité pojmy (State Machine):</strong>
+    <dl style="margin-top:10px;">
+        <dt>stav</dt>
+        <dd>Co to je: Jedna z možných konfigurací chování objektu v čase. K čemu se používá: Reprezentuje, jaký je aktuální stav systému nebo komponenty. Jak se vyznačuje: Označený blok v diagramu se jménem stavu.</dd>
+
+        <dt>přechod</dt>
+        <dd>Co to je: Změna z jednoho stavu do druhého. K čemu se používá: Modelování reakce na události. Jak se vyznačuje: Šipka mezi stavy s popisem události/akce.</dd>
+
+        <dt>událost</dt>
+        <dd>Co to je: Věc, která vyvolá přechod (např. vstup signálu). K čemu se používá: Spouštění změn stavu. Jak se vyznačuje: Text u přechodu (např. "tlačítko stisknuto").</dd>
+
+        <dt>počáteční stav</dt>
+        <dd>Co to je: Výchozí stav při spuštění systému. K čemu se používá: Definuje počáteční chování. Jak se vyznačuje: Plný černý kruh značka startu.</dd>
+
+        <dt>koncový stav</dt>
+        <dd>Co to je: Stav označující ukončení životního cyklu. K čemu se používá: Signalizace ukončení operace nebo systému. Jak se vyznačuje: Kroužek obsahující vyplněný bod.</dd>
+
+        <dt>akce</dt>
+        <dd>Co to je: Operace vykonaná při přechodu nebo ve stavu. K čemu se používá: Implementace reakce na událost. Jak se vyznačuje: Zapsána jako část přechodu nebo v rámci bloku stavu (např. /akcí()).</dd>
+
+        <dt>guard podmínka</dt>
+        <dd>Co to je: Logická podmínka, která musí být splněna, aby přechod nastal. K čemu se používá: Omezování přechodů pouze na specifické případy. Jak se vyznačuje: V hranatých závorkách u přechodu (např. [x &gt; 0]).</dd>
+    </dl>
+</div>
+
+<h2>9. Verzování software</h2>
+<div class="def">
+    Verzování je technika zajišťující centrální nebo distribuované sledování historie, změn a vývoje zdrojového kódu během kooperace týmu. Jednoznačně nejdominantnějším nástrojem v současnosti je <strong>Git</strong> (distribuovaný systém).
+</div>
+<p>Git umožňuje vývojářům (například v týmové spolupráci, kde figurují jména jako Vojta, Kuba a Roman) vytvářet oddělené větve (<code>branch</code>) pro bezpečný a nezávislý vývoj různých funkcionalit. Uložený otisk provedených změn se nazývá <code>commit</code>. Po finalizaci práce v oddělené větvi dochází ke sloučení (<code>merge</code>) s hlavní větví. Pokud dojde k situaci, že více členů týmu upraví identický řádek kódu, systém nedokáže situaci vyhodnotit a ohlásí nebezpečnou kolizi, neboli <code>konflikt</code>. Ke značení vydaných verzí (např. tagování releasů) se využívá <strong>sémantické verzování</strong> mající striktní formát <code>MAJOR.MINOR.PATCH</code>.</p>
+
+<div class="svg-container">
+    <svg width="600" height="150" viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="50" r="10" fill="#3182ce" />
+        <line x1="110" y1="50" x2="290" y2="50" stroke="#3182ce" stroke-width="4"/>
+        <circle cx="300" cy="50" r="10" fill="#3182ce" />
+        <line x1="310" y1="50" x2="490" y2="50" stroke="#3182ce" stroke-width="4"/>
+        <circle cx="500" cy="50" r="10" fill="#3182ce" />
+        <text x="50" y="55" font-family="Arial" font-weight="bold" font-size="12">Main</text>
+        
+        <path d="M 100 50 Q 150 120 200 120" fill="none" stroke="#dd6b20" stroke-width="4"/>
+        <circle cx="200" cy="120" r="10" fill="#dd6b20" />
+        <line x1="210" y1="120" x2="390" y2="120" stroke="#dd6b20" stroke-width="4"/>
+        <circle cx="400" cy="120" r="10" fill="#dd6b20" />
+        <path d="M 400 120 Q 450 120 500 50" fill="none" stroke="#dd6b20" stroke-width="4"/>
+        <text x="140" y="135" font-family="Arial" font-weight="bold" font-size="12">Feature: generovani_navigace</text>
+        
+        <text x="500" y="30" font-family="Arial" font-size="12" font-style="italic" fill="#e53e3e">Merge point</text>
+    </svg>
+    <div class="svg-caption">Obrázek 9.1: Zobrazení základního Git flow - oddělení pracovní větve od hlavní a následné sloučení (merge).</div>
+</div>
+
+<h2>10. Testování software</h2>
+<div class="def">
+    Testování zajišťuje proces pečlivého ověření funkčnosti i nefunkčních vlastností systému za účelem identifikace chyb (bugů/defektů) a potvrzení shody se zadanými požadavky. Testování probíhá prostřednictvím předem koncipovaných testovacích scénářů nad připravenými testovacími daty (srovnáván očekávaný a skutečný výsledek).
+</div>
+
+<div class="card" style="margin-bottom: 20px;">
+    <strong>Důležité pojmy:</strong>
+    <dl style="margin-top:10px;">
+        <dt>testování</dt>
+        <dd>Co to je: Systémový proces ověřování chování systému proti požadavkům. K čemu se používá: Odhalení chyb a potvrzení shody se specifikací. Jak se vyznačuje: Sada testovacích případů a protokolů výsledků.</dd>
+
+        <dt>chyba / defekt / bug</dt>
+        <dd>Co to je: Nesprávné chování nebo chyba v kódu či návrhu. K čemu se používá: Pojmenování problému, který je nutno opravit. Jak se vyznačuje: Reprodukce selhání, popis kroku k jeho vyvolání.</dd>
+
+        <dt>selhání</dt>
+        <dd>Co to je: Viditelný projev defektu při provozu systému. K čemu se používá: Indikuje, že systém nesplnil očekávaný výsledek. Jak se vyznačuje: Nečekané chování, chyba uživatelem pozorovatelná při testu.</dd>
+
+        <dt>verifikace</dt>
+        <dd>Co to je: Proces ověřování, zda systém odpovídá specifikacím. K čemu se používá: Kontrola interní správnosti implementace. Jak se vyznačuje: Testy zaměřené na shodu se SRS a technickými požadavky.</dd>
+
+        <dt>validace</dt>
+        <dd>Co to je: Hodnocení, zda systém splňuje potřeby uživatele. K čemu se používá: Zajištění, že vytváříme správný produkt. Jak se vyznačuje: Akceptační testy a uživatelská kontrola funkčnosti.</dd>
+
+        <dt>testovací případ</dt>
+        <dd>Co to je: Jednotlivý scénář s kroky, vstupy a očekávaným výstupem. K čemu se používá: Opakovatelné ověření konkrétní funkce. Jak se vyznačuje: Jasně definované vstupy, kroky a očekávaný výsledek.</dd>
+
+        <dt>testovací scénář</dt>
+        <dd>Co to je: Sada souvisejících testovacích případů popisujících komplexní úlohu. K čemu se používá: Test komplexních uživatelských toků. Jak se vyznačuje: Sekvence případů pokrývajících celý use case.</dd>
+
+        <dt>testovací data</dt>
+        <dd>Co to je: Datový soubor použitý při testech. K čemu se používá: Inicializace stavu a simulace reálných situací. Jak se vyznačuje: Dobře popsaná, reprodukovatelná a pokrývající okrajové případy.</dd>
+
+        <dt>očekávaný výsledek</dt>
+        <dd>Co to je: Požadovaný výstup definovaný v testovacím případě. K čemu se používá: Kritérium úspěchu testu. Jak se vyznačuje: Přesný popis hodnoty nebo chování, které má nastat.</dd>
+
+        <dt>skutečný výsledek</dt>
+        <dd>Co to je: Reálný výstup pozorovaný po spuštění testu. K čemu se používá: Porovnání s očekávaným výsledkem k identifikaci selhání. Jak se vyznačuje: Zaznamenaný výstup, logy nebo screenshoty.</dd>
+
+        <dt>testovací plán</dt>
+        <dd>Co to je: Dokument shrnující cíle, rozsah a přístup k testování. K čemu se používá: Koordinace testovacích aktivit a zdrojů. Jak se vyznačuje: Obsahuje harmonogram, odpovědnosti a kritéria úspěchu.</dd>
+
+        <dt>testovací strategie</dt>
+        <dd>Co to je: Vyšší úroveň přístupu a metodik pro testování. K čemu se používá: Volba mezi manuálním/automatizovaným testováním, typy testů a nástroji. Jak se vyznačuje: Popis typů testů a způsobu jejich nasazení.</dd>
+
+        <dt>testovací prostředí</dt>
+        <dd>Co to je: HW/SW konfigurace, na které se testy provádějí. K čemu se používá: Reprodukce produkčního chování. Jak se vyznačuje: Definován OS, verze služeb, databáze a přístupová práva.</dd>
+
+        <dt>automatizované testování</dt>
+        <dd>Co to je: Spuštění testů skripty bez zásahu člověka. K čemu se používá: Rychlé a opakovatelné ověřování (unit, integrační, E2E). Jak se vyznačuje: Používá CI/CD pipeline, nástroje jako pytest, JUnit, Selenium.</dd>
+
+        <dt>manuální testování</dt>
+        <dd>Co to je: Ruční provádění testů člověkem. K čemu se používá: Testy s vysokou interakcí nebo exploratorní testování. Jak se vyznačuje: Závisí na testerově zkušenosti, zapisují se kroky a výsledky ručně.</dd>
+
+        <dt>regresní testování</dt>
+        <dd>Co to je: Testování, které ověřuje, že změny neporušily existující funkčnost. K čemu se používá: Zajištění stability po úpravách. Jak se vyznačuje: Sada automatických testů běžících po každém commitu nebo releasu.</dd>
+    </dl>
+</div>
+
+<div class="grid2">
+    <div class="card">
+        <h3>Úrovně testování:</h3>
+        <ol>
+            <li><strong>Unit testy:</strong> Test malých částí kódu (metod, funkcí, tříd). Jsou velmi rychlé a často se plně automatizují.</li>
+            <li><strong>Integrační testy:</strong> Test logické spolupráce částí systému a propojovacích rozhraní (například komunikace backendu s databází).</li>
+            <li><strong>Systémové testy:</strong> Testování celého zkompletovaného systému jako jednoho funkčního celku.</li>
+            <li><strong>Akceptační testy:</strong> Ověření prováděné přímo zákazníkem nebo koncovým uživatelem. Jejich úspěch rozhoduje o finálním převzetí systému do ostrého provozu.</li>
+        </ol>
+    </div>
+    <div class="card">
+        <h3>Typy testování podle znalosti kódu:</h3>
+        <ul>
+            <li><strong>Black-box testing:</strong> Testování "černé skříňky". Tester nemá žádnou znalost zdrojového kódu a ověřuje systém pouze na základě zadávání vstupů a kontroly výstupů.</li>
+            <li><strong>White-box testing:</strong> Testování "bílé skříňky". Tester zná detailní strukturu a kód. Zaměřuje se na průchodnost větví, smyček a logické pokrytí kódu.</li>
+            <li><strong>Gray-box testing:</strong> Kompromisní testování, kdy má tester pouze částečnou znalost vnitřního fungování (např. zná architekturu databáze, ale nezná přesný algoritmus výpočtu).</li>
+        </ul>
+    </div>
+</div>
+
+<div class="svg-container">
+    <svg width="400" height="250" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="200,30 300,100 100,100" fill="#e53e3e" stroke="#fff" stroke-width="2"/>
+        <text x="200" y="85" font-family="Arial" font-weight="bold" font-size="14" fill="white" text-anchor="middle">UI / E2E</text>
+
+        <polygon points="100,100 300,100 350,170 50,170" fill="#dd6b20" stroke="#fff" stroke-width="2"/>
+        <text x="200" y="145" font-family="Arial" font-weight="bold" font-size="16" fill="white" text-anchor="middle">Integrační testy</text>
+
+        <polygon points="50,170 350,170 400,240 0,240" fill="#3182ce" stroke="#fff" stroke-width="2"/>
+        <text x="200" y="215" font-family="Arial" font-weight="bold" font-size="18" fill="white" text-anchor="middle">Unit Testy (Největší množství)</text>
+    </svg>
+    <div class="svg-caption">Obrázek 10.1: Testovací pyramida znázorňující proporční zastoupení úrovní testování.</div>
+</div>
+
+<div class="trap">
+    <strong>Verifikace vs. Validace</strong>: Toto je velmi častý komisionální chyták.
+    <em>Verifikace</em> znamená ověření interní správnosti kódu – tvoříme systém správně podle technické specifikace? 
+    <em>Validace</em> kontroluje shodu s business procesem – tvoříme ten správný systém pro reálného uživatele? Zda aplikace vůbec dělá to, co uživatel nakonec očekává a opravdu potřebuje v praxi.
+</div>
+
+<h2>11. Návrhové vzory (Design Patterns)</h2>
+<div class="def">
+    Návrhový vzor je generické, v praxi již nesčetněkrát osvědčené a elegantní řešení pro obecně se opakující architektonické nebo návrhové problémy. Zvyšují udržovatelnost, robustnost a zejména znovupoužitelnost kódu prosazováním konceptů jako je volná vazba a vysoká soudržnost modulů.
+</div>
+<p>Kategorie takzvaných GoF vzorů (Gang of Four) se větví na vzory vytvářecí, strukturální a behaviorální.</p>
+<ul>
+    <li><strong>Vytvářecí:</strong> Příkladem je populární <em>Singleton</em>, který z principu omezuje instanciaci konkrétní třídy a striktně garantuje maximálně jednu aktivní instanci během běhu aplikace (např. přístup do hlavní databáze). Dalším vzorem z rodiny je <em>Factory (Továrna)</em>, komplexně delegující a zastřešující způsob vytváření objektů v závislosti na vstupních parametrech.</li>
+    <li><strong>Strukturální:</strong> Zahrnují <em>Adapter</em> převádějící nekompatibilní rozhraní komponent k sobě tak, aby hladce spolupracovaly, či <em>Facade</em>, plnící roli brány a zjednodušující složitý přístup k těžkopádnému vnitřnímu subsystému.</li>
+    <li><strong>Behaviorální:</strong> Například <em>Observer</em> či <em>Strategy</em>.</li>
+    <li>Mezi obecně architektonické vzory řadíme známou třívrstvou strukturu zvanou <em>MVC (Model-View-Controller)</em> rozpojující datový model od uživatelského rozhraní.</li>
+</ul>
+
+<div class="svg-container">
+    <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="100" y="50" width="200" height="100" rx="0" fill="#fff" stroke="#333" stroke-width="2"/>
+        <text x="200" y="70" font-family="Arial" font-weight="bold" font-size="14" text-anchor="middle">Singleton Class</text>
+        <line x1="100" y1="80" x2="300" y2="80" stroke="#333"/>
+        <text x="110" y="100" font-family="Arial" font-size="12">- instance: Singleton = null</text>
+        <line x1="100" y1="110" x2="300" y2="110" stroke="#333"/>
+        <text x="110" y="130" font-family="Arial" font-size="12">- Singleton() (private constr)</text>
+        <text x="110" y="145" font-family="Arial" font-size="12">+ getInstance(): Singleton</text>
+        
+        <path d="M 300 70 C 350 50, 350 130, 300 110" fill="none" stroke="#3182ce" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="360" y="95" font-family="Arial" font-size="10" font-weight="bold" fill="#3182ce" text-anchor="middle">return instance</text>
+    </svg>
+    <div class="svg-caption">Obrázek 11.1: UML schéma návrhového vzoru Singleton garantující právě jednu instanci.</div>
+</div>
+
+
+<h2>12. Architektura Klient/Server a REST API</h2>
+<div class="def">
+    Architektura klient/server systematicky rozděluje výpočetní role na poskytovatele sdílených síťových zdrojů nebo funkčních služeb (mocný a centrální server) a samotného příjemce těchto dat, který o zpracování žádá (klientská aplikace).
+</div>
+<p>V moderním software (zejména Three-tier uspořádání) figurují vrstvy jasně oddělené do segmentu UI zobrazení, aplikační vrstvy nesoucí byznys logiku (validace vstupů a zpracování požadavků) a datové vrstvy sloužící pro uložení údajů do databází. Komunikace převážně probíhá po síti za využití aplikačních REST API end-pointů. U API rozeznáváme standardizované HTTP protokoly: <code>GET</code> pro prosté získání metadat, <code>POST</code> k tvorbě nových entit, <code>PUT</code>/<code>PATCH</code> sloužící jako plnohodnotná i částečná úprava stávajících a <code>DELETE</code> určená pro jejich finální smazání.</p>
+
+<div class="note">
+    Důraz v architektuře C/S je kladen na propastný rozdíl mezi autentizací a autorizací. První pojem – <strong>Autentizace</strong> – zjišťuje ryzí identitu: odpovídá na kardinální otázku „Kdo vůbec jsi?“. Naopak <strong>Autorizace</strong> spravuje úroveň vnitřních oprávnění, odpovídá na „Co po přihlášení reálně smíš v systému dělat a vidět?“.
+</div>
+
+<div class="svg-container">
+    <svg width="600" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="50" y="60" width="100" height="80" rx="10" fill="#ebf8ff" stroke="#3182ce" stroke-width="2"/>
+        <text x="100" y="105" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Klient (Web)</text>
+        
+        <path d="M 150 80 L 350 80" fill="none" stroke="#2b6cb0" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="250" y="70" font-family="Arial" font-size="12" fill="#2b6cb0" text-anchor="middle">HTTP GET /api/data</text>
+        
+        <path d="M 350 120 L 150 120" fill="none" stroke="#38a169" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow)"/>
+        <text x="250" y="140" font-family="Arial" font-size="12" fill="#38a169" text-anchor="middle">Response (JSON 200 OK)</text>
+
+        <rect x="350" y="60" width="100" height="80" rx="10" fill="#edf2f7" stroke="#4a5568" stroke-width="2"/>
+        <text x="400" y="105" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">REST Server</text>
+        
+        <path d="M 450 100 L 520 100" fill="none" stroke="#4a5568" stroke-width="2"/>
+        
+        <path d="M 520 70 Q 550 70 550 100 Q 550 130 520 130 Q 490 130 490 100 Q 490 70 520 70" fill="none" stroke="#4a5568" stroke-width="2"/>
+        <text x="520" y="105" font-family="Arial" font-size="10" text-anchor="middle">Databáze</text>
+    </svg>
+    <div class="svg-caption">Obrázek 12.1: Model chování asynchronní komunikace v prostředí architektury Klient / Server skrze REST API.</div>
+</div>
+
+<h2>13. Důležité rozdíly k zapamatování</h2>
+<table>
+    <tr>
+        <th>Koncept A</th>
+        <th>Koncept B</th>
+        <th>Zásadní teoretický rozdíl</th>
+    </tr>
+    <tr>
+        <td><strong>Analýza systému</strong></td>
+        <td><strong>Návrh systému</strong></td>
+        <td>Analýza zkoumá <em>CO</em> má systém dělat a plnit. Návrh řeší, <em>JAK</em> bude systém technicky realizován a kódován.</td>
+    </tr>
+    <tr>
+        <td><strong>Funkční požadavky</strong></td>
+        <td><strong>Nefunkční požadavky</strong></td>
+        <td>Funkční: <em>CO</em> systém dělá (např. odesílá email). Nefunkční: <em>JAK DOBŘE</em> to dělá (např. odešle jej do 2 vteřin).</td>
+    </tr>
+    <tr>
+        <td><strong>Třída</strong></td>
+        <td><strong>Objekt</strong></td>
+        <td>Třída slouží jako abstraktní <em>šablona</em> obsahující definice. Objekt je už z ní stvořená <em>konkrétní instance</em> žijící v paměti.</td>
+    </tr>
+    <tr>
+        <td><strong>Strukturovaný návrh</strong></td>
+        <td><strong>OOP (Objektový návrh)</strong></td>
+        <td>Strukturovaný návrh striktně odděluje funkce a data. OOP data i chování spojuje přímo do objektů.</td>
+    </tr>
+    <tr>
+        <td><strong>Use Case diagram</strong></td>
+        <td><strong>Activity diagram</strong></td>
+        <td>Use Case ukazuje statický přehled toho, <em>jaké funkce</em> systém nabízí aktérům. Activity modeluje <em>algoritmus a tok činností</em> uvnitř (workflow).</td>
+    </tr>
+    <tr>
+        <td><strong>Activity diagram</strong></td>
+        <td><strong>Sequence diagram</strong></td>
+        <td>Activity = grafický model workflow. Sequence = chronologická <em>komunikace (zprávy) objektů v čase</em>.</td>
+    </tr>
+    <tr>
+        <td><strong>Agregace</strong></td>
+        <td><strong>Kompozice</strong></td>
+        <td>Obojí je vztah celek-část. Agregace = slabší vazba, část může existovat samostatně. Kompozice = silná vazba, část bez celku typicky nemůže existovat (zaniká s ním).</td>
+    </tr>
+    <tr>
+        <td><strong>Verifikace</strong></td>
+        <td><strong>Validace</strong></td>
+        <td>Verifikace = Děláme systém <em>správně</em> podle specifikace? Validace = Děláme <em>správný systém</em> (užitečný pro uživatele)?</td>
+    </tr>
+    <tr>
+        <td><strong>Unit test</strong></td>
+        <td><strong>Integrační test</strong></td>
+        <td>Unit test = Testuje pouze jedinou <em>izolovanou malou část</em> (třídu). Integrační test = Testuje <em>spolupráci</em> dvou a více částí napojených na sebe.</td>
+    </tr>
+    <tr>
+        <td><strong>Black-box test</strong></td>
+        <td><strong>White-box test</strong></td>
+        <td>Black-box = Tester aplikaci testuje absolutně <em>bez znalosti vnitřního kódu</em>. White-box = Tester aplikuje logické testy a pokrytí <em>se znalostí struktury kódu</em>.</td>
+    </tr>
+    <tr>
+        <td><strong>Singleton vzor</strong></td>
+        <td><strong>Factory vzor</strong></td>
+        <td>Singleton primárně řeší <em>omezený počet instancí</em> (striktně 1). Factory zastřešuje a řeší <em>komplexní způsob vytváření objektů</em>.</td>
+    </tr>
+    <tr>
+        <td><strong>Adapter vzor</strong></td>
+        <td><strong>Facade vzor</strong></td>
+        <td>Adapter <em>převádí nekompatibilní rozhraní</em> ke vzájemné spolupráci. Facade <em>zjednodušuje užívání</em> a vytváří bránu pro jinak velice složitý subsystém.</td>
+    </tr>
+    <tr>
+        <td><strong>Klient/Server</strong></td>
+        <td><strong>Peer-to-peer (P2P)</strong></td>
+        <td>Klient-server vyžaduje <em>jasné asymetrické role</em>. P2P tuto nadřazenost nemá, každý uzel sítě může operovat jako klient i server zároveň.</td>
+    </tr>
+</table>
+
+<h2>14. Typické doplňující otázky komise</h2>
+<ul>
+    <li><em>"Jaký model životního cyklu byste vybrali pro implementaci jednoduchého firmware komunikujícího přes SPI, pokud jsou hardwarové specifikace pevně a neměnně dané z dokumentace a proč?"</em> (Očekávaná odpověď: Vodopádový model, iterativní flexibilita zde není nutná z důvodu jistoty technických požadavků.)</li>
+    <li><em>"Vysvětlete na příkladu kompozitní vazbu v Class diagramu."</em> (Příklad: Faktura a její položky. Pokud zcela vymažete hlavičku Faktury, samostatně existující položky bez vazby absolutně ztrácejí význam.)</li>
+    <li><em>"Pokud při testování narazíte na selhání v propojení databázového a aplikačního modulu, do jaké vrstvy testovací pyramidy byste tento defekt zařadili a proč?"</em> (Odhalení patří do patra integračních testů, které validují stykové plochy modulů.)</li>
+</ul>
+
+<h2>15. Důležité pojmy ke zkoušce a jejich krátké popisy</h2>
+<div class="note">Následující seznam obsahuje nejpodstatnější klíčová slova k detailnímu průchodu otázkou před komisí.</div>
+<dl class="term-list">
+    <dt>Znovupoužitelnost (Reusability)</dt>
+    <dd>Vlastnost softwarového kódu nebo modulu, kdy může být znovu použit s minimálními úpravami v dalších částech projektu nebo v projektech zcela nových, což dramaticky snižuje finanční i časové náklady spojené s dodatečným vývojem. Vychází především ze správné OOP abstrakce a zapouzdření.</dd>
+    
+    <dt>CI/CD (Continuous Integration / Continuous Deployment)</dt>
+    <dd>DevOps metodologie označující automatizovanou integraci programového kódu z repozitáře (např. Gitu) a kontinuální, pravidelné automatizované nasazování balíčků do testovacího a provozního prostředí. Minimalizuje rizikovost velkých vydání.</dd>
+    
+    <dt>Defekt / Bug / Selhání</dt>
+    <dd>Defekt nebo potažmo bug je inherentní chyba přímo ve zdrojovém kódu programátora. Pojem selhání se však uplatňuje teprve ve chvíli, kdy se vinou existujícího defektu systém za běhu v interakci s uživatelem nezachová v souladu s očekávanou funkcionalitou a specifikací SRS.</dd>
+    
+    <dt>Trasovatelnost požadavků</dt>
+    <dd>Exaktní provázanost analytických požadavků po celou osu životního cyklu. Odhaluje, jaký primární Use Case byl implementován v jakých třídách v kódu a především jakými Unit testy je daný požadavek nakonec verifikován. Zajišťuje transparentnost vývoje.</dd>
+
+    <dt>Scénář použití (Use case scenario)</dt>
+    <dd>Narativní sled událostí definující jednu zcela specifickou interakci mezi vnějším aktérem a programovaným systémem, nutnou pro dosažení zamýšleného cíle uživatele (například popis procesu vložení materiálu).</dd>
+    
+    <dt>Testovací pokrytí (Code coverage / Test coverage)</dt>
+    <dd>Metrika v procentuálním vyjádření zjišťující exaktní míru toho, kolik procent aktuálního produkčního kódu bylo alespoň jedenkrát projito či ověřeno spuštěnou sadou jednotkových testů. Větší pokrytí zásadně koriguje riziko selhání po nasazení do produkce.</dd>
+
+    <dt>Normalizace databází</dt>
+    <dd>Algoritmický proces využívaný při strukturovaném návrhu systémů, koncipovaný pro potlačení datové redundance (zbytečného opakování údajů) a striktní zajištění sémantické integrity dat prostřednictvím definování relací.</dd>
+
+    <dt>Stavový diagram (State machine diagram)</dt>
+    <dd>Společně s modelem časových závislostí a sekvenčním modelem spadá pod behaviorální specifikace chování. Ztvárňuje stavy celého reaktivního bloku nebo jednoho složitého objektu (typické v řídicích logikách zařízení) a podněty, které vyvolají transformaci z jednoho stavu do nového.</dd>
+</dl>
+
+<h2>16. Shrnutí ke státnici v bodech</h2>
+<div class="note">
+    <ul>
+        <li>Oblast Softwarového inženýrství zastřešuje celý proces vývoje od získání požadavků po údržbu, a nekoncentruje se pouze na pasivní psaní kódu.</li>
+        <li>Tvorba SRS (Systémové specifikace) v analytické fázi zásadně redukuje chyby. Je nutno bezpečně rozeznat co systém dělá (analýza, funkční p.) od toho jak to dělá (návrh, nefunkční p.).</li>
+        <li>Životní cyklus (SDLC) tvoří linie: analýza, návrh, implementace, rozsáhlé testování, produkční nasazení a nejdražší údržba. Klasickým přechodem je změna od rigorózního vodopádového modelu k adaptivnímu agilnímu řízení.</li>
+        <li>Vhodnost objektově orientovaného vývoje spočívá na pilířích jako je striktní zapouzdření, mnohotvárný polymorfismus, hierarchická dědičnost a silná abstrakce.</li>
+        <li>Univerzální UML diagramy dělíme primárně na statické strukturální (Diagram tříd) a časové behaviorální (Diagram Případů užití, Diagram aktivit, Sekvenční předávání zpráv a Stavové/Časové vazby).</li>
+        <li>Nástroje verzování (Git a jeho sémantické koncepty vícenásobného větvení) předcházejí fatálním ztrátám a zjednodušují kooperaci.</li>
+        <li>Validace určuje shodu s uživatelským plánem; verifikace shodu s technickou specifikací systému. Testovací metodologie diktuje provádět množství rychlých Unit testů.</li>
+        <li>Návrhové vzory z portfolia GoF brání takzvanému vynalézání kola při řešení stejných problémů. Architektura REST Klient/Server odděluje prezentační roli aplikací a úložiště serverů.</li>
+    </ul>
+</div>
+
+</div>
+
+<script>
+    const topbar = document.getElementById('topbar');
+    const navToggle = document.getElementById('navToggle');
+    const navItems = document.querySelectorAll('.nav-item');
+    const navLinks = document.querySelectorAll('#site-nav > a');
+
+    function setMenu(open) {
+        topbar.classList.toggle('is-open', open);
+        navToggle.setAttribute('aria-expanded', String(open));
+        navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+    }
+
+    navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
+    navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
+    navItems.forEach((item) => {
+        const link = item.querySelector('a:first-child');
+        link.addEventListener('click', (e) => {
+            if (window.innerWidth <= 820 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
+                e.preventDefault();
+                item.classList.toggle('is-open');
+            }
+        });
+    });
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle')) {
+            navItems.forEach(item => item.classList.remove('is-open'));
+        }
+    });
+
+    // Vizuální přeformátování všech sekcí "Důležité pojmy" do přehledných karet.
+    function convertDefinitionListToCards(dl) {
+        const termsGrid = document.createElement('div');
+        termsGrid.className = 'terms-grid';
+        const terms = Array.from(dl.querySelectorAll('dt'));
+
+        function extractPart(text, label, nextLabel) {
+            const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const nextEscaped = nextLabel ? nextLabel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : null;
+            const pattern = nextEscaped
+                ? new RegExp(escaped + '\\s*(.*?)\\s*' + nextEscaped, 'i')
+                : new RegExp(escaped + '\\s*(.*)$', 'i');
+            const match = text.match(pattern);
+            return match ? match[1].trim() : '';
+        }
+
+        function symbolFromDescription(desc) {
+            const d = (desc || '').toLowerCase();
+            if (d.includes('stickman') || d.includes('postavi')) return '◯/\\';
+            if (d.includes('elips')) return '(   )';
+            if (d.includes('ráme') || d.includes('rame')) return '[   ]';
+            if (d.includes('plným kosočtvercem') || d.includes('plnym kosoctvercem')) return '◆──';
+            if (d.includes('prázdným kosočtvercem') || d.includes('prazdnym kosoctvercem')) return '◇──';
+            if (d.includes('kosočtverec') || d.includes('kosoctverec')) return '◇';
+            if (d.includes('přerušovan') || d.includes('prerusovan')) return '- - - >';
+            if (d.includes('šipka') || d.includes('sipka')) return '──▶';
+            if (d.includes('černý kruh') || d.includes('cerny kruh')) return '●';
+            if (d.includes('kroužek') || d.includes('krouzek')) return '◎';
+            if (d.includes('tlustá čára') || d.includes('tlusta cara')) return '█';
+            if (d.includes('hranatých závorkách') || d.includes('hranatych zavorkach')) return '[x>0]';
+            if (d.includes('rozhraní') || d.includes('rozhrani')) return '«I»';
+            if (d.includes('kurzív') || d.includes('kursiv') || d.includes('abstract')) return 'A*';
+            return '•';
+        }
+
+        terms.forEach((dt) => {
+            const dd = dt.nextElementSibling && dt.nextElementSibling.tagName === 'DD' ? dt.nextElementSibling : null;
+            const item = document.createElement('article');
+            item.className = 'term-item';
+
+            const title = document.createElement('h5');
+            title.textContent = dt.textContent.trim();
+
+            const raw = dd ? dd.textContent.trim() : '';
+            const what = extractPart(raw, 'Co to je:', 'K čemu se používá:');
+            const usage = extractPart(raw, 'K čemu se používá:', 'Jak se vyznačuje:');
+            const notation = extractPart(raw, 'Jak se vyznačuje:', null);
+
+            const text = document.createElement('p');
+            if (what || usage || notation) {
+                if (what) {
+                    const line = document.createElement('span');
+                    line.className = 'term-meta';
+                    line.innerHTML = '<strong>Co to je:</strong> ' + what;
+                    text.appendChild(line);
+                }
+                if (usage) {
+                    const line = document.createElement('span');
+                    line.className = 'term-meta';
+                    line.innerHTML = '<strong>K čemu se používá:</strong> ' + usage;
+                    text.appendChild(line);
+                }
+                if (notation) {
+                    const line = document.createElement('span');
+                    line.className = 'term-meta';
+                    line.innerHTML = '<strong>Jak se vyznačuje:</strong> ' + notation;
+                    text.appendChild(line);
+
+                    const symbol = document.createElement('span');
+                    symbol.className = 'term-symbol';
+                    symbol.textContent = symbolFromDescription(notation);
+                    text.appendChild(symbol);
+                }
+            } else {
+                text.textContent = raw;
+            }
+
+            item.appendChild(title);
+            item.appendChild(text);
+            termsGrid.appendChild(item);
+        });
+
+        dl.replaceWith(termsGrid);
+    }
+
+    const glossaryCards = document.querySelectorAll('.card');
+    glossaryCards.forEach((card) => {
+        const marker = card.querySelector('h4, strong');
+        if (!marker || !/Důležité pojmy/i.test(marker.textContent)) {
+            return;
+        }
+        const dl = card.querySelector('dl');
+        if (dl) {
+            convertDefinitionListToCards(dl);
+        }
+    });
+
+    const examGlossary = document.querySelector('dl.term-list');
+    if (examGlossary) {
+        convertDefinitionListToCards(examGlossary);
+    }
+</script>
+
+</body>
+</html>
