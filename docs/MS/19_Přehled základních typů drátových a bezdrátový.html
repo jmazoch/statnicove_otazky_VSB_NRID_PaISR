@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
@@ -629,35 +629,7 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
     </ul>
 </div>
 </div>
-<script>
-    const topbar = document.getElementById('topbar');
-    const navToggle = document.getElementById('navToggle');
-    const navItems = document.querySelectorAll('.nav-item');
-    const navLinks = document.querySelectorAll('#site-nav > a');
-
-    function setMenu(open) {
-        topbar.classList.toggle('is-open', open);
-        navToggle.setAttribute('aria-expanded', String(open));
-        navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
-    }
-
-    navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
-    navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
-    navItems.forEach((item) => {
-        const link = item.querySelector('a:first-child');
-        link.addEventListener('click', (e) => {
-            if (window.innerWidth <= 820 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
-                e.preventDefault();
-                item.classList.toggle('is-open');
-            }
-        });
-    });
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle')) {
-            navItems.forEach(item => item.classList.remove('is-open'));
-        }
-    });
-</script>
+<script defer src="../shared/navbar-inject.js"></script>
 
 </body>
 </html>

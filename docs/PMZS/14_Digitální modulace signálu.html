@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
@@ -872,23 +872,5 @@ R(t)=√(x²(t)+y²(t)),  θ(t)=atan2(y(t),x(t))</code></pre>
     </p>
   </div>
 </div>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const navToggle = document.getElementById('navToggle');
-    const topbar = document.getElementById('topbar');
-    if (navToggle) {
-      navToggle.addEventListener('click', function() {
-        topbar.classList.toggle('is-open');
-        navToggle.setAttribute('aria-expanded', topbar.classList.contains('is-open'));
-      });
-    }
-    const navLinks = document.querySelectorAll('.nav-links a, .nav-dropdown a');
-    navLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        topbar.classList.remove('is-open');
-        if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-  });
-</script></body>
+<script defer src="../shared/navbar-inject.js"></script></body>
 </html>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="cs">
 <head>
@@ -624,30 +624,6 @@ vout(t) = -VL, pokud vin(t) &lt; 0</code></pre>
     </p>
 </div>
 </div>
-<script>
-  // Mobile menu toggle
-  document.addEventListener('DOMContentLoaded', function() {
-    const navToggle = document.getElementById('navToggle');
-    const topbar = document.getElementById('topbar');
-    
-    if (navToggle) {
-      navToggle.addEventListener('click', function() {
-        topbar.classList.toggle('is-open');
-        navToggle.setAttribute('aria-expanded', topbar.classList.contains('is-open'));
-      });
-    }
-
-    // Close menu on link click
-    const navLinks = document.querySelectorAll('.nav-links a, .nav-dropdown a');
-    navLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        topbar.classList.remove('is-open');
-        if (navToggle) {
-          navToggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    });
-  });
-</script>
+<script defer src="../shared/navbar-inject.js"></script>
 </body>
 </html>

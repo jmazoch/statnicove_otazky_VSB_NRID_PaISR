@@ -1,4 +1,24 @@
 (function () {
+  const folderMatch = location.pathname.match(/\/(RS|PMZS|MS|PaISR)\//);
+  const currentFolder = folderMatch ? folderMatch[1] : '';
+
+  function toCurrentPageHref(path) {
+    if (!currentFolder) {
+      return path;
+    }
+
+    if (!path.includes('/')) {
+      return '../' + path;
+    }
+
+    const parts = path.split('/');
+    if (parts[0] === currentFolder) {
+      return parts.slice(1).join('/');
+    }
+
+    return '../' + path;
+  }
+
   const enabledByNumber = {
     "1": "RS/1_RS_synteza_spojitech_regulacnich_obvodu.html",
     "2": "RS/2_RS_prakticke_aspekty_pid_regulatoru.html",
@@ -35,13 +55,13 @@
 
     const number = match[1];
     if (enabledByNumber[number]) {
-      anchor.setAttribute("href", enabledByNumber[number]);
+      anchor.setAttribute("href", toCurrentPageHref(enabledByNumber[number]));
       anchor.classList.remove("nav-disabled");
       return;
     }
 
     if (fallbackByNumber[number]) {
-      anchor.setAttribute("href", fallbackByNumber[number]);
+      anchor.setAttribute("href", toCurrentPageHref(fallbackByNumber[number]));
       anchor.classList.add("nav-disabled");
     }
   });

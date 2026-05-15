@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
@@ -889,29 +889,5 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   </div>
 
 </div>
-<script>
-  // Mobile menu toggle
-  document.addEventListener('DOMContentLoaded', function() {
-    const navToggle = document.getElementById('navToggle');
-    const topbar = document.getElementById('topbar');
-    
-    if (navToggle) {
-      navToggle.addEventListener('click', function() {
-        topbar.classList.toggle('is-open');
-        navToggle.setAttribute('aria-expanded', topbar.classList.contains('is-open'));
-      });
-    }
-
-    // Close menu on link click
-    const navLinks = document.querySelectorAll('.nav-links a, .nav-dropdown a');
-    navLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        topbar.classList.remove('is-open');
-        if (navToggle) {
-          navToggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    });
-  });
-</script></body>
+<script defer src="../shared/navbar-inject.js"></script></body>
 </html>

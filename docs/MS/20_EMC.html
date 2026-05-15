@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
@@ -394,31 +394,7 @@
             <li><strong>Umělá zátěž vedení (LISN):</strong> Poskytuje normovanou impedanci a filtruje externí síť; je nezbytná pro mezinárodní <em>reprodukovatelnost a porovnatelnost</em> výsledků.</li>
         </ul>
     </div>
-    <script>
-      // Mobile menu toggle
-      document.addEventListener('DOMContentLoaded', function() {
-        const navToggle = document.getElementById('navToggle');
-        const topbar = document.getElementById('topbar');
-        
-        if (navToggle) {
-          navToggle.addEventListener('click', function() {
-            topbar.classList.toggle('is-open');
-            navToggle.setAttribute('aria-expanded', topbar.classList.contains('is-open'));
-          });
-        }
-
-        // Close menu on link click
-        const navLinks = document.querySelectorAll('.nav-links a, .nav-dropdown a');
-        navLinks.forEach(link => {
-          link.addEventListener('click', function() {
-            topbar.classList.remove('is-open');
-            if (navToggle) {
-              navToggle.setAttribute('aria-expanded', 'false');
-            }
-          });
-        });
-      });
-    </script>
+    <script defer src="../shared/navbar-inject.js"></script>
 </div>
 </body>
 </html>

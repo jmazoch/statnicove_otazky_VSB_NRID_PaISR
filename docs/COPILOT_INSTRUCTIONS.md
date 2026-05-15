@@ -11,8 +11,9 @@ docs/
 ├── index.html                  ← hlavní stránka s přehledem otázek
 ├── COPILOT_INSTRUCTIONS.md     ← tento soubor
 ├── shared/
-│   ├── navbar-styles.css       ← CSS pro navbar + gradient pozadí (importuje se v <head>)
-│   ├── nav-links.js            ← dynamicky patchuje href v navbar dropdownu (jen pro index.html)
+│   ├── navbar-styles.css       ← CSS pro navbar + gradient pozadí
+│   ├── nav-links.js            ← dynamicky patchuje href v navbar dropdownu podle dostupných otázek
+│   ├── navbar-inject.js        ← centrální zdroj navbaru a jeho chování pro všechny HTML stránky
 │   └── navbar-template.html    ← referenční šablona navbar HTML (jen pro čtení)
 ├── scripts/
 │   └── generate_index_nav.py   ← automaticky aktualizuje index.html a nav-links.js
@@ -21,24 +22,6 @@ docs/
 ├── PaISR/                      ← Předměty pro specializaci (FreeRTOS, Android, SWI...)
 └── RS/                         ← Regulační systémy (otázky 1–7, zatím nezpracované)
 ```
-
----
-
-## Aktuálně zpracované otázky
-
-| Soubor | Složka | Stav |
-|--------|--------|------|
-| `8_statnice_okenni_funkce.html` | PMZS | ✅ hotovo |
-| `9_statnice_frekvencni.html` | PMZS | ✅ hotovo |
-| `10_frekvencni_spektra_modulace.html` | PMZS | ✅ hotovo |
-| `11_Amplitudové analogové modulace, úhlové analogové modulace.html` | PMZS | ✅ hotovo |
-| `12_Systémy pro zpracování signálu.html` | PMZS | ✅ hotovo |
-| `19_Přehled základních typů drátových a bezdrátový.html` | MS | ✅ hotovo |
-| `20_EMC.html` | MS | ✅ hotovo |
-| `statnice_freertos.html` | PaISR | ✅ hotovo |
-| `mobilni_platformy_statnice.html` | PaISR | ✅ hotovo |
-
-Zbývá: RS 1–7, PMZS 13–14, MS 15–18, PaISR SWI
 
 ---
 
@@ -61,6 +44,7 @@ Zbývá: RS 1–7, PMZS 13–14, MS 15–18, PaISR SWI
 ### 3. Použij šablonu stránky (viz níže)
 
 Zkopíruj šablonu, vyplň obsah. Navbar je hardcoded v HTML — cesty jsou relativní k umístění souboru (`../index.html`, `../PMZS/8_...` atd.).
+Zkopíruj šablonu, vyplň obsah. Navbar se na stránkách načítá přes `shared/navbar-inject.js`, takže ho nekopíruj ručně do každého HTML souboru.
 
 ### 4. Spusť generátor pro automatickou aktualizaci index.html a nav-links.js
 

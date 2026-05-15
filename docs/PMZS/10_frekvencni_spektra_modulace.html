@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
@@ -833,36 +833,6 @@ f_s > 2f_{max}=2\cdot1005\,\text{kHz}=2010\,\text{kHz}
 <p class="small">Nízkofrekvenční signál je informační signál v základním pásmu, takže jeho spektrum leží kolem nulové frekvence. Spektrum je obecně komplexní, proto se popisuje magnitudou a fází. Magnitudové spektrum ukazuje velikost jednotlivých frekvenčních složek, fázové spektrum jejich posun. Při modulaci se informační signál převede na nosnou frekvenci \(f_c\). Ve frekvenční oblasti to znamená přesun spektra z okolí nuly do okolí nosné frekvence. U AM vzniká nosná a dvě postranní pásma, u DSB-SC jsou dvě postranní pásma bez nosné a u SSB pouze jedno postranní pásmo. Šířka pásma pásmového signálu je rozdíl horní a dolní mezní frekvence \(B_T=f_2-f_1\). Pro vzorkování signálu v základním pásmu platí \(f_s>2f_{max}\). U pásmových signálů s vysokou nosnou by to bylo nepraktické, proto se využívá pásmové vzorkování, kde rozhoduje obsazená šířka pásma. Zjednodušeně platí \(f_s>2B_T\), pokud se spektrální kopie po vzorkování nepřekryjí.</p>
 
 </div>
-<script>
-  const topbar = document.getElementById('topbar');
-  const navToggle = document.getElementById('navToggle');
-  const navItems = document.querySelectorAll('.nav-item');
-  const navLinks = document.querySelectorAll('#site-nav > a');
-
-  function setMenu(open) {
-    topbar.classList.toggle('is-open', open);
-    navToggle.setAttribute('aria-expanded', String(open));
-    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
-  }
-
-  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
-  navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
-
-  navItems.forEach((item) => {
-    const link = item.querySelector('a:first-child');
-    link.addEventListener('click', (e) => {
-      if (window.innerWidth <= 760 && (link.classList.contains('nav-disabled') || item.querySelector('.nav-dropdown'))) {
-        e.preventDefault();
-        item.classList.toggle('is-open');
-      }
-    });
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-item') && !e.target.closest('#navToggle')) {
-      navItems.forEach(item => item.classList.remove('is-open'));
-    }
-  });
-</script>
+<script defer src="../shared/navbar-inject.js"></script>
 </body>
 </html>

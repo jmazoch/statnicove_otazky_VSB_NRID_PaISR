@@ -2,7 +2,7 @@
 
 ## Overview
 
-Všechny HTML stránky teď používají jednotný navbar se stejným vzhledem a funkcionalitou.
+Všechny HTML stránky používají jednotný navbar načítaný ze shared injektoru, takže změny navigace stačí dělat na jednom místě.
 
 ## Struktura
 
@@ -10,7 +10,7 @@ Všechny HTML stránky teď používají jednotný navbar se stejným vzhledem a
 docs/
 ├── shared/
 │   ├── navbar-styles.css       # CSS styly pro navbar
-│   ├── navbar-inject.js        # JavaScript pro injektování navbaru (zatím nepoužívá se)
+│   ├── navbar-inject.js        # JavaScript pro injektování navbaru
 │   ├── navbar-template.html    # HTML šablona navbaru (pro referenci)
 │   └── nav-links.js            # Správa odkazů v dropdownech
 ├── 8_statnice_okenni_funkce.html
@@ -25,14 +25,13 @@ docs/
 
 ## Co se změnilo
 
-### 1. Vytvorené nové soubory
+### 1. Vytvořené nové soubory
 - `shared/navbar-styles.css` - CSS pro navbar
-- `shared/navbar-inject.js` - JavaScript injector (backup)
+- `shared/navbar-inject.js` - centrální JavaScript injector pro všechny HTML stránky
 - `shared/navbar-template.html` - HTML šablona (referenční)
 
 ### 2. Aktualizované HTML soubory
-- **12_Systémy pro zpracování signálu.html** - Přidán navbar HTML + CSS link + toggle script
-- **20_EMC.html** - Přidán toggle script pro mobil (navbar HTML už byl přítomný)
+- Všechny HTML soubory v `docs/` - inline navbar skripty nahrazeny společným injektorem
 
 ### 3. Ostatní soubory
 Tyto soubory již měly kompletní navbar s toggle skriptem:
@@ -82,12 +81,12 @@ Navbar se automaticky přizpůsobí mobilním zařízením:
 
 Pokud budete chtít změnit navbar na všech stránkách:
 
-1. Upravte HTML v libovolném souboru
-2. Kopírujte změní HTML do ostatních souborů (nahraďte celý `<header>` element)
-3. Nebo použijte `shared/navbar-template.html` jako referenční šablonu
+1. Upravte `shared/navbar-inject.js` a případně `shared/navbar-styles.css`
+2. Pokud se mění položky v dropdownu, upravte také `shared/nav-links.js`
+3. `shared/navbar-template.html` používejte jen jako referenční šablonu
 
 ## Reference
 
 - Hlavní styling: `shared/navbar-styles.css`
 - Link management: `shared/nav-links.js` (spravuje aktivní/neaktivní linky)
-- Mobile toggle: Každý HTML soubor má inline script pro toggle funkci
+- Mobile toggle: `shared/navbar-inject.js` připojuje chování pro celé menu

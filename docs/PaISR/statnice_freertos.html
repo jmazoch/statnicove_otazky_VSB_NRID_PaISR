@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
@@ -594,19 +594,6 @@ xQueueReceive(q, &received, portMAX_DELAY);</code></pre>
 </div>
 
 </div>
-<script>
-  const topbar = document.getElementById('topbar');
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.querySelectorAll('#site-nav a');
-
-  function setMenu(open) {
-    topbar.classList.toggle('is-open', open);
-    navToggle.setAttribute('aria-expanded', String(open));
-    navToggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
-  }
-
-  navToggle.addEventListener('click', () => setMenu(!topbar.classList.contains('is-open')));
-  navLinks.forEach((link) => link.addEventListener('click', () => setMenu(false)));
-</script>
+<script defer src="../shared/navbar-inject.js"></script>
 </body>
 </html>
