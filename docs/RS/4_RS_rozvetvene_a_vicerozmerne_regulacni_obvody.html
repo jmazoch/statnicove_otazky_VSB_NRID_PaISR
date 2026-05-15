@@ -280,7 +280,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <div class="eq">
     <div class="label">SISO tvar kompenzátoru poruchy</div>
     \[
-      R_2 = -rac{S_v}{S}
+      R_2 = -\frac{S_v}{S}
     \]
   </div>
 
@@ -339,12 +339,12 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <div class="eq">
     <div class="label">Vektory a matice v MIMO regulaci</div>
     \[
-      \mathbf{u}(s)=egin{bmatrix}u_1(s) \ u_2(s) \ dots \ u_m(s)\end{bmatrix},\qquad
-      \mathbf{y}(s)=egin{bmatrix}y_1(s) \ y_2(s) \ dots \ y_p(s)\end{bmatrix},\qquad
-      \mathbf{G}(s)=egin{bmatrix}
-        G_{11}(s) & G_{12}(s) & \cdots \
-        G_{21}(s) & G_{22}(s) & \cdots \
-        dots & dots & \ddots
+      \mathbf{u}(s)=\begin{bmatrix}u_1(s) \\ u_2(s) \\ \dots \\ u_m(s)\end{bmatrix},\qquad
+      \mathbf{y}(s)=\begin{bmatrix}y_1(s) \\ y_2(s) \\ \dots \\ y_p(s)\end{bmatrix},\qquad
+      \mathbf{G}(s)=\begin{bmatrix}
+        G_{11}(s) & G_{12}(s) & \cdots \\
+        G_{21}(s) & G_{22}(s) & \cdots \\
+        \dots & \dots & \ddots
       \end{bmatrix}
     \]
   </div>
@@ -353,13 +353,13 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <div class="eq">
     <div class="label">Přenosová matice 2×2</div>
     \[
-      egin{bmatrix}y_1 \ y_2\end{bmatrix}
+      \begin{bmatrix}y_1 \\ y_2\end{bmatrix}
       =
-      egin{bmatrix}
-        G_{11} & G_{12} \
+      \begin{bmatrix}
+        G_{11} & G_{12} \\
         G_{21} & G_{22}
       \end{bmatrix}
-      egin{bmatrix}u_1 \ u_2\end{bmatrix}
+      \begin{bmatrix}u_1 \\ u_2\end{bmatrix}
     \]
   </div>
 
@@ -380,8 +380,8 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
     <div class="label">Ideální autonomní tvar přenosové matice</div>
     \[
       \mathbf{G}_w(s)=
-      egin{bmatrix}
-        G_{w1}(s) & 0 \
+      \begin{bmatrix}
+        G_{w1}(s) & 0 \\
         0 & G_{w2}(s)
       \end{bmatrix}
     \]
@@ -402,7 +402,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
     \[
       G_{21} + G_{22}D_{21} = 0
       \quad\Rightarrow\quad
-      D_{21} = -rac{G_{21}}{G_{22}}
+      D_{21} = -\frac{G_{21}}{G_{22}}
     \]
   </div>
 
@@ -412,7 +412,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
     \[
       G_{12} + G_{11}D_{12} = 0
       \quad\Rightarrow\quad
-      D_{12} = -rac{G_{12}}{G_{11}}
+      D_{12} = -\frac{G_{12}}{G_{11}}
     \]
   </div>
 
