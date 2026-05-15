@@ -1,0 +1,695 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statická optimalizace</title>
+  <style>* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+h4 { font-size: 13px; font-weight: 700; color: #1a4a8a; margin: 12px 0 5px; }
+p { margin: 8px 0 10px; text-align: justify; }
+.def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; font-style: italic; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+.note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.ok { background:#eefaf0; border-left:4px solid #1b7f3a; padding:10px 16px; margin:12px 0; border-radius:0 6px 6px 0; font-size:14px; }
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f8ff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: #f5f8ff; border: 1px solid #c8d8f0; border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: #1a4a8a; margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+.toc { background: #f0f4fa; border: 1px solid #c0cfea; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+.toc h3 { color: #1a4a8a; margin-bottom: 10px; font-size: 14px; }
+.toc ol { font-size: 13px; }
+.toc li { margin-bottom: 3px; }
+.toc a { color: #1a4a8a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+pre { background:#0f172a; color:#e5e7eb; padding:12px 16px; border-radius:8px; overflow-x:auto; font-size:13px; line-height:1.45; margin:14px 0; }
+pre code { background: transparent; color: inherit; padding:0; }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
+.farr { font-size: 20px; color: #888; }
+hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
+.eq { background:#fbfdff; border:1px solid #c8d8f0; border-radius:8px; padding: 10px 14px; margin: 12px 0; overflow-x:auto; }
+.eq .label { font-size:12px; color:#666; font-style:italic; margin-bottom:4px; }
+.source { background:#fcfcfb; border:1px solid #e4e0d8; border-radius:8px; padding:12px 16px; margin:12px 0; }
+.source h4 { color:#6b4e00; margin-top:0; }
+.source p { font-size:14px; }
+.tag { display:inline-block; background:#eef4ff; border:1px solid #c8d8f0; color:#1a4a8a; border-radius:999px; padding:2px 9px; margin:3px 3px 3px 0; font-size:12px; font-weight:700; }
+.small { font-size:13px; color:#555; }
+@media (max-width: 760px) { .page { padding: 26px 22px; } .grid2, .grid3 { grid-template-columns: 1fr; } }
+@media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } .toc { break-inside: avoid; } }
+  </style>
+  <link rel="stylesheet" href="../shared/navbar-styles.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="../index.html" aria-label="Hlavní stránka">
+      <strong>Státnicové otázky</strong>
+      <span>README a přehled vypracovaných HTML otázek</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Otevřít menu" id="navToggle">
+      <span aria-hidden="true"></span>
+    </button>
+    <nav class="nav-links" id="site-nav">
+      <a href="../index.html">Main</a>
+      <a href="../index.html#otazky">Otázky</a>
+      
+      <div class="nav-item" id="nav-rs">
+        <a href="../index.html#rs">RS (1–7) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">1. Syntéza spojitých regulačních...</a>
+          <a href="#" class="nav-disabled">2. Praktické aspekty PID...</a>
+          <a href="#" class="nav-disabled">3. Stavová regulace</a>
+          <a href="#" class="nav-disabled">4. Rozvětvené a vícerozměrné...</a>
+          <a href="#" class="nav-disabled">5. Syntéza nelineárních...</a>
+          <a href="6_staticka_optimalizace.html">6. Statická optimalizace</a>
+          <a href="#" class="nav-disabled">7. Dynamická optimalizace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-pmzs">
+        <a href="../index.html#pmzs">PMZS (8–14) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="8_statnice_okenni_funkce.html">8. Váhové okenní funkce</a>
+          <a href="9_statnice_frekvencni.html">9. Analýzy diskrétního signálu</a>
+          <a href="10_frekvencni_spektra_modulace.html">10. Frekvenční spektra...</a>
+          <a href="11_Amplitudové analogové modulace, úhlové analogové modulace.html">11. Amplitudové modulace...</a>
+          <a href="12_Systémy pro zpracování signálu.html">12. Systémy pro zpracování...</a>
+          <a href="13_prevody_PCM_PAM_PWM_PPM_PNM.html">13. Převod analogové...</a>
+          <a href="14_Digitální modulace signálu.html">14. Digitální modulace</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-ms">
+        <a href="../index.html#ms">MS (15–20) <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-disabled">15. Vlastnosti měřicího systému</a>
+          <a href="#" class="nav-disabled">16. Příčiny chyb...</a>
+          <a href="#" class="nav-disabled">17. Statistické parametry...</a>
+          <a href="#" class="nav-disabled">18. Statické a dynamické...</a>
+          <a href="#" class="nav-disabled">19. Drátové a bezdrátové...</a>
+          <a href="../MS/20_EMC.html">20. EMC a kvalita signálu</a>
+        </div>
+      </div>
+      
+      <div class="nav-item" id="nav-paisr">
+        <a href="../index.html#paisr">PaISR <span class="nav-chevron">▼</span></a>
+        <div class="nav-dropdown">
+          <a href="../PaISR/statnice_freertos.html">FreeRTOS</a>
+          <a href="../PaISR/SW_Engineering.html">SWI</a>
+          <a href="../PaISR/mobilni_platformy_statnice.html">Android</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+<div class="page">
+
+  <h1>Statická optimalizace</h1>
+  <p class="subtitle">Vypracovaná státnicová otázka · Řídicí systémy · Podklady: Otázky státnice RS</p>
+
+  <div class="toc">
+    <h3>Obsah</h3>
+    <ol>
+      <li><a href="#s1">Zadání a základní smysl statické optimalizace</a></li>
+      <li><a href="#s2">Kategorizace statických optimalizačních úloh</a></li>
+      <li><a href="#s3">Metody řešení statických optimalizačních úloh</a></li>
+      <li><a href="#s4">Analytické metody bez omezení</a></li>
+      <li><a href="#s5">Analytické metody s omezeními</a></li>
+      <li><a href="#s6">Numerické metody bez omezení</a></li>
+      <li><a href="#s7">Numerické metody s omezeními</a></li>
+      <li><a href="#s8">Převod vázaného extrému na volný extrém</a></li>
+      <li><a href="#s9">Co určitě umět říct u státnic</a></li>
+    </ol>
+  </div>
+
+  <h2 id="s1">1. Zadání a základní smysl statické optimalizace</h2>
+  <div class="source">
+    <h4>Zadání otázky</h4>
+    <p><strong>6. Statická optimalizace.</strong> Formulace a kategorizace statických optimalizačních úloh a základní metody jejich řešení. Analytické a numerické přístupy k řešení nelineárních optimalizačních úloh (NLP). Řešení úloh s rovnostními a nerovnostními omezeními. Převod úlohy s vázaným extrémem na úlohu hledání volného extrému.</p>
+  </div>
+
+  <div class="def">Statická optimalizace hledá nejlepší hodnotu rozhodovacích proměnných pro danou účelovou funkci, přičemž výsledné řešení není funkcí času.</div>
+
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p>Optimalizace patří k základním principům technických i ekonomických rozhodovacích procesů. Cílem je nalézt nejlepší možné řešení – takové, které při daných podmínkách maximalizuje požadovaný efekt nebo minimalizuje náklady, čas, energii či jiné zdroje.</p>
+    <p>Při problému statické optimalizace není nalezené řešení funkcí času.<br>Výsledkem může být optimální tvar, nastavení, rozdělení zdrojů či hodnota parametru modelu – zkrátka libovolná veličina, která se v čase nemění.</p>
+  </div>
+
+  <p>Prakticky řečeno: u statické optimalizace nehledáme trajektorii v čase, ale jednu nejlepší kombinaci hodnot. Třeba optimální nastavení parametru regulátoru, rozdělení výkonu, minimum spotřeby nebo maximum účinnosti. Dynamická optimalizace už by řešila průběh řízení v čase, statická optimalizace je spíš „najdi nejlepší bod v krajině“.</p>
+
+  <div class="flow">
+    <div class="fbox">rozhodovací proměnné x</div>
+    <div class="farr">→</div>
+    <div class="fbox">účelová funkce f(x)</div>
+    <div class="farr">→</div>
+    <div class="fbox">omezení h(x), g(x)</div>
+    <div class="farr">→</div>
+    <div class="fbox">optimální bod x*</div>
+  </div>
+
+  <div class="note">Jedna věta na začátek odpovědi: Statická optimalizace řeší, jak z množiny přípustných řešení vybrat takové řešení, které minimalizuje nebo maximalizuje účelovou funkci, a výsledek není časový průběh, ale konkrétní hodnota nebo vektor hodnot.</div>
+
+  <hr class="sec">
+
+  <h2 id="s2">2. Kategorizace statických optimalizačních úloh</h2>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Kategorizace stat. úloh</strong></p>
+    <p><strong>1. Podle přítomnosti omezení</strong></p>
+    <p>Úloha bez omezení (volný extrém) znamená, že hledaná veličina může nabývat libovolných hodnot z definičního oboru. Naopak u úloh s omezeními (vázaný extrém) je řešení omezeno jednou či více podmínkami, které mohou mít tvar rovnic nebo nerovností.</p>
+    <p><strong>2. Podle linearity</strong></p>
+    <p>U lineárních úloh jsou jak účelová funkce, tak i všechny omezující podmínky lineární.<br>Tyto úlohy tvoří základní třídu optimalizačních problémů a lze je řešit přesně a efektivně pomocí metod lineárního programování.</p>
+    <p>Naopak nelineární úlohy obsahují alespoň jeden nelineární vztah – ať už v účelové funkci nebo v omezujících podmínkách. Takové úlohy bývají obecně složitější a vyžadují speciální metody (např. gradientní, Newtonovy, SQP či bariérové metody). Tento typ zahrnuje většinu reálných inženýrských a fyzikálních problémů.</p>
+    <p><strong>3. Podle charakteru proměnných</strong></p>
+    <p>U spojitých úloh nabývají rozhodovací proměnné hodnot z reálného prostoru x⊂Rn, což je typické pro většinu úloh v oblasti techniky, fyziky nebo ekonomiky. Diskrétní úlohy naopak pracují s proměnnými, které mohou nabývat pouze určitých konečných nebo celočíselných hodnot. Speciálním případem jsou binární úlohy, kde proměnné mohou nabývat pouze hodnot 0 nebo 1 (např. volba zapnuto/vypnuto, ano/ne).</p>
+  </div>
+
+  <table>
+    <tr>
+      <th>Hledisko</th>
+      <th>Typy úloh</th>
+      <th>Jak to říct u zkoušky</th>
+    </tr>
+    <tr>
+      <td>Podle omezení</td>
+      <td>bez omezení / s omezeními</td>
+      <td>Bez omezení hledám volný extrém. S omezeními hledám vázaný extrém v přípustné oblasti.</td>
+    </tr>
+    <tr>
+      <td>Podle linearity</td>
+      <td>lineární / nelineární</td>
+      <td>Lineární úlohy mají lineární účelovou funkci i omezení. Nelineární úlohy mají alespoň jeden nelineární vztah.</td>
+    </tr>
+    <tr>
+      <td>Podle proměnných</td>
+      <td>spojité / diskrétní / binární</td>
+      <td>Spojité proměnné jsou reálné hodnoty, diskrétní jsou konečná nebo celočíselná množina, binární jsou 0/1.</td>
+    </tr>
+  </table>
+
+  <div class="grid3">
+    <div class="card">
+      <h4>Volný extrém</h4>
+      <p>Hledáme optimum bez vazeb. Typicky řešíme derivace, gradient a Hessovu matici.</p>
+    </div>
+    <div class="card">
+      <h4>Vázaný extrém</h4>
+      <p>Optimum musí splnit rovnosti nebo nerovnosti. Nastupuje Lagrange, KKT, penalizace nebo bariéry.</p>
+    </div>
+    <div class="card">
+      <h4>NLP</h4>
+      <p>Nelineární programování. Něco v účelové funkci nebo omezení je nelineární, takže problém je mastnější než rohlík v menze.</p>
+    </div>
+  </div>
+
+  <div class="danger">Pozor: u lineární účelové funkce v neomezeném prostoru typicky nenajdeme klasický vnitřní extrém. U lineárního programování vzniká optimum až díky omezením, často na hraně přípustné oblasti.</div>
+
+  <hr class="sec">
+
+  <h2 id="s3">3. Metody řešení statických optimalizačních úloh</h2>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Metody řešení stat. optimal. úloh:</strong></p>
+    <p><strong>Analytické metody</strong></p>
+    <p>Analytické metody umožňují nalézt přesné (symbolické) řešení optimalizační úlohy.</p>
+    <p>Používají se především tam, kde má účelová funkce známý matematický tvar a kde lze vyjádřit derivace explicitně. U analytických přístupů nemá smysl zavádět dělení na lineární/nelineární, protože lineární úlohy tam extrém ani nemají.</p>
+  </div>
+
+  <table>
+    <tr>
+      <th>Přístup</th>
+      <th>Princip</th>
+      <th>Kdy se hodí</th>
+    </tr>
+    <tr>
+      <td>Analytický</td>
+      <td>Odvodím podmínky optima symbolicky, typicky přes derivace.</td>
+      <td>Malé, přehledné úlohy se známým matematickým tvarem.</td>
+    </tr>
+    <tr>
+      <td>Numerický</td>
+      <td>Iterativně počítám přiblížení optima pomocí algoritmu.</td>
+      <td>Reálné inženýrské úlohy, složité funkce, hodně proměnných, omezení.</td>
+    </tr>
+  </table>
+
+  <div class="note">Na státnice to můžeš rozdělit jako dvě větve: analyticky, kde hledáš přesné řešení přes derivace, a numericky, kde počítač krok za krokem leze k optimu. Prostě matematická turistika, jen místo kopce máš gradient.</div>
+
+  <hr class="sec">
+
+  <h2 id="s4">4. Analytické metody bez omezení</h2>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Bez omezení:</strong> hledání stacionárních bodů účelové funkce, ověření pomocí Hessovy matice.</p>
+    <p>Analyticky řešitelné případy úloh bez omezení se řeší hledáním stacionárních bodů účelové funkce – tam, kde je její gradient nulový (∇f = 0). Tyto body představují pouze kandidáty na extrém a je nutné je následně ověřit pomocí vhodných testů (např. druhé derivace pro 1D nebo Hessovy matice pro vícerozměrnou funkci.</p>
+  </div>
+
+  <div class="eq">
+    <div class="label">Podmínka stacionárního bodu</div>
+    \[
+      \nabla f(x) = 0
+    \]
+  </div>
+
+  <p>Gradient říká směr největšího růstu funkce. Když je gradient nulový, funkce se v daném bodě „lokálně nehýbe“. To ale ještě neznamená automaticky minimum. Může to být minimum, maximum nebo sedlový bod.</p>
+
+  <table>
+    <tr>
+      <th>Test</th>
+      <th>Co zjišťuje</th>
+      <th>Interpretace</th>
+    </tr>
+    <tr>
+      <td>1D druhá derivace</td>
+      <td>Znaménko \(f''(x)\)</td>
+      <td>\(f''(x) &gt; 0\) minimum, \(f''(x) &lt; 0\) maximum.</td>
+    </tr>
+    <tr>
+      <td>Hessova matice</td>
+      <td>Matice druhých parciálních derivací</td>
+      <td>Pozitivně definitní Hessian znamená lokální minimum, negativně definitní lokální maximum, neurčitý sedlový bod.</td>
+    </tr>
+  </table>
+
+  <div class="eq">
+    <div class="label">Hessova matice pro více proměnných</div>
+    \[
+      H_f(x)=
+      \begin{bmatrix}
+      \frac{\partial^2 f}{\partial x_1^2} & \cdots & \frac{\partial^2 f}{\partial x_1 \partial x_n} \\
+      \vdots & \ddots & \vdots \\
+      \frac{\partial^2 f}{\partial x_n \partial x_1} & \cdots & \frac{\partial^2 f}{\partial x_n^2}
+      \end{bmatrix}
+    \]
+  </div>
+
+  <div class="note">Mluveně: „Nejdřív najdu kandidáty na extrém z rovnice nulového gradientu. Pak pomocí Hessovy matice ověřím, jestli jde o minimum, maximum, nebo sedlový bod.“</div>
+
+  <hr class="sec">
+
+  <h2 id="s5">5. Analytické metody s omezeními</h2>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>S omezeními:</strong> využití Lagrangeových multiplikátorů pro rovnostní podmínky a KKT podmínek pro nerovnosti.</p>
+    <p>Analyticky řešitelné případy nelineárního programování (NLP) se specifickou strukturou a s omezeními ve tvaru rovností se řeší metodou zvanou&nbsp; Lagrangeovy multiplikátory. Umožňují nalézt extrémy funkce při rovnostních vazbách formou řešení soustavy rovnic bez nutnosti použití numerických metod.</p>
+    <p><strong>Metoda Langrangeovy multipl.</strong></p>
+    <p>Podstata metody spočívá v redukci problému s vazbami na problém minimalizace bez vazebních podmínek pomocí tzv. Lagrangeové fce. „L“.</p>
+  </div>
+
+  <div class="eq">
+    <div class="label">Rovnostní vazební podmínky, rovnice z podkladů</div>
+    \[
+      h_i(x)=0, \qquad i=1,\ldots,m, \quad m&lt;n
+    \]
+  </div>
+
+  <p>Pokud má úloha rovnostní omezení, nehledáme optimum všude, ale pouze na množině bodů, které splňují vazbu. Lagrangeova metoda k původní funkci přidá omezení vynásobená multiplikátory. Tím vznikne jedna pomocná funkce, Lagrangián.</p>
+
+  <div class="eq">
+    <div class="label">Lagrangeova funkce, rovnice z podkladů</div>
+    \[
+      L(x,\lambda)=f(x)+\sum_{j=1}^{m}\lambda_j h_j(x)
+    \]
+  </div>
+
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Sestavení L:</strong> K původní účelové funkci se přičtou omezující podmínky vynásobené neurčitými koeficienty , které nazýváme Lagrangeovy multiplikátory</p>
+    <p><strong>Hledání stacionárních bodů:</strong> Extrém se hledá řešením soustavy rovnic, kde parciální derivace Lagrangiánu podle všech proměnných () a všech multiplikátorů () musí být rovny nule</p>
+    <p>Tímto postupem vznikne soustava rovnic, jejímž vyřešením získáme optimální hodnoty proměnných a multiplikátorů</p>
+    <p>Postačující podmínky pro extrém (zda jde o min nebo max) se zjistí z&nbsp;Hessovy matice Lagrangeovy funkce L (druhé parciální derivace).</p>
+  </div>
+
+  <div class="eq">
+    <div class="label">Stacionarita Lagrangiánu</div>
+    \[
+      \frac{\partial L}{\partial x_i}=0, \qquad
+      \frac{\partial L}{\partial \lambda_j}=0
+    \]
+  </div>
+
+  <div class="note">V podkladech jsou v textu u „neurčitých koeficientů“ a závorek prázdná místa. Významově jde o multiplikátory \(\lambda_j\), proměnné \(x_i\) a multiplikátory \(\lambda_j\). Nechtěl jsem to schovat pod koberec, protože přesně takové malé díry pak u zkoušky koušou do kotníku.</div>
+
+  <h3>KKT podmínky a nerovnosti</h3>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p>Původní metodu pro rovnosti lze zobecnit na úlohy s nerovnostmi () pomocí tzv. Kuhn-Tuckerových (KKT) podmínek. V praxi se to často řeší převedením nerovnosti na rovnost zavedením pomocných, tzv. slack proměnných (), čímž se problém opět převede do tvaru vhodného pro Lagrangeovy multiplikátory.</p>
+  </div>
+
+  <div class="eq">
+    <div class="label">Nerovnostní omezení, běžný tvar</div>
+    \[
+      g_i(x) \le 0
+    \]
+  </div>
+
+  <p>KKT podmínky jsou rozšíření Lagrangeovy metody pro úlohy s nerovnostmi. Přidávají nejen stacionaritu a splnění omezení, ale také podmínku nezápornosti multiplikátorů a komplementaritu.</p>
+
+  <div class="eq">
+    <div class="label">Základní tvar KKT podmínek pro rovnosti a nerovnosti</div>
+    \[
+    \begin{aligned}
+      \nabla_x L(x,\lambda,\mu) &= 0 \\
+      h_i(x) &= 0 \\
+      g_j(x) &\le 0 \\
+      \mu_j &\ge 0 \\
+      \mu_j g_j(x) &= 0
+    \end{aligned}
+    \]
+  </div>
+
+  <div class="note">Komplementarita \(\mu_j g_j(x)=0\) říká elegantní věc: buď je omezení aktivní na hranici, nebo jeho multiplikátor nemá co dělat a je nulový. Je to takový matematický hlídač dveří.</div>
+
+  <hr class="sec">
+
+  <h2 id="s6">6. Numerické metody bez omezení</h2>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Numerické metody</strong></p>
+    <p>Numerické metody využívají iterační výpočty, které postupně přibližují optimální řešení.<br>Používají se zejména tehdy, když analytické řešení není možné nebo by bylo příliš složité.</p>
+    <p>V&nbsp;drtivé většině úloh převažují numerické metody řešené s&nbsp;pomocí výpočetní techniky. Jsou implementovány v celé řadě softwarových řešičů (např. Matlab/fmincon)</p>
+    <p><strong>Bez omezení:</strong></p>
+    <ul>
+      <li>Metody přímého hledání (např. metoda pružných polyedrů)</li>
+      <li>Gradientní metody (využívají 1. derivace)</li>
+      <li>Newtonova metoda (využívá 2. derivace)</li>
+    </ul>
+    <p>Algoritmus "kráčí" z kopce (proti směru gradientu), dokud nedosáhne bodu, kde je gradient nulový (minimum).</p>
+  </div>
+
+  <table>
+    <tr>
+      <th>Metoda</th>
+      <th>Co používá</th>
+      <th>Charakter</th>
+    </tr>
+    <tr>
+      <td>Přímé hledání</td>
+      <td>Hodnoty funkce, ne derivace</td>
+      <td>Vhodné, když derivace nejsou dostupné nebo jsou nespolehlivé.</td>
+    </tr>
+    <tr>
+      <td>Gradientní metoda</td>
+      <td>První derivace, gradient</td>
+      <td>Krok proti směru gradientu u minimalizace.</td>
+    </tr>
+    <tr>
+      <td>Newtonova metoda</td>
+      <td>První i druhé derivace, Hessian</td>
+      <td>Rychlá blízko optima, ale citlivější a výpočetně těžší.</td>
+    </tr>
+  </table>
+
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Gradientní metody pro hledání volného extrému</strong></p>
+    <p>Slouží k&nbsp;nalezení minima nebo maxima funkce více proměnných, přičemž využívají první derivace(gradienty) funkce</p>
+    <p><strong>Princip</strong></p>
+    <p>Iterativně se přibližuje k&nbsp;optimálnímu bodu x*, který minimalizuje (nebo maximalizuje fci)</p>
+    <p>Bod xk+1 se odvozuje z&nbsp;předchozího bodu xk podle vzorce:</p>
+  </div>
+
+  <div class="eq">
+    <div class="label">Iterační vztah, rovnice z podkladů</div>
+    \[
+      x_{k+1}=x_k+\Delta x_k=x_k+\alpha_k s_k
+    \]
+  </div>
+
+  <div class="eq">
+    <div class="label">Popis symbolů, rovnice z podkladů</div>
+    \[
+      \alpha_k \;\text{- skalární skok}
+    \]
+    \[
+      s_k \;\text{- směr pohybu}
+    \]
+  </div>
+
+  <p>V tomto zápisu je \(x_k\) aktuální bod, \(x_{k+1}\) nový bod, \(s_k\) směr pohybu a \(\alpha_k\) délka kroku. U minimalizace bývá základní volba směru \(s_k=-\nabla f(x_k)\), tedy proti gradientu.</p>
+
+  <div class="eq">
+    <div class="label">Typická gradientní metoda pro minimalizaci</div>
+    \[
+      x_{k+1}=x_k-\alpha_k \nabla f(x_k)
+    \]
+  </div>
+
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p>V&nbsp;matlabu pomocí fce fmincon()</p>
+  </div>
+
+  <div class="danger">Technická poznámka: <code>fmincon()</code> je v MATLABu hlavně řešič pro úlohy s omezeními. Pro neomezené úlohy se často používá například <code>fminunc()</code>. Ale protože v podkladech je uvedený <code>fmincon()</code>, nechávám ho v textu 1:1 a jen doplňuji vysvětlení.</div>
+
+  <hr class="sec">
+
+  <h2 id="s7">7. Numerické metody s omezeními</h2>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>S&nbsp;omezením:</strong></p>
+    <p>Každou úlohu nelineárního programování (NLP) s omezeními lze převést na úlohu bez omezení, typicky pomocí:</p>
+    <ul>
+      <li>penalizačních metod (quadratic penalty),</li>
+      <li>bariérových metod (log-bariéry),</li>
+      <li>Augmented Lagrangian Method (ALM)</li>
+    </ul>
+  </div>
+
+  <div class="grid3">
+    <div class="card">
+      <h4>Penalizace</h4>
+      <p>Porušení omezení přidá trest do účelové funkce.</p>
+    </div>
+    <div class="card">
+      <h4>Bariéra</h4>
+      <p>Řešení zůstává uvnitř přípustné oblasti, protože hranice je „zakázaná zeď“.</p>
+    </div>
+    <div class="card">
+      <h4>ALM</h4>
+      <p>Kombinuje Lagrangeovy multiplikátory a penalizační člen.</p>
+    </div>
+  </div>
+
+  <h3>Penalizační metody</h3>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Penalizační metody:</strong></p>
+    <p>U penalizačních funkcí přidaný člen q penalizuje porušení omezení, a tím „tlačí“ řešení do přípustné oblasti.</p>
+    <p>Definujeme novou účelovou funkci F(x) bez omezujících podmínek:</p>
+  </div>
+
+  <div class="eq">
+    <div class="label">Kvadratická penalizace, rovnice z podkladů</div>
+    \[
+      F(x)=f(x)+\frac{\rho}{2}\sum_{i=1}^{m}\left(h_i(x)\right)^2,
+    \]
+  </div>
+
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p>ρ&gt;0: Parametr penalizace, který určuje váhu porušení omezení.</p>
+    <p>Pracuje mimo přípustnou oblast - penalizuje</p>
+  </div>
+
+  <p>Penalizační metoda vezme omezenou úlohu a udělá z ní neomezenou tím, že ke špatným bodům přidá pokutu. Když bod poruší omezení, hodnota \(F(x)\) naroste. Algoritmus pak přirozeně preferuje body, které omezení splňují.</p>
+
+  <h3>Bariérová metoda</h3>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Bariérová metoda:</strong></p>
+    <p>Barrierové metody řeší optimalizační úlohy s nerovnostními omezeními tak, že do účelové funkce přidají bariérový člen, který brání tomu, aby řešení vstoupilo do zakázané oblasti (kde je některé omezení porušeno).</p>
+    <p>Jde o neomezené řešení problému, avšak pouze uvnitř přípustné oblasti.</p>
+    <p>Nová účelová funkce (barrier function)</p>
+  </div>
+
+  <div class="eq">
+    <div class="label">Nerovnostní omezení, rovnice z podkladů</div>
+    \[
+      g_i(x) \le 0
+    \]
+  </div>
+
+  <div class="eq">
+    <div class="label">Logaritmická bariéra, rovnice z podkladů</div>
+    \[
+      F(x)=f(x)-\frac{1}{\mu}\sum_{i=1}^{m}\ln\left(-g_i(x)\right),
+    \]
+  </div>
+
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p>Optimalizaci provádíme uvnitř povolené oblasti a postupně snižujeme parametr µ , čímž se bariéra stává prudší a řešení se přibližuje k hranici přípustné oblasti, kde leží skutečné optimum.</p>
+    <p>Není možné dostat se mimo tuto oblast.</p>
+  </div>
+
+  <div class="eq">
+    <div class="label">Parametr bariéry a bariérový člen, rovnice z podkladů</div>
+    \[
+      \mu &gt; 0
+    \]
+    \[
+      -\frac{1}{\mu}\ln\left(-g_i(x)\right)
+    \]
+  </div>
+
+  <p>U logaritmické bariéry musí platit \(g_i(x)&lt;0\), protože logaritmus \(\ln(-g_i(x))\) je definovaný jen uvnitř přípustné oblasti. Když se řešení blíží k hranici \(g_i(x)\to 0^-\), bariérový člen roste k nekonečnu a algoritmus je odražen zpět dovnitř.</p>
+
+  <div class="eq">
+    <div class="label">Chování na hranici přípustné oblasti</div>
+    \[
+      g_i(x)\to 0^- \quad \Rightarrow \quad -\ln(-g_i(x))\to +\infty
+    \]
+  </div>
+
+  <h3>ALM - rozšířený Lagrangeův multiplikátor</h3>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>ALM – rozšířený langrang. Multiplikátor</strong></p>
+    <p>Kombinace Langr. mult. a Q-penalizace</p>
+  </div>
+
+  <p>ALM, tedy Augmented Lagrangian Method, spojuje výhodu Lagrangeových multiplikátorů s penalizačním členem. Intuitivně: Lagrange řeší vazby elegantně, penalizace trestá jejich porušení. ALM si vezme oboje a udělá z toho praktičtější numerickou metodu.</p>
+
+  <div class="eq">
+    <div class="label">Typický tvar rozšířeného Lagrangiánu pro rovnostní omezení</div>
+    \[
+      L_A(x,\lambda,\rho)=f(x)+\sum_{i=1}^{m}\lambda_i h_i(x)+\frac{\rho}{2}\sum_{i=1}^{m}\left(h_i(x)\right)^2
+    \]
+  </div>
+
+  <hr class="sec">
+
+  <h2 id="s8">8. Převod vázaného extrému na volný extrém</h2>
+  <div class="source">
+    <h4>Text 1:1 z podkladů</h4>
+    <p><strong>Řešení úloh s rovnostními a nerovnostními omezeními. Převod úlohy s vázaným extrémem na úlohu hledání volného extrému.</strong></p>
+    <p>Když máme omezení, neumíme to řešit přímo. Proto to převedeme na úlohu bez omezení. U analytiky k tomu slouží Lagrange, u numeriky penalizační a bariérové funkce. Tím z vázaného problému uděláme volný, který už umíme zderivovat nebo prochodit gradientem (neboli metodami bez omezení</p>
+  </div>
+
+  <div class="flow">
+    <div class="fbox">vázaný extrém</div>
+    <div class="farr">→</div>
+    <div class="fbox">Lagrange / KKT / penalizace / bariéra</div>
+    <div class="farr">→</div>
+    <div class="fbox">nová funkce bez omezení</div>
+    <div class="farr">→</div>
+    <div class="fbox">řešení metodou volného extrému</div>
+  </div>
+
+  <table>
+    <tr>
+      <th>Omezení</th>
+      <th>Analytický převod</th>
+      <th>Numerický převod</th>
+    </tr>
+    <tr>
+      <td>Rovnost \(h_i(x)=0\)</td>
+      <td>Lagrangeova funkce</td>
+      <td>Kvadratická penalizace, ALM</td>
+    </tr>
+    <tr>
+      <td>Nerovnost \(g_i(x)\le0\)</td>
+      <td>KKT podmínky, případně slack proměnné</td>
+      <td>Bariérové metody, penalizační metody, SQP, ALM</td>
+    </tr>
+  </table>
+
+  <div class="ok">Nejdůležitější myšlenka celé otázky: omezenou úlohu se snažíme převést do takového tvaru, který lze řešit jako neomezenou optimalizaci. To je přesně ten most mezi Lagrangem, penalizací, bariérou a gradientními metodami.</div>
+
+  <hr class="sec">
+
+  <h2 id="s9">9. Co určitě umět říct u státnic</h2>
+  <div class="note">
+    <p><strong>Mluvené minimum:</strong> Statická optimalizace hledá nejlepší hodnoty proměnných, které nejsou funkcí času. Nejprve zformuluji účelovou funkci, kterou minimalizuji nebo maximalizuji, a případně přidám omezení. Úlohy dělíme podle omezení na volný a vázaný extrém, podle linearity na lineární a nelineární a podle proměnných na spojité, diskrétní a binární.</p>
+    <p>U analytických metod bez omezení hledám stacionární body, tedy body, kde je gradient nulový. Potom ověřuji typ extrému pomocí druhé derivace nebo Hessovy matice. U úloh s rovnostními omezeními použiju Lagrangeovy multiplikátory, kde vytvořím Lagrangeovu funkci a řeším její stacionární podmínky. Pro nerovnosti se používají KKT podmínky nebo slack proměnné.</p>
+    <p>U numerických metod se optimum hledá iterativně. Bez omezení se používají přímé metody, gradientní metody a Newtonovy metody. S omezeními se problém často převádí na neomezenou úlohu pomocí penalizační metody, bariérové metody nebo ALM. Penalizace trestá porušení omezení, bariéra nepustí řešení mimo přípustnou oblast a ALM kombinuje Lagrangeovy multiplikátory s penalizačním členem.</p>
+  </div>
+
+  <h3>Rychlá mapa pojmů</h3>
+  <p>
+    <span class="tag">účelová funkce f(x)</span>
+    <span class="tag">rozhodovací proměnné x</span>
+    <span class="tag">volný extrém</span>
+    <span class="tag">vázaný extrém</span>
+    <span class="tag">gradient ∇f</span>
+    <span class="tag">Hessova matice</span>
+    <span class="tag">Lagrange</span>
+    <span class="tag">KKT</span>
+    <span class="tag">penalizace</span>
+    <span class="tag">bariéra</span>
+    <span class="tag">ALM</span>
+  </p>
+
+  <h3>Mini tahák: kdy co použít</h3>
+  <table>
+    <tr>
+      <th>Situace</th>
+      <th>Řešení</th>
+      <th>Jedna věta</th>
+    </tr>
+    <tr>
+      <td>Bez omezení, známá funkce</td>
+      <td>Gradient + Hessian</td>
+      <td>Najdu \(\nabla f=0\), ověřím typ extrému.</td>
+    </tr>
+    <tr>
+      <td>Rovnostní omezení</td>
+      <td>Lagrangeovy multiplikátory</td>
+      <td>Přidám vazby do Lagrangiánu.</td>
+    </tr>
+    <tr>
+      <td>Nerovnostní omezení</td>
+      <td>KKT / slack proměnné</td>
+      <td>Řeším aktivní a neaktivní omezení.</td>
+    </tr>
+    <tr>
+      <td>Složitá reálná NLP úloha</td>
+      <td>Numerické metody</td>
+      <td>Iterativně hledám optimum výpočetně.</td>
+    </tr>
+    <tr>
+      <td>Chci převést omezenou úlohu na neomezenou</td>
+      <td>Penalizace, bariéra, ALM</td>
+      <td>Omezení zakóduju přímo do nové účelové funkce.</td>
+    </tr>
+  </table>
+
+  <div class="danger">Co nepomotat: penalizace dovolí být mimo přípustnou oblast, ale trestá to. Bariéra naopak drží řešení uvnitř přípustné oblasti a k hranici ho nepustí bez toho, aby funkce nezačala růst jako panika před státnicí.</div>
+
+</div>
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const siteNav = document.getElementById('site-nav');
+  if (navToggle && siteNav) {
+    navToggle.addEventListener('click', () => {
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      siteNav.classList.toggle('is-open');
+    });
+  }
+</script>
+</body>
+</html>

@@ -1,5 +1,12 @@
 (function () {
   const enabledByNumber = {
+    "1": "RS/1_RS_synteza_spojitech_regulacnich_obvodu.html",
+    "2": "RS/2_RS_prakticke_aspekty_pid_regulatoru.html",
+    "3": "RS/3_RS_stavova_regulace.html",
+    "4": "RS/4_RS_rozvetvene_a_vicerozmerne_regulacni_obvody.html",
+    "5": "RS/5_RS_synteza_nelinearnich_r_o.html",
+    "6": "RS/6_RS_staticka_optimalizace.html",
+    "7": "RS/7_RS_dynamicka_optimalizace.html",
     "8": "PMZS/8_statnice_okenni_funkce.html",
     "9": "PMZS/9_statnice_frekvencni.html",
     "10": "PMZS/10_frekvencni_spektra_modulace.html",
@@ -14,13 +21,6 @@
   };
 
   const fallbackByNumber = {
-    "1": "index.html#rs",
-    "2": "index.html#rs",
-    "3": "index.html#rs",
-    "4": "index.html#rs",
-    "5": "index.html#rs",
-    "6": "index.html#rs",
-    "7": "index.html#rs",
     "15": "index.html#ms",
     "16": "index.html#ms"
   };
