@@ -124,6 +124,8 @@ p { margin: 8px 0 10px; text-align: justify; }
       <span aria-hidden="true"></span>
     </button>
     <nav class="nav-links" id="site-nav">
+
+    <p>Právě z Bodeho a Nyquistova diagramu se čtou i <strong>amplitudová bezpečnost</strong> (zisková rezerva) a <strong>fázová bezpečnost</strong> (fázová rezerva), tedy rezervy stability regulace. Proto je jejich zmínka k této otázce přímo relevantní, i když se v grafu objevují jen schematicky.</p>
       <a href="../index.html">Main</a>
       <a href="../index.html#otazky">Otázky</a>
 
@@ -210,6 +212,8 @@ p { margin: 8px 0 10px; text-align: justify; }
     <ul>
         <li><strong>Chyba linearity (Nelinearita):</strong> Maximální odchylka skutečné nelineární křivky od ideální (optimalizované) přímky. U aproximace se minimalizuje max. odchylka (minimalizace maximální chyby podle Čebyševova kritéria).</li>
         <li><strong>Počáteční necitlivost (Pásmo necitlivosti):</strong> Zóna u nuly, kde změna vstupu nevyvolá žádnou změnu výstupu (např. suché tření v mechanice).</li>
+      <li><strong>Saturace:</strong> Při velkém vstupu dosáhne výstup své maximální nebo minimální hodnoty a dál už neroste lineárně. Typicky vzniká na konci rozsahu senzoru nebo při přebuzení zesilovače.</li>
+        <li><strong>Offset (nulový posun):</strong> Statická charakteristika je trvale posunutá o konstantní hodnotu, i když je vstup nulový. Na rozdíl od driftu se tento posun v čase nemění.</li>
         <li><strong>Hystereze a chyba reverzibility:</strong> Systém vykazuje jiné výstupní hodnoty pro stejný vstup v závislosti na tom, zda měřená veličina narůstá, nebo klesá (vzniká hysterezní smyčka).</li>
         <li><strong>Drift:</strong> Pomalá samovolná změna (posun) výstupní hodnoty v čase při konstantním vstupu (např. teplotní drift nuly).</li>
         <li><strong>Potlačený rozsah:</strong> Systém začíná měřit až od určité nenulové prahové hodnoty vstupu.</li>
@@ -260,6 +264,64 @@ p { margin: 8px 0 10px; text-align: justify; }
         </svg>
     </div>
 
+      <div class="svg-container">
+        <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow-axis-2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <polygon points="0,0 6,3 0,6" fill="#333"/>
+            </marker>
+          </defs>
+
+          <g transform="translate(60, 30)">
+            <text x="20" y="-10" class="svg-title">Saturace (omezení výstupu)</text>
+            <line x1="0" y1="170" x2="250" y2="170" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis-2)"/>
+            <line x1="0" y1="170" x2="0" y2="10" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis-2)"/>
+            <text x="240" y="190" font-family="sans-serif">x</text>
+            <text x="-15" y="20" font-family="sans-serif">y</text>
+            <path d="M0,170 L70,130 L120,90 L150,65 L180,50 L210,50 L240,50" fill="none" stroke="#d9534f" stroke-width="3"/>
+            <line x1="180" y1="50" x2="240" y2="50" stroke="#d9534f" stroke-width="3" stroke-dasharray="7,4"/>
+            <text x="168" y="40" font-size="12" fill="#d9534f">saturace</text>
+          </g>
+
+          <g transform="translate(520, 30)">
+            <text x="35" y="-10" class="svg-title">Drift (posun v čase)</text>
+            <line x1="0" y1="170" x2="250" y2="170" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis-2)"/>
+            <line x1="0" y1="170" x2="0" y2="10" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis-2)"/>
+            <text x="240" y="190" font-family="sans-serif">x</text>
+            <text x="-15" y="20" font-family="sans-serif">y</text>
+            <line x1="20" y1="140" x2="220" y2="40" stroke="#5bc0de" stroke-width="3"/>
+            <line x1="20" y1="120" x2="220" y2="20" stroke="#d9534f" stroke-width="3" stroke-dasharray="7,4"/>
+            <text x="145" y="55" font-size="12" fill="#5bc0de">t₀</text>
+            <text x="150" y="25" font-size="12" fill="#d9534f">t₁</text>
+            <text x="18" y="150" font-size="12">stejný vstup</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="svg-container">
+        <svg viewBox="0 0 900 230" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow-axis-3" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <polygon points="0,0 6,3 0,6" fill="#333"/>
+            </marker>
+          </defs>
+
+          <g transform="translate(285, 30)">
+            <text x="40" y="-10" class="svg-title">Offset (nulový posun)</text>
+            <line x1="0" y1="150" x2="300" y2="150" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis-3)"/>
+            <line x1="0" y1="150" x2="0" y2="10" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis-3)"/>
+            <text x="290" y="170" font-family="sans-serif">x</text>
+            <text x="-15" y="20" font-family="sans-serif">y</text>
+            <line x1="20" y1="150" x2="240" y2="40" stroke="#5bc0de" stroke-width="3"/>
+            <line x1="20" y1="120" x2="240" y2="10" stroke="#d9534f" stroke-width="3"/>
+            <line x1="20" y1="150" x2="240" y2="150" stroke="#999" stroke-width="2" stroke-dasharray="5,4"/>
+            <text x="182" y="25" font-size="12" fill="#d9534f">posunutá charakteristika</text>
+            <text x="160" y="70" font-size="12" fill="#5bc0de">ideální charakteristika</text>
+            <text x="40" y="143" font-size="12" fill="#666">nulový vstup, nenulový výstup</text>
+          </g>
+        </svg>
+      </div>
+
     <h3>Matematické vyjádření nelinearity – Linearizace (Taylorův rozvoj)</h3>
     <p>Pro matematické zpracování nelineárních měřicích systémů používáme lokální linearizaci v pracovním bodě \( (x_0, u_0) \) pomocí Taylorova rozvoje prvního řádu (zanedbání vyšších derivací). Nelineární stavový model:</p>
     <div class="math-box">
@@ -299,11 +361,11 @@ p { margin: 8px 0 10px; text-align: justify; }
     <ul>
         <li><strong>Bodeho amplitudová charakteristika:</strong> Poměr výstupní a vstupní amplitudy v závislosti na frekvenci (kreslená v decibelech, sklon -20dB/dekádu pro člen 1. řádu). Kritickým bodem je <strong>mezní frekvence (\( f_m \))</strong>, při které signál poklesne o 3 dB (výkonový pokles na polovinu).</li>
         <li><strong>Bodeho fázová charakteristika:</strong> Změna fáze v závislosti na frekvenci (pro člen 1. řádu od 0° po -90°).</li>
-        <li><strong>Nyquistův diagram (Frekvenční charakteristika v komplexní rovině):</strong> Proporcionální člen 1. řádu (např. jednoduchý RC článek nebo teplotní senzor) vykreslí v komplexní rovině přesnou <strong>půlkružnici</strong> v 4. kvadrantu.</li>
+        <li><strong>Nyquistův diagram (Frekvenční charakteristika v komplexní rovině):</strong> Slouží hlavně k posouzení <strong>stability</strong> a rezerv zesílení a fáze u zpětnovazebních systémů. V této analýze ukáže, jak se komplexní přenos mění s frekvencí a zda se trajektorie nebezpečně přibližuje ke kritickému bodu <strong>-1 + j0</strong>. Pro jednoduchý člen 1. řádu (např. RC článek) má tvar půlkružnice v 4. kvadrantu.</li>
     </ul>
 
     <div class="svg-container">
-        <svg viewBox="0 0 900 350" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
             <g transform="translate(50, 40)">
                 <text x="40" y="-15" class="svg-title">Bode: Amplitudová char.</text>
                 <line x1="0" y1="120" x2="300" y2="120" stroke="#333" stroke-width="2"/> <line x1="0" y1="140" x2="0" y2="0" stroke="#333" stroke-width="2"/> <text x="310" y="125">ω [rad/s]</text>
@@ -332,7 +394,29 @@ p { margin: 8px 0 10px; text-align: justify; }
                 <text x="110" y="140" font-size="12">ω = 1/T</text>
                 <line x1="40" y1="40" x2="160" y2="105" stroke="#999" stroke-width="1"/>
                 <text x="70" y="65" font-size="14">φ</text>
+              <line x1="120" y1="120" x2="40" y2="40" stroke="#c26d2c" stroke-width="1.5" stroke-dasharray="4,4"/>
+              <text x="67" y="108" font-size="11" fill="#c26d2c">zisková rezerva</text>
             </g>
+
+              <g transform="translate(50, 260)">
+                <text x="35" y="-15" class="svg-title">Bode: Fázová char.</text>
+                <line x1="0" y1="120" x2="760" y2="120" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/>
+                <line x1="0" y1="120" x2="0" y2="0" stroke="#333" stroke-width="2" marker-end="url(#arrow-axis)"/>
+                <text x="770" y="125">ω [rad/s]</text>
+                <text x="-45" y="10" font-size="12">φ [°]</text>
+
+                <line x1="0" y1="20" x2="220" y2="20" stroke="#999" stroke-dasharray="4,4"/>
+                <line x1="0" y1="120" x2="220" y2="120" stroke="#999" stroke-dasharray="4,4"/>
+                <text x="225" y="24" font-size="11">0°</text>
+                <text x="225" y="124" font-size="11">-90°</text>
+
+                <path d="M0,20 C110,20 150,35 200,70 C240,95 290,115 370,120" fill="none" stroke="#d9534f" stroke-width="3"/>
+                <line x1="150" y1="20" x2="150" y2="120" stroke="#173627" stroke-dasharray="4,4"/>
+                <text x="135" y="138" font-size="11" fill="#173627">ω_m</text>
+                <text x="210" y="85" font-size="11" fill="#d9534f">fázový posun</text>
+                <line x1="150" y1="20" x2="150" y2="60" stroke="#c26d2c" stroke-width="2" stroke-dasharray="3,4"/>
+                <text x="160" y="50" font-size="11" fill="#c26d2c">fázová rezerva</text>
+              </g>
         </svg>
     </div>
 
@@ -345,7 +429,7 @@ p { margin: 8px 0 10px; text-align: justify; }
     <h2>5. Metody měření statických a dynamických vlastností</h2>
     <ul>
         <li><strong>Měření statických vlastností:</strong> Kalibrace krok po kroku. Do senzoru přivádíme statický (neměnný) vstupní signál od 0 % do 100 % jmenovitého rozsahu a měříme ustálený výstup. Klíčové je následně měřit <strong>zpětným chodem</strong> od 100 % do 0 %. Rozdíl mezi těmito dvěma chody v jakémkoliv bodě prokazuje <strong>hysterezi</strong> přístroje.</li>
-        <li><strong>Měření přechodové charakteristiky v čase:</strong> Zavedení <strong>jednotkového skoku</strong> na vstup (např. náhlé připojení napětí, bleskové přemístění teploměru z bodu mrazu do bodu varu). Osciloskopem (nebo A/D převodníkem při splnění Shannonova teorému $f_{vz} > 2 \cdot f_{max}$) záznam výstupu a analytické určení $T_d$, $T_p$, $T_n$ tečnou v inflexním bodě.</li>
+        <li><strong>Měření přechodové charakteristiky v čase:</strong> Zavedení <strong>jednotkového skoku</strong> na vstup (např. náhlé připojení napětí, bleskové přemístění teploměru z bodu mrazu do bodu varu). Osciloskopem (nebo A/D převodníkem při splnění Shannonova teorému \( f_{vz} > 2 \cdot f_{max} \)) záznam výstupu a analytické určení \( T_d \), \( T_p \), \( T_n \) tečnou v inflexním bodě.</li>
         <li><strong>Měření frekvenční charakteristiky:</strong> Zavedení harmonického signálu proměnné frekvence (funkční generátor s režimem <em>sweep</em>) na vstup. Měříme útlum a zpoždění výstupu, z čehož na spektrálním analyzátoru nebo vektorovém analyzátoru zkonstruujeme Bodeho či Nyquistovy diagramy.</li>
     </ul>
 
@@ -354,9 +438,9 @@ p { margin: 8px 0 10px; text-align: justify; }
         <ul>
             <li><span class="important">Rozdíl statika a dynamika:</span> Statické vlastnosti popisují měřicí systém v ustáleném stavu (časové derivace jsou nula, uplatňuje se statická převodní charakteristika). Dynamické vlastnosti popisují chování při změnách v čase (náběhy, překmity) a jsou řešeny diferenciálními rovnicemi.</li>
             <li><span class="important">Matematický model a Linearizace:</span> Reálné systémy jsou nelineární (mají hysterzi, pásma necitlivosti). Lze je aproximovat pro malý rozkmit v pracovním bodě pomocí Taylorova rozvoje (vzniknou Jacobiho matice \( A, B, C, D \) pro stavový popis).</li>
-            <li><span class="important">Odchylky reálného měřidla:</span> Patří sem chyba linearity, počáteční necitlivost, hystereze a drift (samovolná změna v čase bez změny měřené veličiny). Hysterezi prokážu měřením hodnot plynule nahoru a ihned plynule dolů.</li>
+            <li><span class="important">Odchylky reálného měřidla:</span> Patří sem chyba linearity, počáteční necitlivost, offset, hystereze a drift (samovolná změna v čase bez změny měřené veličiny). Hysterezi prokážu měřením hodnot plynule nahoru a ihned plynule dolů.</li>
             <li><span class="important">Přechodová charakteristika:</span> Z odezvy na skok určujeme dopravní zpoždění (\( T_d \)), dobu průtahu (\( T_p \)) a dobu náběhu (\( T_n \)). Exaktní definice \( T_p \) a \( T_n \) se provádí proložením <strong>tečny v inflexním bodě</strong>!</li>
-            <li><span class="important">Frekvenční charakteristika:</span> Graficky se zobrazuje Nyquistovým diagramem (v komplexní rovině, kde ideální přenos 1. řádu je půlkružnice) nebo Bodeho charakteristikou (důležitá je mezní frekvence \( f_m \) představující pokles o 3 dB).</li>
+        <li><span class="important">Frekvenční charakteristika:</span> Graficky se zobrazuje Nyquistovým diagramem (v komplexní rovině, kde ideální přenos 1. řádu je půlkružnice) nebo Bodeho charakteristikou (důležitá je mezní frekvence \( f_m \) představující pokles o 3 dB). Z nich se čtou i amplitudová a fázová bezpečnost, tedy rezervy stability regulace.</li>
             <li><span class="important">Optimalizace přenosu:</span> Chyby reálného MIS minimalizujeme vyhodnocením <strong>střední kvadratické chyby</strong> integrálem z kvadrátu odchylky reálného a ideálního signálu.</li>
         </ul>
     </div>

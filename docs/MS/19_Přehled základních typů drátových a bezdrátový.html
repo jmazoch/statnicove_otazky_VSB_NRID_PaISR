@@ -348,7 +348,7 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
     <table>
         <tr><th>Stav sběrnice</th><th>Logická hodnota</th><th>Fyzická úroveň</th><th>Typ budiče</th></tr>
         <tr><td><span class="badge-dom">Dominantní</span></td><td>Logická 0</td><td>0 V (stáhnuto k GND)</td><td>Tranzistor (Open-drain)</td></tr>
-        <tr><td><span class="badge-rec">Recesivní</span></td><td>Logická 1</td><td><span class="math">V_{CC}</span></td><td>Pull-up rezistor</td></tr>
+        <tr><td><span class="badge-rec">Recesivní</span></td><td>Logická 1</td><td><span class="math">Vcc</span></td><td>Pull-up rezistor</td></tr>
     </table>
 </div>
 
@@ -421,6 +421,73 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
         <tr><td><span class="badge-rec">Recesivní</span></td><td>Logická 1 / Klid</td><td>~Vcc (přes 4.7kΩ pull-up)</td></tr>
     </table>
     <p><strong>Parazitní napájení:</strong> Senzor si "nabíjí" vnitřní kondenzátor během doby, kdy je linka v log 1. Během A/D převodu u teploměru (např. DS18B20) je nutné zapnout "silný" (Strong) pull-up tranzistor MOSFET, protože proud stoupne až na 1.5 mA a vnitřní kondenzátor by se vybil.</p>
+</div>
+
+<!-- UART -->
+<div class="card">
+    <h3>UART (Universal Asynchronous Receiver/Transmitter)</h3>
+    <p>Asynchronní sériové rozhraní pro bod-bod komunikaci mezi dvěma zařízeními. Nepoužívá hodinový signál, přenos je časován předem dohodnutou rychlostí (baud rate). UART definuje formát datového rámce, zatímco konkrétní napěťové úrovně závisí na fyzické vrstvě (typicky TTL/CMOS nebo přes převodník RS-232).</p>
+
+    <div class="grid2">
+        <div>
+            <h4>Zapojení</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <rect x="20" y="35" width="90" height="80" fill="#3498db"/> <text x="35" y="70" font-size="14" fill="white">MCU 1</text>
+                    <rect x="240" y="35" width="90" height="80" fill="#9b59b6"/> <text x="255" y="70" font-size="14" fill="white">MCU 2</text>
+
+                    <line x1="110" y1="55" x2="240" y2="55" stroke="#1a1a1a" stroke-width="2"/> <text x="145" y="48" font-size="10">TX</text>
+                    <line x1="110" y1="85" x2="240" y2="85" stroke="#1a1a1a" stroke-width="2"/> <text x="145" y="78" font-size="10">RX</text>
+
+                    <line x1="110" y1="115" x2="240" y2="115" stroke="#27ae60" stroke-width="2"/> <text x="160" y="110" font-size="10" fill="#27ae60">GND</text>
+
+                    <text x="120" y="30" font-size="10">TX z MCU 1 do RX MCU 2</text>
+                    <text x="120" y="140" font-size="10">RX z MCU 2 do TX MCU 1</text>
+                </svg>
+            </div>
+        </div>
+        <div>
+            <h4>Datový rámec</h4>
+            <div class="img-container">
+                <svg viewBox="0 0 350 150">
+                    <text x="10" y="25" font-size="12">Idle</text>
+                    <path d="M 40,20 L 80,20 L 90,50 L 110,50 L 120,20 L 150,20 L 160,50 L 180,50 L 190,20 L 220,20 L 230,50 L 250,50 L 260,20 L 290,20 L 300,20" stroke="#2980b9" fill="none" stroke-width="2"/>
+
+                    <line x1="90" y1="10" x2="90" y2="110" stroke="#e74c3c" stroke-dasharray="3"/>
+                    <text x="78" y="122" font-size="10" fill="#e74c3c">Start</text>
+
+                    <line x1="120" y1="10" x2="120" y2="110" stroke="#95a5a6" stroke-dasharray="3"/>
+                    <text x="108" y="122" font-size="10">D0</text>
+                    <line x1="150" y1="10" x2="150" y2="110" stroke="#95a5a6" stroke-dasharray="3"/>
+                    <text x="138" y="122" font-size="10">D1</text>
+                    <line x1="180" y1="10" x2="180" y2="110" stroke="#95a5a6" stroke-dasharray="3"/>
+                    <text x="168" y="122" font-size="10">D2</text>
+                    <line x1="210" y1="10" x2="210" y2="110" stroke="#95a5a6" stroke-dasharray="3"/>
+                    <text x="198" y="122" font-size="10">D3</text>
+                    <line x1="240" y1="10" x2="240" y2="110" stroke="#95a5a6" stroke-dasharray="3"/>
+                    <text x="228" y="122" font-size="10">D4</text>
+                    <line x1="270" y1="10" x2="270" y2="110" stroke="#95a5a6" stroke-dasharray="3"/>
+                    <text x="258" y="122" font-size="10">D5</text>
+
+                    <text x="115" y="38" font-size="10">8 datových bitů</text>
+                    <text x="245" y="38" font-size="10">Parita</text>
+                    <text x="285" y="38" font-size="10">Stop</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <table>
+        <tr><th>Stav linky</th><th>Logická hodnota</th><th>Typická úroveň u MCU</th><th>Poznámka</th></tr>
+        <tr><td><span class="badge-dom">Start / 0</span></td><td>Logická 0</td><td>0 V</td><td>Linka je aktivně stažena nízko.</td></tr>
+        <tr><td><span class="badge-rec">Idle / 1</span></td><td>Logická 1</td><td>3.3 V nebo 5 V</td><td>Klidový stav je v log. 1, přesnější úroveň určuje konkrétní UART periferie a napájení.</td></tr>
+    </table>
+
+    <p><strong>Rámec UART:</strong> Idle (log. 1) &rarr; Start bit (log. 0) &rarr; 5-9 datových bitů (obvykle 8, LSB first) &rarr; volitelný paritní bit &rarr; 1 nebo 2 stop bity (log. 1).</p>
+
+    <div class="note">
+        <strong>Na státnice:</strong> UART je asynchronní, takže si obě strany musí dopředu nastavit stejný baud rate. Není to totéž co RS-232: UART je komunikační rozhraní, zatímco RS-232 je konkrétní elektrická vrstva s vyššími napěťovými úrovněmi.
+    </div>
 </div>
 
 <!-- RS232 -->
@@ -623,6 +690,7 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
         <li><strong>Arbitráž na CANu:</strong> Probíhá nedestruktivně bit po bitu na základě metody CSMA/CD+AMP. Zpráva s nižším identifikátorem (více nul = více dominantních bitů) vždy vyhraje přístup na sběrnici bez poškození vlastní zprávy. Dominantní stav (rozdíl > 1.5V), recesivní stav (rozdíl ~ 0V).</li>
         <li><strong>I2C vs SPI:</strong> I2C má dva dráty (SDA, SCL), je multimaster, používá fyzické 7-bit adresy zařízení a otevřený kolektor s pull-up rezistory. SPI má čtyři dráty (MOSI, MISO, SCK, CS), jeden master a výběr komunikujícího slave uzlu probíhá vodičem CS (Chip Select). SPI je podstatně rychlejší (push-pull) a plně duplexní.</li>
         <li><strong>1-Wire a časování:</strong> 1-Wire obstarává napájení i data po jednom pinu (DQ). Komunikace využívá časové sloty. Pro zápis nuly se linka stahuje k 0 V na celý slot (až 120 µs), pro zápis jedničky jen na krátký okamžik (max 15 µs).</li>
+        <li><strong>UART:</strong> UART je asynchronní sériové rozhraní bez hodinového signálu. Rámec tvoří start bit, 5-9 datových bitů, volitelná parita a stop bit(y); typické úrovně u MCU jsou TTL/CMOS 0 V a 3.3/5 V.</li>
         <li><strong>RS-232 vs RS-485:</strong> RS-232 se používá pro dvobodová spojení s krátkým dosahem (asymetrický signál). RS-485 je pro sběrnicová spojení v průmyslu s vysokým dosahem a odolností (diferenciální signál a až 32 zařízení na lince).</li>
         <li><strong>Bluetooth FHSS vs. Wi-Fi:</strong> Obě technologie koexistují na pásmu 2.4 GHz. Bluetooth se vyhýbá rušení tím, že velmi rychle mění komunikační frekvenci 1600x za sekundu (Frequency-Hopping Spread Spectrum - metoda FHSS) přes svých 79 kanálů.</li>
         <li><strong>LoRa třídy (A, B, C):</strong> LoRa je LPWAN síť s CSS modulací. Třída A vysílá asynchronně a je nejúspornější (senzorové uzly na baterii). Třída B má synchronizovaná přijímací okna. Třída C přijímá nepřetržitě (vyžaduje síťový napájecí zdroj např. ovládané ventily).</li>

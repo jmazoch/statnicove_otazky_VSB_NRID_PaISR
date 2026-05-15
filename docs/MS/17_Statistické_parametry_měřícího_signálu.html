@@ -94,6 +94,7 @@ p { margin: 8px 0 10px; text-align: justify; }
 .svg-container svg { max-width: 100%; height: auto; }
 .svg-container img { max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 .svg-title { font-weight: bold; fill: var(--brand-strong); font-family: Arial, sans-serif; }
+.card svg { width: 100%; height: auto; display: block; margin: 6px 0 10px; }
 
 .toc { background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
   padding: 16px 20px; margin: 24px 0; }
@@ -251,11 +252,83 @@ hr.sec { border: none; border-top: 2px solid var(--line); margin: 36px 0; }
 
   <p><strong>Směrodatná odchylka</strong> je odmocnina z rozptylu. Výrazně lépe se s ní pracuje, neboť kompenzuje předchozí umocnění a vrací chybu (nejistotu) do původních fyzikálních jednotek. Slouží mimo jiné i jako základ pro vyčíslení standardní nejistoty typu A.</p>
 
+  <h3>Pomocné vzorce a vizualizace</h3>
+
+  <div class="grid2">
+    <div class="card">
+      <h4>Náhodný proces a metoda řezů</h4>
+      <svg viewBox="0 0 560 220" aria-label="Vizualizace náhodného procesu a řezu v čase">
+        <defs>
+          <marker id="arrow-rp" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#1a1a1a" />
+          </marker>
+        </defs>
+        <line x1="35" y1="180" x2="530" y2="180" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrow-rp)" />
+        <line x1="50" y1="188" x2="50" y2="22" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrow-rp)" />
+        <text x="535" y="184" font-family="sans-serif" font-size="13" fill="#1a1a1a">t</text>
+        <text x="35" y="18" font-family="sans-serif" font-size="13" fill="#1a1a1a">x(t)</text>
+
+        <polyline points="50,130 85,110 120,145 155,95 190,118 225,82 260,125 295,86 330,112 365,70 400,98 435,58 470,82 505,52"
+                  fill="none" stroke="#25533b" stroke-width="2.5" />
+        <polyline points="50,150 85,125 120,160 155,118 190,145 225,105 260,150 295,112 330,132 365,96 400,122 435,82 470,108 505,75"
+                  fill="none" stroke="#c26d2c" stroke-width="2.5" opacity="0.9" />
+        <polyline points="50,95 85,75 120,110 155,65 190,92 225,50 260,88 295,40 330,70 365,32 400,58 435,22 470,48 505,18"
+                  fill="none" stroke="#1a4a8a" stroke-width="2.5" opacity="0.85" />
+        <polyline points="50,165 85,145 120,172 155,138 190,160 225,125 260,168 295,128 330,152 365,116 400,140 435,102 470,126 505,92"
+                  fill="none" stroke="#6d4c9b" stroke-width="2.2" opacity="0.8" />
+
+        <line x1="315" y1="22" x2="315" y2="188" stroke="#d9534f" stroke-width="1.5" stroke-dasharray="6,4" />
+        <text x="321" y="36" font-family="sans-serif" font-size="12" fill="#d9534f">t₀</text>
+
+        <circle cx="315" cy="102" r="4.5" fill="#25533b" />
+        <circle cx="315" cy="126" r="4.5" fill="#c26d2c" />
+        <circle cx="315" cy="74" r="4.5" fill="#1a4a8a" />
+        <circle cx="315" cy="150" r="4.5" fill="#6d4c9b" />
+        <text x="330" y="105" font-family="sans-serif" font-size="12" fill="#25533b">U(t₀)</text>
+        <text x="330" y="129" font-family="sans-serif" font-size="12" fill="#c26d2c">realizace</text>
+      </svg>
+      <p>Náhodný proces popisuje rodinu možných průběhů. Řez v čase \( t_0 \) z něj udělá náhodnou veličinu.</p>
+    </div>
+
+    <div class="card">
+      <h4>Rozptyl jako šířka hodnot</h4>
+      <svg viewBox="0 0 560 220" aria-label="Vizualizace malého a velkého rozptylu">
+        <line x1="30" y1="180" x2="530" y2="180" stroke="#1a1a1a" stroke-width="1.5" />
+        <line x1="45" y1="190" x2="45" y2="22" stroke="#1a1a1a" stroke-width="1.5" />
+        <text x="535" y="184" font-family="sans-serif" font-size="13" fill="#1a1a1a">u</text>
+        <text x="35" y="18" font-family="sans-serif" font-size="13" fill="#1a1a1a">početnost</text>
+
+        <line x1="170" y1="35" x2="170" y2="180" stroke="#25533b" stroke-width="2" stroke-dasharray="6,4" />
+        <text x="150" y="30" font-family="sans-serif" font-size="12" fill="#25533b">μ</text>
+        <circle cx="140" cy="120" r="6" fill="#c26d2c" />
+        <circle cx="155" cy="108" r="6" fill="#c26d2c" />
+        <circle cx="165" cy="132" r="6" fill="#c26d2c" />
+        <circle cx="178" cy="115" r="6" fill="#c26d2c" />
+        <circle cx="190" cy="125" r="6" fill="#c26d2c" />
+        <text x="95" y="200" font-family="sans-serif" font-size="12" fill="#c26d2c">malý rozptyl</text>
+
+        <line x1="390" y1="35" x2="390" y2="180" stroke="#1a4a8a" stroke-width="2" stroke-dasharray="6,4" />
+        <text x="380" y="30" font-family="sans-serif" font-size="12" fill="#1a4a8a">μ</text>
+        <circle cx="320" cy="145" r="6" fill="#1a4a8a" opacity="0.85" />
+        <circle cx="348" cy="95" r="6" fill="#1a4a8a" opacity="0.85" />
+        <circle cx="382" cy="122" r="6" fill="#1a4a8a" opacity="0.85" />
+        <circle cx="420" cy="78" r="6" fill="#1a4a8a" opacity="0.85" />
+        <circle cx="452" cy="150" r="6" fill="#1a4a8a" opacity="0.85" />
+        <text x="310" y="200" font-family="sans-serif" font-size="12" fill="#1a4a8a">velký rozptyl</text>
+      </svg>
+      <p>Menší rozptyl znamená hodnoty blízko střední hodnoty. Větší rozptyl znamená širší rozlití výsledků kolem μ.</p>
+    </div>
+  </div>
+
   <hr class="sec">
 
   <h2 id="s3">3. Distribuční funkce F(u)</h2>
   <div class="info-box">
     <strong>Distribuční funkce F(u)</strong> udává pravděpodobnost, že hodnota náhodné veličiny U nabude hodnoty, která je menší (nebo rovna) určité zadané hodnotě <em>u</em>.
+  </div>
+  <div class="math-box">
+    $$ F(u) = P(U \leq u) $$
+    $$ P(u_1 \leq U \leq u_2) = F(u_2) - F(u_1) $$
   </div>
   
   <p>Základní vlastnosti distribuční funkce F(u):</p>
@@ -298,6 +371,12 @@ hr.sec { border: none; border-top: 2px solid var(--line); margin: 36px 0; }
 
   <p>Protože distribuční funkce je neklesající, její derivace, neboli funkce hustoty pravděpodobnosti, bude mít vždy jen kladné hodnoty (nebo nulové). Integrací funkce rozložení hustoty pravděpodobnosti v mezích od minus nekonečna do plus nekonečna získáme celkovou plochu pod grafem, která je přesně rovna číslu 1 (vyjadřující 100% jistotu jevu).</p>
 
+  <div class="math-box">
+    $$ p(u) = \frac{dF(u)}{du} $$
+    $$ \int_{-\infty}^{\infty} p(u) \, du = 1 $$
+    $$ \mu = \mathrm{E}(U), \quad \sigma^2 = \mathrm{Var}(U) = \mathrm{E}[(U - \mu)^2], \quad \sigma = \sqrt{\sigma^2} $$
+  </div>
+
   <h3>Příklady významných rozdělení:</h3>
   <table>
     <tr>
@@ -307,6 +386,10 @@ hr.sec { border: none; border-top: 2px solid var(--line); margin: 36px 0; }
     <tr>
       <td><strong>Normální (Gaussovo)</strong></td>
       <td>Nejčastější případ pro reálná měření, u kterých existuje celá řada náhodných drobných vlivů. Tvar je klasická "zvonovitá" křivka. Čím je tato Gaussova křivka "hubenější" a "vyšší", tím je měření kvalitnější a má menší směrodatnou odchylku (tedy i menší chybovost/nejistotu).</td>
+    </tr>
+    <tr>
+      <td><strong>Exponenciální</strong></td>
+      <td>Modeluje dobu mezi nepravidelnými událostmi (např. čas mezi poruchami). Hustota: <em>p(u) = λ e<sup>-λu</sup></em> pro u ≥ 0, střední hodnota µ = 1/λ. Používá se pro predikci MTBF a pro modelování časů mezi impulzy nebo událostmi v měřicích systémech. Níže jsou schematické pdf křivky pro různé hodnoty λ.</td>
     </tr>
   </table>
 
@@ -336,6 +419,28 @@ hr.sec { border: none; border-top: 2px solid var(--line); margin: 36px 0; }
     <p style="font-size: 12px; color: #666; margin-top: 8px; font-style: italic;">Graf 2: Hustota pravděpodobnosti p(u) pro normální rozdělení s vyznačenou střední hodnotou (μ) a směrodatnou odchylkou (σ).</p>
   </div>
 
+  <div class="svg-container">
+    <svg viewBox="0 0 520 240" width="520" aria-label="Exponenciální hustota pravděpodobnosti pro různé lambdy">
+      <line x1="50" y1="200" x2="480" y2="200" stroke="#1a1a1a" stroke-width="1.5" />
+      <line x1="60" y1="210" x2="60" y2="20" stroke="#1a1a1a" stroke-width="1.5" />
+      <!-- lambda=2 (rychlý pokles) -->
+      <path d="M60 60 C120 75,180 110,240 140 C300 165,360 180,420 194" fill="none" stroke="#d9534f" stroke-width="3" />
+      <!-- lambda=1 (střední) -->
+      <path d="M60 90 C120 105,180 130,240 150 C300 165,360 176,420 190" fill="none" stroke="#25533b" stroke-width="3" />
+      <!-- lambda=0.5 (pomalý pokles) -->
+      <path d="M60 120 C120 130,180 145,240 158 C300 168,360 176,420 188" fill="none" stroke="#1a4a8a" stroke-width="3" />
+      <text x="490" y="204" font-family="sans-serif" font-size="13" font-style="italic">u</text>
+      <text x="20" y="18" font-family="sans-serif" font-size="13" font-style="italic">p(u)</text>
+      <!-- legenda -->
+      <rect x="350" y="30" width="12" height="8" fill="#d9534f" /> <text x="368" y="38" font-family="sans-serif" font-size="12">λ = 2</text>
+      <rect x="350" y="50" width="12" height="8" fill="#25533b" /> <text x="368" y="58" font-family="sans-serif" font-size="12">λ = 1</text>
+      <rect x="350" y="70" width="12" height="8" fill="#1a4a8a" /> <text x="368" y="78" font-family="sans-serif" font-size="12">λ = 0.5</text>
+      <text x="120" y="60" font-family="sans-serif" font-size="12" fill="#333">p(u)=λ e^{-λu} for u ≥ 0</text>
+    </svg>
+    <p style="font-size:12px;color:#666;margin-top:8px;font-style:italic;">Graf: Srovnání pdf exponenciálního rozdělení pro λ = 0.5, 1, 2. Vyšší λ => kratší střední doba (µ=1/λ) a rychlejší pokles.</p>
+    <p>Praktické použití: odhad životnosti komponent a modelování doby mezi poruchami (MTBF). V kontextu měřených signálů lze exponenciální rozdělení použít pro modelování doby mezi náhodnými impulzy nebo událostmi detekovanými systémem.</p>
+  </div>
+
   <table>
     <tr>
       <td><strong>Rovnoměrné (Pravoúhlé)</strong></td>
@@ -360,6 +465,63 @@ hr.sec { border: none; border-top: 2px solid var(--line); margin: 36px 0; }
       <text x="45" y="10" font-family="sans-serif" font-size="13" font-style="italic">p(u)</text>
     </svg>
     <p style="font-size: 12px; color: #666; margin-top: 8px; font-style: italic;">Graf 3: Hustota pravděpodobnosti p(u) rovnoměrného (pravoúhlého) rozdělení.</p>
+  </div>
+
+  <h3>Přesnost a preciznost měření</h3>
+  <p><strong>Přesnost</strong> říká, jak blízko je průměr výsledků ke skutečné hodnotě. <strong>Preciznost</strong> říká, jak těsně jsou jednotlivé výsledky shluknuté kolem sebe.</p>
+
+  <div class="grid3">
+    <div class="card">
+      <h4>Malá přesnost, malá preciznost</h4>
+      <svg viewBox="0 0 220 220" aria-label="Terč s malou přesností a malou precizností">
+        <circle cx="110" cy="110" r="88" fill="#fff8f0" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="64" fill="none" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="40" fill="none" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="18" fill="#25533b" stroke="#25533b" stroke-width="2" />
+        <line x1="110" y1="18" x2="110" y2="202" stroke="#d7cfc1" stroke-width="1" />
+        <line x1="18" y1="110" x2="202" y2="110" stroke="#d7cfc1" stroke-width="1" />
+        <circle cx="55" cy="55" r="7" fill="#c26d2c" />
+        <circle cx="78" cy="48" r="7" fill="#c26d2c" />
+        <circle cx="92" cy="72" r="7" fill="#c26d2c" />
+        <circle cx="58" cy="84" r="7" fill="#c26d2c" />
+        <circle cx="70" cy="62" r="7" fill="#c26d2c" />
+      </svg>
+      <p>Zásahy jsou rozptýlené a zároveň mimo střed, takže výsledek je nepřesný i neprecizní.</p>
+    </div>
+    <div class="card">
+      <h4>Malá přesnost, vysoká preciznost</h4>
+      <svg viewBox="0 0 220 220" aria-label="Terč s malou přesností a vysokou precizností">
+        <circle cx="110" cy="110" r="88" fill="#fff8f0" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="64" fill="none" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="40" fill="none" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="18" fill="#25533b" stroke="#25533b" stroke-width="2" />
+        <line x1="110" y1="18" x2="110" y2="202" stroke="#d7cfc1" stroke-width="1" />
+        <line x1="18" y1="110" x2="202" y2="110" stroke="#d7cfc1" stroke-width="1" />
+        <circle cx="160" cy="70" r="7" fill="#1a4a8a" />
+        <circle cx="166" cy="76" r="7" fill="#1a4a8a" />
+        <circle cx="154" cy="68" r="7" fill="#1a4a8a" />
+        <circle cx="162" cy="80" r="7" fill="#1a4a8a" />
+        <circle cx="158" cy="74" r="7" fill="#1a4a8a" />
+      </svg>
+      <p>Zásahy jsou těsně u sebe, ale mimo střed. Měření je opakovatelné, jen systematicky posunuté.</p>
+    </div>
+    <div class="card">
+      <h4>Velká přesnost, velká preciznost</h4>
+      <svg viewBox="0 0 220 220" aria-label="Terč s vysokou přesností a vysokou precizností">
+        <circle cx="110" cy="110" r="88" fill="#fff8f0" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="64" fill="none" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="40" fill="none" stroke="#25533b" stroke-width="2" />
+        <circle cx="110" cy="110" r="18" fill="#25533b" stroke="#25533b" stroke-width="2" />
+        <line x1="110" y1="18" x2="110" y2="202" stroke="#d7cfc1" stroke-width="1" />
+        <line x1="18" y1="110" x2="202" y2="110" stroke="#d7cfc1" stroke-width="1" />
+        <circle cx="106" cy="106" r="7" fill="#c26d2c" />
+        <circle cx="114" cy="108" r="7" fill="#c26d2c" />
+        <circle cx="108" cy="115" r="7" fill="#c26d2c" />
+        <circle cx="112" cy="103" r="7" fill="#c26d2c" />
+        <circle cx="109" cy="109" r="7" fill="#c26d2c" />
+      </svg>
+      <p>Zásahy jsou soustředěné a zároveň u středu. To je ideální kombinace přesnosti i preciznosti.</p>
+    </div>
   </div>
 
   <hr class="sec">

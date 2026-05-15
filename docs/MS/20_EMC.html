@@ -249,6 +249,9 @@
             <li><a href="#sec-uvod">1. EMC a její vliv na kvalitu měřicího signálu</a></li>
             <li><a href="#sec-vazby">2. Způsoby přenosových vazeb rušivých signálů</a></li>
             <li><a href="#sec-omezeni">3. Základní způsoby omezení rušivých signálů</a></li>
+            <li><a href="#sec-ferit">3.1 Feritová perla</a></li>
+            <li><a href="#sec-tvs">3.2 TVS dioda</a></li>
+            <li><a href="#sec-esd">3.3 ESD ochrana</a></li>
             <li><a href="#sec-zaver">4. Co určitě umět říct u státnic (Zlaté hřebíky)</a></li>
         </ul>
     </div>
@@ -307,26 +310,31 @@
             <th>Typ vazby</th>
             <th>Fyzikální podstata</th>
             <th>Kritické podmínky a charakteristika</th>
+            <th>Příklad problému</th>
         </tr>
         <tr>
             <td><strong>Galvanická</strong></td>
             <td>Fyzické vodivé spojení.</td>
             <td>Vzniká v důsledku <strong>úbytku napětí na společné impedanci</strong> (typicky parazitní zemní smyčky).</td>
+            <td><strong>Proudová/zemní smyčka</strong> mezi dvěma zařízeními: po společné zemi teče rušivý proud a způsobí hučení, posun nulové úrovně nebo chybné měření A/D převodníku.</td>
         </tr>
         <tr>
             <td><strong>Kapacitní</strong></td>
             <td>Elektrické pole (parazitní kapacity).</td>
-            <td>Dominantní při rychlých změnách <strong>napětí</strong> ($du/dt$), např. u spínaných zdrojů. Omezuje se stíněním.</td>
+            <td>Dominantní při rychlých změnách <strong>napětí</strong> ($\frac{du}{dt}$), např. u spínaných zdrojů. Omezuje se stíněním.</td>
+            <td><strong>Crosstalk</strong> mezi sousedními vodiči nebo plošnými spoji: rychlý skok na jednom signálu se přes parazitní kapacitu přenese do vedlejšího kanálu a vyvolá falešné impulzy.</td>
         </tr>
         <tr>
             <td><strong>Induktivní</strong></td>
             <td>Magnetické pole (Faradayův zákon).</td>
-            <td>Dominantní při rychlých změnách masivních <strong>proudů</strong> ($di/dt$), např. blesk nebo ESD. Omezuje se zmenšením plochy smyčky.</td>
+            <td>Dominantní při rychlých změnách masivních <strong>proudů</strong> ($\frac{di}{dt}$), např. blesk nebo ESD. Omezuje se zmenšením plochy smyčky.</td>
+            <td><strong>Velká proudová smyčka</strong> u spínaného zdroje nebo relé: rychlá změna proudu indukuje napětí do okolních obvodů, takže bliká displej, ruší se senzor nebo padá mikrokontrolér.</td>
         </tr>
         <tr>
             <td><strong>Radiační</strong></td>
             <td>Elektromagnetická vlna (vzdálené pole).</td>
             <td>Energie se šíří jako vlna prostorem, do obvodu se váže anténním efektem.</td>
+            <td><strong>Dlouhý kabel jako anténa</strong>: zachytí vysílané pole z okolí nebo sám vyzařuje rušení do rádia, Wi-Fi nebo citlivého analogového vstupu.</td>
         </tr>
     </table>
 
@@ -380,6 +388,33 @@
         <strong>Proč je LISN nutná?</strong> Skutečná impedance běžné sítě náhodně kolísá. Bez LISN by výsledky měření z různých laboratoří byly absolutně neporovnatelné. LISN je nezbytná pro zajištění mezinárodní <strong>reprodukovatelnosti</strong>.
     </div>
 
+    <h3 id="sec-ferit">D) Feritová perla</h3>
+    <div class="def">
+        <strong>Feritová perla</strong> je malý pasivní prvek vložený do signálové nebo napájecí cesty, který má pro vysoké kmitočty výrazně vyšší impedanci než pro stejnosměrnou složku nebo nízké frekvence.
+    </div>
+    <p>V praxi se používá jako jednoduchá a levná prevence rušení přímo u konektoru, napájecí větve nebo citlivého obvodu. Potlačuje hlavně <strong>vysokofrekvenční šum</strong> a pomáhá zabránit tomu, aby se rušení šířilo po vedení dál do zařízení nebo z něj ven. Nejlépe funguje ve spojení s lokálními blokovacími kondenzátory.</p>
+    <div class="note">
+        <strong>Na státnice:</strong> Řekni, že feritová perla neřeší velké přepěťové špičky, ale hlavně vysokofrekvenční rušení. Je to typický prvek pro odrušení napájení a oddělení citlivých částí obvodu.
+    </div>
+
+    <h3 id="sec-tvs">E) TVS dioda</h3>
+    <div class="def">
+        <strong>TVS dioda</strong> (Transient Voltage Suppressor) je přepěťová ochranná součástka, která při překročení prahového napětí velmi rychle omezí napěťovou špičku a odvede proud mimo chráněný obvod.
+    </div>
+    <p>TVS dioda se používá tam, kde hrozí <strong>rázové přepětí</strong> na vedení, například na externích konektorech, dlouhých kabelech, datových linkách nebo napájecích vstupech. Oproti varistoru reaguje velmi rychle a hodí se i pro ochranu elektroniky proti špičkám vzniklým při spínání, indukci nebo při ESD. Zapojení bývá co nejblíže chráněnému vstupu a často vůči zemi nebo mezi vodiče vedení.</p>
+    <div class="danger">
+        <strong>Rozdíl proti varistoru:</strong> TVS dioda je typicky rychlejší a vhodnější pro jemnější elektroniku a datové linky. Varistor se častěji používá pro hrubší přepěťovou ochranu na síťové straně.
+    </div>
+
+    <h3 id="sec-esd">F) ESD ochrana</h3>
+    <div class="def">
+        <strong>ESD</strong> (Electrostatic Discharge) je elektrostatický výboj mezi dvěma tělesy s rozdílným potenciálem. Může mít velmi krátký průběh, ale vysoký proud a prudké napěťové hrany.
+    </div>
+    <p>ESD je častý zdroj poruch, resetů a poškození vstupů elektroniky. Z pohledu EMC je důležité chránit obvod proti přímému výboji z obsluhy, z kabelu nebo z okolního prostředí. Typické spouštěče jsou například <strong>dotyk obsluhy na konektor</strong> při manipulaci se zařízením a <strong>vybití z nabitého kabelu nebo kovové části skříně</strong> do vstupu elektroniky. Používají se <strong>TVS diody</strong>, správné uzemnění, krátké proudové cesty do referenční roviny, vhodné rozmístění součástek a mechanické provedení vstupů. U citlivých signálů pomáhá i omezení rychlých hran, sériový odpor a kvalitní návrh plošného spoje.</p>
+    <div class="note">
+        <strong>Na státnice:</strong> ESD neber jen jako „nějaké jiskření“. Zdůrazni, že jde o rychlý přechodový jev s velkým $\frac{di}{dt}$ i $\frac{dv}{dt}$, který se řeší kombinací konstrukce, směrování proudů a ochranných součástek.
+    </div>
+
 
     <!-- ZÁVĚR: CO UMĚT U STÁTNIC -->
     <div class="final-list" id="sec-zaver">
@@ -388,12 +423,22 @@
             <li><strong>Rozdíl EMI a EMS:</strong> EMI je proces vysílání rušení (řešíme příčinu). EMS je schopnost zařízení rušení odolat (řešíme důsledky – např. Watchdog).</li>
             <li><strong>Základní řetězec EMC:</strong> Vždy se skládá ze zdroje, vazby (přenosového prostředí) a přijímače (rušeného objektu).</li>
             <li><strong>Galvanická vazba:</strong> Její definicí je, že rušení vzniká jako <em>úbytek napětí na společné impedanci</em> (typicky nevhodná zemní smyčka).</li>
-            <li><strong>Kapacitní vs. Induktivní vazba:</strong> Kapacitní je kritická při velkém $du/dt$ (rychlá změna napětí), induktivní při velkém $di/dt$ (rychlá změna proudu).</li>
+            <li><strong>Kapacitní vs. Induktivní vazba:</strong> Kapacitní je kritická při velkém $\frac{du}{dt}$ (rychlá změna napětí), induktivní při velkém $\frac{di}{dt}$ (rychlá změna proudu).</li>
             <li><strong>Tlumivka s proudovou kompenzací:</strong> Slouží k potlačení soufázového rušení, aniž by došlo k přesycení jádra masivním pracovním proudem 50 Hz.</li>
+            <li><strong>Feritová perla:</strong> Zvyšuje impedanci pro vysoké kmitočty a používá se jako jednoduché odrušení napájení nebo signálové větve.</li>
+            <li><strong>TVS dioda:</strong> Velmi rychlá ochrana proti přechodovým přepětím a ESD; omezuje špičku a odvádí proud mimo chráněný obvod.</li>
+            <li><strong>ESD:</strong> Elektrostatický výboj je krátký, ale energeticky nebezpečný přechodový jev, který se řeší TVS diodami, vhodným layoutem a řízením proudových cest.</li>
             <li><strong>Varistor:</strong> Je nelineární součástka s napěťově závislým odporem chránící obvod před přepěťovými rázovými špičkami.</li>
             <li><strong>Umělá zátěž vedení (LISN):</strong> Poskytuje normovanou impedanci a filtruje externí síť; je nezbytná pro mezinárodní <em>reprodukovatelnost a porovnatelnost</em> výsledků.</li>
         </ul>
     </div>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <script defer src="../shared/navbar-inject.js"></script>
 </div>
 </body>
