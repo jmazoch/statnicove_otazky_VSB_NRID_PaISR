@@ -36,6 +36,10 @@ code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: '
 pre { background:#0f172a; color:#e5e7eb; padding:12px 16px; border-radius:8px; overflow-x:auto; font-size:13px; line-height:1.45; margin:14px 0; }
 pre code { background: transparent; color: inherit; padding:0; }
 .math { background: transparent; color: #1a1a1a; padding: 8px 4px; font-family: Georgia, 'Times New Roman', serif; font-size: 16px; text-align: center; margin: 12px 0; }
+.frac { display: inline-grid; grid-template-rows: auto auto; vertical-align: middle; text-align: center; line-height: 1.15; margin: 0 3px; }
+.frac > span:first-child { border-bottom: 1px solid currentColor; padding: 0 5px 2px; }
+.frac > span:last-child { padding: 2px 5px 0; }
+.paren { font-size: 1.35em; vertical-align: middle; }
 .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
 .fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
 .farr { font-size: 20px; color: #888; }
@@ -190,7 +194,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <p>U MIS sledujeme převod vstupního měřeného signálu <code>uᵢ(t)</code> na výstupní signál <code>uₒ(t)</code>. Ideální systém by provedl požadovanou operaci bez zkreslení, bez zpoždění a bez rušení:</p>
   <p class="math">u<sub>o,id</sub>(t) = OP<sub>id</sub>{u<sub>i</sub>(t)}</p>
   <p>Reálný systém má neideální statické i dynamické vlastnosti a navíc je ovlivněn rušivými signály. Zjednodušeně lze psát:</p>
-  <p class="math">u<sub>o,re</sub>(t) = OP<sub>re</sub>{u<sub>i</sub>(t)} + \text{vliv rušení} + \text{vliv vnitřních chyb systému}</p>
+  <p class="math">u<sub>o,re</sub>(t) = OP<sub>re</sub>{u<sub>i</sub>(t)} + vliv rušení + vliv vnitřních chyb systému</p>
   <p>Chyba přenosu se potom definuje jako rozdíl reálného a ideálního výstupu:</p>
   <p class="math">u<sub>ε</sub>(t) = u<sub>o,re</sub>(t) - u<sub>o,id</sub>(t)</p>
 
@@ -265,9 +269,13 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Signál, šum a poměr signál/šum</h3>
   <p>V jednoduchém aditivním modelu je naměřený signál součtem užitečné složky a šumu:</p>
-  <p class="math">x_m(t) = x(t) + n(t)</p>
+  <p class="math">x<sub>m</sub>(t) = x(t) + n(t)</p>
   <p>Kvalitu přenosu lze vyjádřit poměrem signálu k šumu:</p>
-  <p class="math">SNR = \dfrac{P_{signálu}}{P_{šumu}}<br/>SNR_{dB} = 10 &middot; \log_{10}\left(\dfrac{P_{signálu}}{P_{šumu}}\right)</p>
+  <p class="math">
+    SNR = <span class="frac"><span>P<sub>signálu</sub></span><span>P<sub>šumu</sub></span></span><br/>
+    SNR<sub>dB</sub> = 10 &middot; log<sub>10</sub>
+    <span class="paren">(</span><span class="frac"><span>P<sub>signálu</sub></span><span>P<sub>šumu</sub></span></span><span class="paren">)</span>
+  </p>
 
   <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
     <svg width="100%" viewBox="0 0 760 280" role="img" aria-label="Časový průběh a spektrum signálu s rušením">
@@ -365,7 +373,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
     <tr><td>Digitální filtrace</td><td>Matematická úprava již vzorkovaných dat.</td><td>Klouzavý průměr, FIR/IIR filtry, potlačení náhodného šumu.</td><td>Zlepšuje stabilitu, ale může přidat zpoždění.</td></tr>
     <tr><td>Průměrování</td><td>Náhodné složky se při opakování částečně vyruší.</td><td>Stacionární měření, pomalé procesy, diagnostika trendů.</td><td>Nepomůže na systematickou chybu.</td></tr>
     <tr><td>Správné zemnění</td><td>Řízení návratových proudů a referenčních potenciálů.</td><td>Analogové obvody, více zdrojů, dlouhá vedení.</td><td>Špatné zemnění může být samo zdrojem rušení.</td></tr>
-    <tr><td>Minimalizace smyček</td><td>Menší plocha smyčky znamená menší indukované napětí.</td><td>Rychlé signály, výkonové spínání, dlouhé kabely.</td><td>Vztah <span class="math">u<sub>ind</sub> = -\dfrac{dΦ}{dt}</span> vysvětluje, proč vadí velké smyčky.</td></tr>
+    <tr><td>Minimalizace smyček</td><td>Menší plocha smyčky znamená menší indukované napětí.</td><td>Rychlé signály, výkonové spínání, dlouhé kabely.</td><td>Vztah <span class="math">u<sub>ind</sub> = -<span class="frac"><span>dΦ</span><span>dt</span></span></span> vysvětluje, proč vadí velké smyčky.</td></tr>
     <tr><td>Blokování napájení</td><td>Lokální kondenzátory dodají rychlé proudové špičky a sníží rušení napájení.</td><td>Digitální obvody, ADC, operační zesilovače, snímače.</td><td>Blokovací kondenzátor patří co nejblíže k napájecím pinům.</td></tr>
   </table>
 

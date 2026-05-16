@@ -34,6 +34,8 @@
     "12": "PMZS/12_Systémy pro zpracování signálu.html",
     "13": "PMZS/13_prevody_PCM_PAM_PWM_PPM_PNM.html",
     "14": "PMZS/14_Digitální modulace signálu.html",
+    "15": "MS/15_Obecné vlastnosti měřicího informačního systému.html",
+    "16": "MS/16_priciny_vzniku_chyb_v_mericich_informacnich_systemech.html",
     "17": "MS/17_Statistické_parametry_měřícího_signálu.html",
     "18": "MS/18_Statické_a_dynamické_vlastnosti_MIS.html",
     "19": "MS/19_Přehled základních typů drátových a bezdrátový.html",
@@ -41,8 +43,7 @@
   };
 
   const fallbackByNumber = {
-    "15": "index.html#ms",
-    "16": "index.html#ms"
+    "15": "index.html#ms"
   };
 
   const allAnchors = document.querySelectorAll(".nav-dropdown a");

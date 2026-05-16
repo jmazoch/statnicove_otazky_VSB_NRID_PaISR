@@ -64,7 +64,7 @@
     '        <a href="' + sectionHref('ms') + '">MS (15–20) <span class="nav-chevron">▼</span></a>',
     '        <div class="nav-dropdown">',
     '          <a href="' + questionHref('MS', '15_Obecné vlastnosti měřicího informačního systému.html') + '">15. Obecné vlastnosti MIS</a>',
-    '          <a href="#" class="nav-disabled">16. Příčiny chyb...</a>',
+    '          <a href="' + questionHref('MS', '16_priciny_vzniku_chyb_v_mericich_informacnich_systemech.html') + '">16. Příčiny chyb...</a>',
     '          <a href="' + questionHref('MS', '17_Statistické_parametry_měřícího_signálu.html') + '">17. Statistické parametry...</a>',
     '          <a href="' + questionHref('MS', '18_Statické_a_dynamické_vlastnosti_MIS.html') + '">18. Statické a dynamické...</a>',
     '          <a href="' + questionHref('MS', '19_Přehled základních typů drátových a bezdrátový.html') + '">19. Drátové a bezdrátové...</a>',
