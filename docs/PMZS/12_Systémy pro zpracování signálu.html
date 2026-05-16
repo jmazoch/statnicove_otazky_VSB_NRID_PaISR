@@ -322,6 +322,114 @@ vout(t) = -VL, pokud vin(t) &lt; 0</code></pre>
 <p>Protože se filtr a zesilovač na mezifrekvenci nastavují na pevnou frekvenci, je možné dosáhnout vyšší selektivity a stability než u kaskádně laděného přijímače.</p>
 <p>Na následujícím blokovém schématu je vidět typická struktura směšovače: vstupní pásmový signál, lokální oscilátor a filtr, který zvolí požadovanou součtovou nebo rozdílovou složku.</p><div class="figure"><img alt="Základní blokové schéma směšovače s lokálním oscilátorem a filtrem." src="data:image/webp;base64,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"/><div class="figcap">Schéma ze skript PMZS: základní blokové schéma směšovače.</div></div><div class="note"><strong>Co říct u zkoušky:</strong> Směšovač nevytváří pouze součet dvou signálů. Jeho princip je násobení, a proto na výstupu vznikají nové frekvence odpovídající součtu a rozdílu vstupní frekvence a frekvence lokálního oscilátoru.</div>
 <div class="danger"><strong>Častá chyba:</strong> Pokud se po směšování nepoužije vhodný filtr, zůstanou v signálu nežádoucí součtové složky, zrcadlové frekvence nebo produkty nelinearity.</div>
+
+<h3>Fázový závěs PLL jako související systém</h3>
+<div class="def">Fázový závěs PLL (Phase-Locked Loop) je zpětnovazební systém, který porovnává fázi vstupního signálu s fází lokálního oscilátoru a řídí oscilátor tak, aby se jeho fáze a frekvence uzamkla na vstupní signál.</div>
+<p>Ke směšovači se PLL úzce vztahuje proto, že v praktických přijímačích často zajišťuje <strong>stabilní lokální oscilátor</strong>, případně umožňuje <strong>obnovu nosné</strong> pro koherentní detekci. Zatímco směšovač provádí frekvenční konverzi násobením, PLL vytváří a dolaďuje referenční signál, který se v těchto strukturách používá.</p>
+<h3>Základní bloky PLL</h3>
+<table>
+<tr>
+<th>Blok</th>
+<th>Funkce</th>
+<th>Význam</th>
+</tr>
+<tr>
+<td>Fázový detektor (PD)</td>
+<td>Porovnává fázi vstupního signálu a signálu z VCO a vytváří chybové napětí.</td>
+<td>Určuje fázovou chybu, tedy informaci pro řízení smyčky.</td>
+</tr>
+<tr>
+<td>Dolnopropustný filtr (LPF)</td>
+<td>Vyhlazuje chybové napětí a potlačuje vysokofrekvenční složky.</td>
+<td>Určuje dynamiku smyčky, rychlost sledování a odolnost proti šumu.</td>
+</tr>
+<tr>
+<td>Napěťově řízený oscilátor (VCO)</td>
+<td>Mění svou frekvenci podle řídicího napětí z filtru.</td>
+<td>Generuje lokální referenční signál a uzavírá zpětnou vazbu.</td>
+</tr>
+</table>
+<div class="figure">
+<svg aria-label="Blokové schéma fázového závěsu PLL podle skript PMZS" role="img" viewBox="0 0 820 380">
+<defs>
+<marker id="arrowPLL" markerHeight="10" markerUnits="strokeWidth" markerWidth="10" orient="auto" refX="8" refY="3">
+<path d="M0,0 L0,6 L9,3 z" fill="#1a4a8a"></path>
+</marker>
+<filter id="shadowPLL" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#000" flood-opacity="0.18"></feDropShadow>
+</filter>
+</defs>
+<text x="28" y="63" font-family="Georgia" font-size="19" fill="#1a1a1a">v<tspan baseline-shift="sub" font-size="13">in</tspan>(t)</text>
+<line x1="110" y1="70" x2="185" y2="70" stroke="#1a4a8a" stroke-width="3" marker-end="url(#arrowPLL)"></line>
+<rect x="190" y="32" width="145" height="76" rx="9" fill="#d89090" stroke="#8a1a1a" stroke-width="2" filter="url(#shadowPLL)"></rect>
+<text x="262" y="61" text-anchor="middle" font-family="Georgia" font-size="17" fill="#1a1a1a">fázový</text>
+<text x="262" y="84" text-anchor="middle" font-family="Georgia" font-size="17" fill="#1a1a1a">detektor PD</text>
+<line x1="335" y1="70" x2="415" y2="70" stroke="#1a4a8a" stroke-width="3" marker-end="url(#arrowPLL)"></line>
+<text x="365" y="52" text-anchor="middle" font-family="Georgia" font-size="14" fill="#555">u<tspan baseline-shift="sub" font-size="10">d</tspan>(t)</text>
+<rect x="420" y="32" width="130" height="76" rx="9" fill="#d8b0b0" stroke="#8a1a1a" stroke-width="2" filter="url(#shadowPLL)"></rect>
+<text x="485" y="61" text-anchor="middle" font-family="Georgia" font-size="17" fill="#1a1a1a">LPF</text>
+<text x="485" y="84" text-anchor="middle" font-family="Georgia" font-size="17" fill="#1a1a1a">H(f)</text>
+<line x1="550" y1="70" x2="625" y2="70" stroke="#1a4a8a" stroke-width="3" marker-end="url(#arrowPLL)"></line>
+<text x="585" y="52" text-anchor="middle" font-family="Georgia" font-size="14" fill="#555">u<tspan baseline-shift="sub" font-size="10">f</tspan>(t)</text>
+<rect x="630" y="32" width="140" height="76" rx="9" fill="#bdd39a" stroke="#607a32" stroke-width="2" filter="url(#shadowPLL)"></rect>
+<text x="700" y="61" text-anchor="middle" font-family="Georgia" font-size="17" fill="#1a1a1a">VCO</text>
+<text x="700" y="84" text-anchor="middle" font-family="Georgia" font-size="16" fill="#1a1a1a">řízený oscilátor</text>
+<line x1="770" y1="70" x2="805" y2="70" stroke="#1a4a8a" stroke-width="3" marker-end="url(#arrowPLL)"></line>
+<text x="645" y="136" font-family="Georgia" font-size="15" fill="#444">v<tspan baseline-shift="sub" font-size="10">0</tspan>(t)=A<tspan baseline-shift="sub" font-size="10">0</tspan>cos(ω<tspan baseline-shift="sub" font-size="10">0</tspan>t+θ<tspan baseline-shift="sub" font-size="10">0</tspan>)</text>
+<path d="M700 108 L700 250 L262 250 L262 112" fill="none" stroke="#1a4a8a" stroke-width="3" marker-end="url(#arrowPLL)"></path>
+<text x="455" y="238" text-anchor="middle" font-family="Georgia" font-size="14" fill="#555">zpětná vazba – porovnání fáze</text>
+<rect x="105" y="295" width="610" height="54" rx="8" fill="#eef4ff" stroke="#c8d8f0"></rect>
+<text x="410" y="319" text-anchor="middle" font-family="Georgia" font-size="15" fill="#1a3a6a">PD vytvoří napětí úměrné fázové odchylce, LPF jej vyhladí a VCO upraví frekvenci tak,</text>
+<text x="410" y="340" text-anchor="middle" font-family="Georgia" font-size="15" fill="#1a3a6a">aby se výstupní signál uzamkl na fázi a frekvenci vstupního signálu.</text>
+</svg>
+<div class="figcap">Schéma ze skript PMZS: fázový závěs PLL složený z fázového detektoru PD, dolnopropustného filtru LPF a napěťově řízeného oscilátoru VCO.</div>
+</div>
+<h3>Princip činnosti PLL</h3>
+<p>Na vstup smyčky přichází pásmový signál, například:</p>
+<pre><code>vin(t) = Ain · cos(ωin · t + θin(t))</code></pre>
+<p>VCO generuje lokální referenční signál:</p>
+<pre><code>v0(t) = A0 · cos(ω0 · t + θ0(t))</code></pre>
+<p>Fázový detektor porovnává fázi obou signálů. Pro malé fázové odchylky lze chybové napětí přibližně psát:</p>
+<pre><code>ud(t) ≈ Kd · [θin(t) - θ0(t)]</code></pre>
+<p>Po průchodu filtrem vznikne řídicí napětí <code>uf(t)</code>, které mění frekvenci VCO:</p>
+<pre><code>ω0(t) = ωfree + Kv · uf(t)</code></pre>
+<p>Je-li smyčka uzamknutá, PLL sleduje změny fáze a frekvence vstupního signálu. Tím může zajistit přesné doladění oscilátoru nebo vytvořit synchronní referenci pro další zpracování signálu.</p>
+<div class="flow">
+<div class="fbox">vstupní pásmový signál</div>
+<div class="farr">→</div>
+<div class="fbox">fázový detektor</div>
+<div class="farr">→</div>
+<div class="fbox">LPF</div>
+<div class="farr">→</div>
+<div class="fbox">VCO</div>
+<div class="farr">↺</div>
+<div class="fbox">zpětná vazba</div>
+</div>
+<table>
+<tr>
+<th>Použití PLL</th>
+<th>Smysl</th>
+<th>Vztah ke směšovači</th>
+</tr>
+<tr>
+<td>Obnova nosné</td>
+<td>PLL se uzamkne na nosný signál a vytvoří referenci pro koherentní zpracování.</td>
+<td>Umožňuje správnou činnost směšovače nebo multiplikativního detektoru.</td>
+</tr>
+<tr>
+<td>FM demodulace</td>
+<td>Řídicí napětí VCO může být úměrné okamžité frekvenci vstupního FM signálu.</td>
+<td>PLL zde nahrazuje speciální FM diskriminátor.</td>
+</tr>
+<tr>
+<td>Frekvenční syntéza</td>
+<td>Umožňuje generovat stabilní a přesné frekvence.</td>
+<td>Často vytváří lokální oscilátor pro směšovač v přijímači.</td>
+</tr>
+</table>
+<div class="note"><strong>Co říct u zkoušky:</strong> Směšovač dělá frekvenční konverzi, ale PLL řeší synchronizaci a stabilní vytvoření lokálního oscilátoru. V praxi se oba bloky často používají společně, zejména v přijímačích a koherentních detektorech.</div>
+<div class="danger"><strong>Častá chyba:</strong> Neříkat, že PLL je jen filtr nebo jen oscilátor. Je to uzavřená regulační smyčka. Důležité pojmy jsou uzamčení smyčky, rozsah zachycení a rozsah udržení.</div>
+
 <hr class="sec"/>
 <h2 id="s4">4. Způsoby zpracování signálu pomocí detektoru obálky</h2>
 <div class="def">Detektor obálky je systém, který z pásmového signálu získává jeho reálnou obálku. U klasické amplitudové modulace je obálka přímo úměrná přenášenému informačnímu signálu.</div>
