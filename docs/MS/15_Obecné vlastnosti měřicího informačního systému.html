@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obecné vlastnosti měřicího informačního systému, základní schéma, model MIS s uvažováním rušení. Metody potlačení rušení.</title>
+  <style>* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Georgia', serif; font-size: 15px; line-height: 1.75; color: #1a1a1a; background: #fafaf8; }
+.page { max-width: 900px; margin: 0 auto; padding: 40px 48px; background: #fff; box-shadow: 0 2px 24px rgba(0,0,0,0.08); }
+h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; border-bottom: 3px solid #1a4a8a; padding-bottom: 12px; margin-bottom: 6px; }
+.subtitle { font-size: 13px; color: #666; margin-bottom: 36px; font-style: italic; }
+h2 { font-size: 19px; font-weight: 700; color: #1a4a8a; margin: 36px 0 10px; padding-left: 12px; border-left: 4px solid #1a4a8a; }
+h3 { font-size: 15px; font-weight: 700; color: #2a2a2a; margin: 20px 0 8px; }
+p { margin: 8px 0 10px; text-align: justify; }
+.def { background: #eef4ff; border-left: 4px solid #1a4a8a; padding: 10px 16px; margin: 12px 0; font-style: italic; border-radius: 0 6px 6px 0; color: #1a3a6a; }
+.note { background: #fffbea; border-left: 4px solid #c8960c; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+.danger { background: #fff0f0; border-left: 4px solid #8a1a1a; padding: 10px 16px; margin: 12px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+ul, ol { margin: 8px 0 10px 24px; }
+li { margin-bottom: 4px; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+th { background: #1a4a8a; color: #fff; padding: 8px 12px; text-align: left; }
+td { padding: 7px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f8ff; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 14px 0; }
+.card { background: #f5f8ff; border: 1px solid #c8d8f0; border-radius: 8px; padding: 12px 14px; }
+.card h4 { font-size: 13px; color: #1a4a8a; margin-bottom: 6px; font-weight: 700; }
+.card p { font-size: 13px; margin: 0; text-align: left; }
+.toc { background: #f0f4fa; border: 1px solid #c0cfea; border-radius: 8px; padding: 16px 20px; margin-bottom: 28px; }
+.toc h3 { color: #1a4a8a; margin-bottom: 10px; font-size: 14px; }
+.toc ol { font-size: 13px; }
+.toc li { margin-bottom: 3px; }
+.toc a { color: #1a4a8a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
+pre { background:#0f172a; color:#e5e7eb; padding:12px 16px; border-radius:8px; overflow-x:auto; font-size:13px; line-height:1.45; margin:14px 0; }
+pre code { background: transparent; color: inherit; padding:0; }
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
+.fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
+.farr { font-size: 20px; color: #888; }
+hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
+@media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Obecné vlastnosti měřicího informačního systému, základní schéma, model MIS s uvažováním rušení. Metody potlačení rušení.</h1>
+  <p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · Podklady: přednášky a skripta MS</p>
+
+  <div class="toc">
+    <h3>Obsah</h3>
+    <ol>
+      <li><a href="#s1">Obecné vlastnosti měřicího informačního systému</a></li>
+      <li><a href="#s2">Základní schéma</a></li>
+      <li><a href="#s3">Model MIS s uvažováním rušení</a></li>
+      <li><a href="#s4">Metody potlačení rušení</a></li>
+      <li><a href="#s5">Co určitě umět říct u státnic</a></li>
+    </ol>
+  </div>
+
+  <h2 id="s1">1. Obecné vlastnosti měřicího informačního systému</h2>
+  <div class="def">Měřicí informační systém (MIS) je soubor hardwarových a softwarových prostředků, které zajišťují získání měřicího signálu, jeho úpravu, přenos, zpracování, archivaci, vizualizaci a využití informace o měřené veličině.</div>
+  <p>Měření lze chápat jako proces přiřazení hodnoty fyzikální proměnné. V moderním pojetí však nejde pouze o samotné odečtení hodnoty ze snímače, ale o celý informační řetězec: získání signálu, jeho převod na vhodnou měronosnou veličinu, přenos do vyhodnocovací části, zpracování a nakonec využití výsledku například operátorem, řídicím systémem nebo archivací.</p>
+
+  <div class="note"><strong>U státnic zdůraznit:</strong> MIS není jen snímač. Je to celý systém pro přenos informace od měřeného objektu až k místu, kde se informace zpracuje nebo použije.</div>
+
+  <h3>Principiální pohled na MIS</h3>
+  <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
+    <svg width="100%" viewBox="0 0 760 170" role="img" aria-label="Principiální schéma měřicího řetězce">
+      <defs>
+        <marker id="arr1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#1a4a8a" />
+        </marker>
+      </defs>
+      <rect x="15" y="25" width="118" height="54" rx="8" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="74" y="47" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">Senzorická</text>
+      <text x="74" y="65" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">část</text>
+      <line x1="133" y1="52" x2="182" y2="52" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr1)"/>
+      <rect x="184" y="25" width="118" height="54" rx="8" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="243" y="47" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">Konverze</text>
+      <text x="243" y="65" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">signálu</text>
+      <line x1="302" y1="52" x2="351" y2="52" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr1)"/>
+      <rect x="353" y="25" width="118" height="54" rx="8" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="412" y="47" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">Přenos</text>
+      <text x="412" y="65" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">dat</text>
+      <line x1="471" y1="52" x2="520" y2="52" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr1)"/>
+      <rect x="522" y="25" width="118" height="54" rx="8" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="581" y="47" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">Zpracování</text>
+      <text x="581" y="65" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">dat</text>
+      <line x1="640" y1="52" x2="689" y2="52" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr1)"/>
+      <rect x="691" y="25" width="54" height="54" rx="8" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="718" y="47" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">Využití</text>
+      <text x="718" y="65" text-anchor="middle" font-size="14" fill="#1a4a8a" font-weight="700">dat</text>
+      <path d="M 50 123 C 120 85, 185 138, 255 110 S 390 82, 455 118 S 570 147, 704 108" fill="none" stroke="#888" stroke-width="2"/>
+      <path d="M 50 123 C 120 85, 185 138, 255 110 S 390 82, 455 118 S 570 147, 704 108" fill="none" stroke="#1a4a8a" stroke-width="4" stroke-dasharray="1 18" stroke-linecap="round" opacity="0.75"/>
+      <text x="380" y="154" text-anchor="middle" font-size="12" fill="#666">tok informace: fyzikální veličina → měronosná veličina → data → rozhodnutí</text>
+    </svg>
+    <p style="font-size:12px;color:#666;text-align:center;margin:4px 0 0;">Schéma vytvořené jako čistý přepis principu měřicího řetězce z materiálů MS.</p>
+  </div>
+
+  <h3>Obecné vlastnosti a požadavky</h3>
+  <table>
+    <tr><th>Vlastnost / požadavek</th><th>Význam pro MIS</th><th>Typický projev v praxi</th></tr>
+    <tr><td>Citlivost</td><td>Poměr změny výstupu ke změně vstupu.</td><td>Malá změna teploty, tlaku nebo proudu se musí projevit měřitelnou změnou signálu.</td></tr>
+    <tr><td>Rozsah</td><td>Interval hodnot, ve kterém lze měřit s požadovanou přesností.</td><td>Např. snímač tlaku 0 až 10 bar, převodník 4 až 20 mA.</td></tr>
+    <tr><td>Linearita</td><td>Míra, s jakou odpovídá převodní charakteristika přímce.</td><td>Nelinearita se kompenzuje kalibrací nebo softwarovou korekcí.</td></tr>
+    <tr><td>Dynamika</td><td>Schopnost sledovat časově proměnnou veličinu.</td><td>Doba odezvy, zpoždění, šířka pásma, přechodová charakteristika.</td></tr>
+    <tr><td>Odolnost proti rušení</td><td>Schopnost dodat použitelnou informaci i v rušivém prostředí.</td><td>Průmyslové prostředí, dlouhá vedení, spínané zdroje, motory, stykače.</td></tr>
+    <tr><td>Spolehlivost</td><td>Schopnost pracovat dlouhodobě bez výpadku a s detekcí poruch.</td><td>Diagnostika snímače, hlídání limitů, alarmy, kontrola komunikace.</td></tr>
+  </table>
+
+  <h3>Měřicí systém vs. monitorovací systém</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>Měřicí systém</h4>
+      <p>Často jednorázové nebo krátkodobé měření. Může být centralizovaný, levnější a jednodušší. Archivace a dlouhodobá vizualizace nemusí být hlavní požadavek.</p>
+    </div>
+    <div class="card">
+      <h4>Monitorovací systém</h4>
+      <p>Dlouhodobé sledování, přenos a zpracování dat, vizualizace trendů, alarmní stavy a často decentralizovaná struktura.</p>
+    </div>
+  </div>
+
+  <h3>Centralizované a decentralizované MIS</h3>
+  <table>
+    <tr><th>Typ</th><th>Charakteristika</th><th>Výhody</th><th>Nevýhody</th></tr>
+    <tr><td>Centralizovaný MIS</td><td>Senzory jsou vedeny do jedné centrální jednotky, často analogově.</td><td>Jednoduchý návrh, vhodné pro laboratoře a menší úlohy.</td><td>Dlouhá analogová vedení, nižší odolnost proti rušení, závislost na centrální jednotce.</td></tr>
+    <tr><td>Decentralizovaný / distribuovaný MIS</td><td>Část zpracování je blízko snímače, data se přenášejí digitálně po sběrnici.</td><td>Vyšší odolnost proti rušení, flexibilita, možnost SMART senzorů, snazší rozšiřování.</td><td>Složitější návrh, nutnost řešit komunikaci, adresaci, diagnostiku a časování.</td></tr>
+  </table>
+
+  <div class="danger"><strong>Častá chyba:</strong> zaměnit měřicí řetězec za samotný snímač. Snímač je pouze první část řetězce. O výsledné kvalitě rozhoduje i úprava signálu, přenos, zpracování, kalibrace, algoritmy a odolnost proti rušení.</div>
+
+  <hr class="sec">
+
+  <h2 id="s2">2. Základní schéma</h2>
+  <div class="def">Základní schéma MIS popisuje přenos měřené informace od vstupní veličiny přes snímač, přenosový a zpracovatelský blok až k výstupnímu zařízení, přičemž v počítači nebo řídicí jednotce je uložen předpis pro zpracování signálu.</div>
+  <p>Základní schéma měřicího informačního systému je vhodné popsat pomocí pěti bloků. V materiálech MS jsou tyto bloky značeny jako: <strong>1 - vlastní snímač</strong>, <strong>2 - zařízení pro přenos dat</strong>, <strong>3 - počítač nebo jednotka pro zpracování měřené informace</strong>, <strong>4 - paměť s předpisem zpracování signálu</strong> a <strong>5 - výstupní zařízení</strong>.</p>
+
+  <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
+    <svg width="100%" viewBox="0 0 760 250" role="img" aria-label="Základní schéma MIS se vstupy a výstupy">
+      <defs>
+        <marker id="arr2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#1a4a8a" />
+        </marker>
+      </defs>
+      <text x="38" y="70" font-size="14" fill="#1a4a8a" font-weight="700">uᵢ(t)</text>
+      <line x1="55" y1="80" x2="110" y2="80" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr2)"/>
+      <rect x="112" y="55" width="88" height="50" fill="#fff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="156" y="76" text-anchor="middle" font-size="13" fill="#1a4a8a" font-weight="700">1</text>
+      <text x="156" y="94" text-anchor="middle" font-size="11" fill="#333">snímač</text>
+      <line x1="200" y1="80" x2="270" y2="80" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="235" y="67" text-anchor="middle" font-size="12" fill="#666">u₀₁</text>
+      <rect x="272" y="55" width="88" height="50" fill="#fff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="316" y="76" text-anchor="middle" font-size="13" fill="#1a4a8a" font-weight="700">2</text>
+      <text x="316" y="94" text-anchor="middle" font-size="11" fill="#333">přenos</text>
+      <line x1="360" y1="80" x2="430" y2="80" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="395" y="67" text-anchor="middle" font-size="12" fill="#666">u₀₂</text>
+      <rect x="432" y="55" width="88" height="50" fill="#fff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="476" y="76" text-anchor="middle" font-size="13" fill="#1a4a8a" font-weight="700">3</text>
+      <text x="476" y="94" text-anchor="middle" font-size="11" fill="#333">zpracování</text>
+      <line x1="520" y1="80" x2="590" y2="80" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="555" y="67" text-anchor="middle" font-size="12" fill="#666">u₀₃</text>
+      <rect x="592" y="55" width="88" height="50" fill="#fff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="636" y="76" text-anchor="middle" font-size="13" fill="#1a4a8a" font-weight="700">5</text>
+      <text x="636" y="94" text-anchor="middle" font-size="11" fill="#333">výstup</text>
+      <line x1="680" y1="80" x2="725" y2="80" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="715" y="67" font-size="14" fill="#1a4a8a" font-weight="700">uₒ(t)</text>
+      <rect x="430" y="155" width="92" height="50" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="476" y="177" text-anchor="middle" font-size="13" fill="#1a4a8a" font-weight="700">4</text>
+      <text x="476" y="195" text-anchor="middle" font-size="11" fill="#333">paměť</text>
+      <line x1="476" y1="155" x2="476" y2="108" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr2)"/>
+      <line x1="496" y1="108" x2="496" y2="155" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr2)"/>
+      <text x="380" y="222" font-size="12" fill="#666" text-anchor="middle">blok 4 obsahuje algoritmus, kalibrační konstanty a předpis zpracování měřicího signálu</text>
+    </svg>
+    <p style="font-size:12px;color:#666;text-align:center;margin:4px 0 0;">Rekonstrukce základního schématu měřicího řetězce podle skript MS.</p>
+  </div>
+
+  <h3>Význam jednotlivých bloků</h3>
+  <table>
+    <tr><th>Blok</th><th>Název</th><th>Funkce</th><th>Příklad</th></tr>
+    <tr><td>1</td><td>Vlastní snímač</td><td>Je v kontaktu s měřeným objektem a převádí fyzikální veličinu na měronosný signál.</td><td>Termočlánek, tenzometr, snímač tlaku, akcelerometr.</td></tr>
+    <tr><td>2</td><td>Přenos dat / signálu</td><td>Přenáší signál do místa zpracování. Může být analogový, digitální, drátový nebo bezdrátový.</td><td>Vedení 4-20 mA, RS-485, CAN, Ethernet, Wi-Fi.</td></tr>
+    <tr><td>3</td><td>Zpracování informace</td><td>Provádí převod, filtraci, korekce, výpočty, detekci limitů a přípravu výsledku.</td><td>PLC, mikrokontrolér, měřicí karta, PC aplikace.</td></tr>
+    <tr><td>4</td><td>Paměť s předpisem</td><td>Obsahuje algoritmus zpracování, kalibrační data, konfiguraci a diagnostické mezní hodnoty.</td><td>Firmware, program PLC, kalibrační tabulka, koeficienty filtru.</td></tr>
+    <tr><td>5</td><td>Výstupní zařízení</td><td>Zajišťuje využití naměřené hodnoty.</td><td>Displej, HMI, databáze, alarm, vstup regulátoru.</td></tr>
+  </table>
+
+  <h3>Matematický popis ideálního a reálného MIS</h3>
+  <p>U MIS sledujeme převod vstupního měřeného signálu <code>uᵢ(t)</code> na výstupní signál <code>uₒ(t)</code>. Ideální systém by provedl požadovanou operaci bez zkreslení, bez zpoždění a bez rušení:</p>
+  <pre><code>uₒ,id(t) = OP_id{uᵢ(t)}</code></pre>
+  <p>Reálný systém má neideální statické i dynamické vlastnosti a navíc je ovlivněn rušivými signály. Zjednodušeně lze psát:</p>
+  <pre><code>uₒ,re(t) = OP_re{uᵢ(t)} + vliv rušení + vliv vnitřních chyb systému</code></pre>
+  <p>Chyba přenosu se potom definuje jako rozdíl reálného a ideálního výstupu:</p>
+  <pre><code>uε(t) = uₒ,re(t) - uₒ,id(t)</code></pre>
+
+  <div class="grid3">
+    <div class="card"><h4>Statické vlastnosti</h4><p>Citlivost, rozsah, linearita, hystereze, prah citlivosti, aditivní a multiplikativní chyba.</p></div>
+    <div class="card"><h4>Dynamické vlastnosti</h4><p>Doba odezvy, časová konstanta, překmit, zpoždění, frekvenční pásmo.</p></div>
+    <div class="card"><h4>Informační vlastnosti</h4><p>Schopnost přenést užitečnou informaci s minimální ztrátou a s potlačením šumu.</p></div>
+  </div>
+
+  <h3>Etapy měření</h3>
+  <div class="flow">
+    <div class="fbox">volba metody</div><div class="farr">→</div>
+    <div class="fbox">výběr přístrojů</div><div class="farr">→</div>
+    <div class="fbox">sestavení řetězce</div><div class="farr">→</div>
+    <div class="fbox">nastavení podmínek</div><div class="farr">→</div>
+    <div class="fbox">měření</div><div class="farr">→</div>
+    <div class="fbox">zpracování</div><div class="farr">→</div>
+    <div class="fbox">protokol / využití</div>
+  </div>
+
+  <div class="note"><strong>Dobrá formulace ke zkoušce:</strong> „Blokové schéma MIS není jen kresba toku signálu. Ukazuje také, kde mohou vznikat chyby: ve snímači, v přenosu, ve zpracování, v kalibraci i ve výstupní interpretaci.“</div>
+  <div class="danger"><strong>Chyták:</strong> Pokud je rušení přidáno před zesilovačem, zesílí se spolu s užitečným signálem. Proto je výhodné umístit vhodnou úpravu, filtraci a digitalizaci co nejblíže snímači.</div>
+
+  <hr class="sec">
+
+  <h2 id="s3">3. Model MIS s uvažováním rušení</h2>
+  <div class="def">Model MIS s rušením popisuje reálný přenos měřené informace tak, že k užitečnému signálu se v některém místě řetězce přičítá rušivý signál; výsledkem je reálný výstup odlišný od ideálního výstupu a vznik chyby přenosu.</div>
+  <p>V reálném měřicím systému nikdy nepřenášíme pouze čistý informační signál. Signál je ovlivněn neideálním přenosem jednotlivých bloků, nelinearitou, omezenou šířkou pásma, zpožděním a především rušením. Materiály MS popisují model, ve kterém je systém rozdělen na dvě části s frekvenčními přenosy <code>G₁(jω)</code> a <code>G₂(jω)</code> a rušivý signál <code>uᵣ(t)</code> vstupuje mezi tyto části.</p>
+
+  <h3>Blokový model s aditivním rušením</h3>
+  <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
+    <svg width="100%" viewBox="0 0 760 270" role="img" aria-label="Model MIS s rušením">
+      <defs>
+        <marker id="arr3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#1a4a8a" />
+        </marker>
+      </defs>
+      <text x="40" y="92" font-size="14" fill="#1a4a8a" font-weight="700">uᵢ(t)</text>
+      <line x1="70" y1="100" x2="145" y2="100" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr3)"/>
+      <rect x="150" y="70" width="120" height="60" rx="6" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="210" y="96" text-anchor="middle" font-size="16" fill="#1a4a8a" font-weight="700">G₁(jω)</text>
+      <text x="210" y="116" text-anchor="middle" font-size="11" fill="#333">snímač + úprava</text>
+      <line x1="270" y1="100" x2="345" y2="100" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr3)"/>
+      <circle cx="370" cy="100" r="22" fill="#fff" stroke="#1a4a8a" stroke-width="2"/>
+      <line x1="357" y1="100" x2="383" y2="100" stroke="#1a4a8a" stroke-width="2"/>
+      <line x1="370" y1="87" x2="370" y2="113" stroke="#1a4a8a" stroke-width="2"/>
+      <line x1="370" y1="35" x2="370" y2="75" stroke="#8a1a1a" stroke-width="2" marker-end="url(#arr3)"/>
+      <text x="395" y="45" font-size="14" fill="#8a1a1a" font-weight="700">uᵣ(t)</text>
+      <text x="420" y="65" font-size="12" fill="#8a1a1a">aditivní rušení</text>
+      <line x1="392" y1="100" x2="470" y2="100" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr3)"/>
+      <rect x="475" y="70" width="120" height="60" rx="6" fill="#eef4ff" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="535" y="96" text-anchor="middle" font-size="16" fill="#1a4a8a" font-weight="700">G₂(jω)</text>
+      <text x="535" y="116" text-anchor="middle" font-size="11" fill="#333">přenos + výpočet</text>
+      <line x1="595" y1="100" x2="700" y2="100" stroke="#1a4a8a" stroke-width="2" marker-end="url(#arr3)"/>
+      <text x="705" y="94" font-size="14" fill="#1a4a8a" font-weight="700">uₒ,re(t)</text>
+      <path d="M 60 205 C 100 180, 145 230, 185 205 S 270 182, 315 205 S 400 225, 445 205" fill="none" stroke="#1a4a8a" stroke-width="2"/>
+      <text x="245" y="246" font-size="12" fill="#1a4a8a" text-anchor="middle">užitečný měřicí signál</text>
+      <path d="M 470 205 L 485 205 L 487 165 L 490 240 L 494 205 L 520 205 L 522 180 L 525 230 L 529 205 L 556 205 L 558 170 L 561 235 L 565 205 L 610 205" fill="none" stroke="#8a1a1a" stroke-width="2"/>
+      <text x="540" y="246" font-size="12" fill="#8a1a1a" text-anchor="middle">impulzní rušení / špičky</text>
+    </svg>
+    <p style="font-size:12px;color:#666;text-align:center;margin:4px 0 0;">Rekonstrukce modelu MIS s rušivým signálem vstupujícím mezi dva bloky přenosu.</p>
+  </div>
+
+  <h3>Matematický zápis ve frekvenční oblasti</h3>
+  <p>Pro lineární popis lze uvažovat Fourierovy obrazy signálů. Pokud se rušení přičítá mezi bloky <code>G₁</code> a <code>G₂</code>, potom pro výstup přibližně platí:</p>
+  <pre><code>Uₒ,re(jω) = G₂(jω) · [G₁(jω) · Uᵢ(jω) + Uᵣ(jω)]</code></pre>
+  <p>Ideální výstup by byl například:</p>
+  <pre><code>Uₒ,id(jω) = G_id(jω) · Uᵢ(jω)</code></pre>
+  <p>Chyba přenosu ve frekvenční oblasti je:</p>
+  <pre><code>Uε(jω) = Uₒ,re(jω) - Uₒ,id(jω)</code></pre>
+  <p>Z tohoto zápisu je vidět, že rušení vstupující před blok <code>G₂</code> je tímto blokem také přenášeno. Proto se u MIS řeší nejen velikost rušení, ale i místo, kde se do řetězce dostává.</p>
+
+  <h3>Signál, šum a poměr signál/šum</h3>
+  <p>V jednoduchém aditivním modelu je naměřený signál součtem užitečné složky a šumu:</p>
+  <pre><code>x_m(t) = x(t) + n(t)</code></pre>
+  <p>Kvalitu přenosu lze vyjádřit poměrem signálu k šumu:</p>
+  <pre><code>SNR = P_signálu / P_šumu
+SNR_dB = 10 · log10(P_signálu / P_šumu)</code></pre>
+
+  <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
+    <svg width="100%" viewBox="0 0 760 280" role="img" aria-label="Časový průběh a spektrum signálu s rušením">
+      <defs>
+        <marker id="arr4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+        </marker>
+      </defs>
+      <line x1="50" y1="120" x2="350" y2="120" stroke="#333" stroke-width="1.5" marker-end="url(#arr4)"/>
+      <line x1="50" y1="165" x2="50" y2="45" stroke="#333" stroke-width="1.5" marker-end="url(#arr4)"/>
+      <text x="355" y="126" font-size="12" fill="#333">t</text>
+      <text x="38" y="50" font-size="12" fill="#333">u</text>
+      <path d="M55 118 C70 90, 85 90, 100 118 S130 146,145 118 S175 90,190 118 S220 146,235 118 S265 90,280 118 S310 146,340 118" fill="none" stroke="#1a4a8a" stroke-width="2"/>
+      <path d="M55 120 L65 116 L72 124 L80 111 L88 130 L96 103 L105 135 L115 111 L125 128 L135 105 L145 118 L155 123 L165 93 L175 145 L185 112 L195 122 L205 104 L215 134 L225 111 L235 117 L245 126 L255 90 L265 148 L275 115 L285 127 L295 105 L305 135 L315 112 L340 118" fill="none" stroke="#8a1a1a" stroke-width="1.7" opacity="0.85"/>
+      <text x="195" y="200" text-anchor="middle" font-size="12" fill="#666">časová oblast: čistý signál a rušený signál</text>
+      <line x1="430" y1="220" x2="705" y2="220" stroke="#333" stroke-width="1.5" marker-end="url(#arr4)"/>
+      <line x1="430" y1="220" x2="430" y2="45" stroke="#333" stroke-width="1.5" marker-end="url(#arr4)"/>
+      <text x="710" y="226" font-size="12" fill="#333">f</text>
+      <text x="415" y="48" font-size="12" fill="#333">|U(f)|</text>
+      <path d="M440 218 C460 210, 475 185, 492 90 C508 185,525 210,545 218" fill="none" stroke="#1a4a8a" stroke-width="2"/>
+      <path d="M570 218 C586 212, 592 195, 600 145 C608 195,616 212,630 218" fill="none" stroke="#8a1a1a" stroke-width="2"/>
+      <path d="M642 218 C660 210, 670 195, 682 120 C690 195,697 212,705 218" fill="none" stroke="#8a1a1a" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="492" y="82" text-anchor="middle" font-size="12" fill="#1a4a8a">užitečné pásmo</text>
+      <text x="600" y="138" text-anchor="middle" font-size="12" fill="#8a1a1a">50 Hz</text>
+      <text x="664" y="113" text-anchor="middle" font-size="12" fill="#8a1a1a">rušivé harmonické</text>
+      <text x="570" y="252" text-anchor="middle" font-size="12" fill="#666">frekvenční oblast: oddělení signálu a rušení podle spektra</text>
+    </svg>
+    <p style="font-size:12px;color:#666;text-align:center;margin:4px 0 0;">Doplněný průběh: zobrazuje typickou myšlenku časové a frekvenční analýzy rušeného měření.</p>
+  </div>
+
+  <h3>Typy a zdroje rušení v MIS</h3>
+  <table>
+    <tr><th>Rušení</th><th>Popis</th><th>Typický zdroj</th><th>Dopad na MIS</th></tr>
+    <tr><td>Aditivní šum</td><td>Přičítá se k užitečnému signálu.</td><td>Tepelný šum, elektronika zesilovače, okolní elektromagnetické pole.</td><td>Kolísání výsledku, zhoršení rozlišení a SNR.</td></tr>
+    <tr><td>Impulzní / mžiková porucha</td><td>Krátký rušivý impuls nebo špička.</td><td>Spínání relé, stykačů, motorů, ESD, přechodové jevy.</td><td>Jednorázové výpadky, falešný alarm, chyba vzorku.</td></tr>
+    <tr><td>Síťové rušení</td><td>Periodická složka 50 Hz a její harmonické.</td><td>Napájecí síť, transformátory, zemní smyčky.</td><td>Zvlnění měřené hodnoty, především u nízkoúrovňových analogových signálů.</td></tr>
+    <tr><td>Souhlasné rušení</td><td>Stejná rušivá složka na obou vodičích vůči zemi.</td><td>Dlouhá vedení, kapacitní vazby na okolí, rozdíl potenciálů zemí.</td><td>Nutnost diferenčního měření a vysokého CMRR.</td></tr>
+    <tr><td>Nesouhlasné rušení</td><td>Rušivé napětí mezi signálovými vodiči.</td><td>Indukce do smyčky, nevhodné vedení vodičů, proudové smyčky.</td><td>Přímo se přičítá k měřenému rozdílovému signálu.</td></tr>
+  </table>
+
+  <h3>Souhlasné a nesouhlasné rušení</h3>
+  <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
+    <svg width="100%" viewBox="0 0 760 250" role="img" aria-label="Souhlasné a nesouhlasné rušení">
+      <defs>
+        <marker id="arr5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#1a4a8a" />
+        </marker>
+      </defs>
+      <text x="180" y="30" text-anchor="middle" font-size="15" fill="#1a4a8a" font-weight="700">Nesouhlasné rušení (differential mode)</text>
+      <line x1="60" y1="75" x2="300" y2="75" stroke="#1a4a8a" stroke-width="4" marker-end="url(#arr5)"/>
+      <line x1="300" y1="135" x2="60" y2="135" stroke="#1a4a8a" stroke-width="4" marker-end="url(#arr5)"/>
+      <rect x="60" y="60" width="65" height="90" rx="6" fill="#eef4ff" stroke="#1a4a8a"/>
+      <text x="92" y="110" text-anchor="middle" font-size="12" fill="#333">zdroj</text>
+      <rect x="300" y="60" width="65" height="90" rx="6" fill="#eef4ff" stroke="#1a4a8a"/>
+      <text x="332" y="110" text-anchor="middle" font-size="12" fill="#333">vstup</text>
+      <text x="185" y="105" text-anchor="middle" font-size="12" fill="#8a1a1a">rušivé napětí je mezi vodiči</text>
+      <text x="580" y="30" text-anchor="middle" font-size="15" fill="#1a4a8a" font-weight="700">Souhlasné rušení (common mode)</text>
+      <line x1="455" y1="75" x2="695" y2="75" stroke="#1a4a8a" stroke-width="4" marker-end="url(#arr5)"/>
+      <line x1="455" y1="135" x2="695" y2="135" stroke="#1a4a8a" stroke-width="4" marker-end="url(#arr5)"/>
+      <rect x="455" y="60" width="65" height="90" rx="6" fill="#eef4ff" stroke="#1a4a8a"/>
+      <text x="487" y="110" text-anchor="middle" font-size="12" fill="#333">zdroj</text>
+      <rect x="695" y="60" width="50" height="90" rx="6" fill="#eef4ff" stroke="#1a4a8a"/>
+      <text x="720" y="110" text-anchor="middle" font-size="12" fill="#333">vstup</text>
+      <line x1="570" y1="75" x2="570" y2="195" stroke="#8a1a1a" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="610" y1="135" x2="610" y2="195" stroke="#8a1a1a" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="540" y1="195" x2="640" y2="195" stroke="#555" stroke-width="2"/>
+      <text x="590" y="217" text-anchor="middle" font-size="12" fill="#8a1a1a">parazitní vazba k zemi / okolí</text>
+    </svg>
+  </div>
+
+  <div class="danger"><strong>Častá chyba v odpovědi:</strong> říct pouze „rušení se odfiltruje“. Rušení může mít stejné frekvenční pásmo jako měřený signál, může vstupovat jako souhlasné napětí nebo jako zemní smyčka. Pak samotný filtr nemusí stačit.</div>
+
+  <hr class="sec">
+
+  <h2 id="s4">4. Metody potlačení rušení</h2>
+  <div class="def">Potlačení rušení v MIS znamená snížení vlivu rušivého signálu na výsledek měření, a to buď vhodným návrhem systému, technickými opatřeními, analogovou nebo digitální filtrací, korekcí, diferenčním měřením, stíněním, zemněním, galvanickým oddělením nebo zpracováním dat.</div>
+  <p>Metody potlačení rušení lze rozdělit do tří hlavních skupin: <strong>konstrukční a EMC opatření</strong>, <strong>úprava a filtrace signálu</strong> a <strong>softwarové zpracování dat</strong>. Cílem není dosáhnout nulové chyby - to u reálného MIS nejde - ale minimalizovat chybu přenosu tak, aby výsledek splnil požadovanou nejistotu, přesnost a spolehlivost.</p>
+
+  <h3>Základní strategie optimalizace MIS</h3>
+  <div class="flow">
+    <div class="fbox">přiblížit systém ideálnímu chování</div><div class="farr">→</div>
+    <div class="fbox">zvýšit citlivost na užitečný signál</div><div class="farr">→</div>
+    <div class="fbox">snížit citlivost na rušení</div><div class="farr">→</div>
+    <div class="fbox">zmenšit samotné rušení</div>
+  </div>
+
+  <h3>Přehled metod potlačení</h3>
+  <table>
+    <tr><th>Metoda</th><th>Princip</th><th>Kdy je vhodná</th><th>Poznámka ke zkoušce</th></tr>
+    <tr><td>Stínění</td><td>Omezení kapacitní a elektromagnetické vazby mezi rušivým zdrojem a signálem.</td><td>Slabé analogové signály, dlouhá vedení, průmyslové prostředí.</td><td>Stínění musí být správně připojeno, jinak může vytvořit zemní smyčku.</td></tr>
+    <tr><td>Kroucený pár</td><td>Malá plocha smyčky a symetrické ovlivnění obou vodičů.</td><td>Diferenciální signály, RS-485, snímače s malým napětím.</td><td>Potlačuje hlavně indukované nesouhlasné rušení.</td></tr>
+    <tr><td>Diferenciální měření</td><td>Měří se rozdíl dvou vstupů, společná složka se potlačí.</td><td>Mostkové snímače, tenzometry, dlouhé kabely.</td><td>Důležitý parametr je CMRR.</td></tr>
+    <tr><td>Galvanické oddělení</td><td>Přeruší stejnosměrnou zemní vazbu mezi částmi systému.</td><td>Velký rozdíl potenciálů zemí, průmyslové sběrnice, bezpečnost.</td><td>Optočlen, izolovaný převodník, izolovaný DC/DC.</td></tr>
+    <tr><td>Analogová filtrace</td><td>Omezí frekvence mimo užitečné pásmo před A/D převodníkem.</td><td>Anti-alias filtr, potlačení 50 Hz, omezení vysokofrekvenčního šumu.</td><td>Filtr před ADC brání aliasingu - po vzorkování už alias nelze jednoduše odstranit.</td></tr>
+    <tr><td>Digitální filtrace</td><td>Matematická úprava již vzorkovaných dat.</td><td>Klouzavý průměr, FIR/IIR filtry, potlačení náhodného šumu.</td><td>Zlepšuje stabilitu, ale může přidat zpoždění.</td></tr>
+    <tr><td>Průměrování</td><td>Náhodné složky se při opakování částečně vyruší.</td><td>Stacionární měření, pomalé procesy, diagnostika trendů.</td><td>Nepomůže na systematickou chybu.</td></tr>
+    <tr><td>Správné zemnění</td><td>Řízení návratových proudů a referenčních potenciálů.</td><td>Analogové obvody, více zdrojů, dlouhá vedení.</td><td>Špatné zemnění může být samo zdrojem rušení.</td></tr>
+    <tr><td>Minimalizace smyček</td><td>Menší plocha smyčky znamená menší indukované napětí.</td><td>Rychlé signály, výkonové spínání, dlouhé kabely.</td><td>Vztah <code>u_ind = -dΦ/dt</code> vysvětluje, proč vadí velké smyčky.</td></tr>
+    <tr><td>Blokování napájení</td><td>Lokální kondenzátory dodají rychlé proudové špičky a sníží rušení napájení.</td><td>Digitální obvody, ADC, operační zesilovače, snímače.</td><td>Blokovací kondenzátor patří co nejblíže k napájecím pinům.</td></tr>
+  </table>
+
+  <h3>Filtrace ve frekvenční oblasti</h3>
+  <p>Filtr se popisuje přenosovou funkcí <code>H(jω)</code>. Výstupní spektrum je dáno součinem vstupního spektra a přenosu filtru:</p>
+  <pre><code>Y(jω) = H(jω) · X(jω)</code></pre>
+  <p>Pro aditivní signál se šumem platí:</p>
+  <pre><code>Y(jω) = H(jω) · [S(jω) + N(jω)]</code></pre>
+  <p>Úkolem je zvolit <code>H(jω)</code> tak, aby bylo užitečné pásmo zachováno a rušivé složky potlačeny.</p>
+
+  <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
+    <svg width="100%" viewBox="0 0 760 250" role="img" aria-label="Přenosové charakteristiky filtrů">
+      <defs>
+        <marker id="arr6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+        </marker>
+      </defs>
+      <line x1="65" y1="190" x2="300" y2="190" stroke="#333" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <line x1="65" y1="190" x2="65" y2="45" stroke="#333" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <path d="M70 65 C125 65, 150 68, 175 90 C200 112, 220 160, 290 184" fill="none" stroke="#1a4a8a" stroke-width="3"/>
+      <text x="180" y="218" text-anchor="middle" font-size="12" fill="#666">dolní propust</text>
+      <line x1="430" y1="190" x2="695" y2="190" stroke="#333" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <line x1="430" y1="190" x2="430" y2="45" stroke="#333" stroke-width="1.5" marker-end="url(#arr6)"/>
+      <path d="M440 65 L525 65 C540 65, 550 100, 560 178 C570 100, 580 65, 595 65 L690 65" fill="none" stroke="#1a4a8a" stroke-width="3"/>
+      <text x="560" y="185" text-anchor="middle" font-size="12" fill="#8a1a1a">zářez 50 Hz</text>
+      <text x="560" y="218" text-anchor="middle" font-size="12" fill="#666">pásmová zádrž / notch filtr</text>
+      <text x="50" y="50" font-size="12" fill="#333">|H|</text><text x="300" y="205" font-size="12" fill="#333">f</text>
+      <text x="415" y="50" font-size="12" fill="#333">|H|</text><text x="695" y="205" font-size="12" fill="#333">f</text>
+    </svg>
+  </div>
+
+  <h3>Diferenciální měření a CMRR</h3>
+  <p>U diferenciálního vstupu se signál vyhodnocuje jako rozdíl dvou vodičů:</p>
+  <pre><code>u_d = u⁺ - u⁻</code></pre>
+  <p>Souhlasná složka je přibližně průměr obou vstupů:</p>
+  <pre><code>u_cm = (u⁺ + u⁻) / 2</code></pre>
+  <p>Kvalita potlačení souhlasné složky se vyjadřuje činitelem CMRR:</p>
+  <pre><code>CMRR_dB = 20 · log10(A_d / A_cm)</code></pre>
+  <p>Kde <code>A_d</code> je diferenciální zesílení a <code>A_cm</code> je zesílení souhlasné složky. Čím vyšší CMRR, tím lépe měřicí vstup potlačuje rušení stejné na obou vodičích.</p>
+
+  <h3>Průměrování a klouzavý průměr</h3>
+  <p>Jednoduchý softwarový filtr je aritmetický průměr z <code>N</code> vzorků:</p>
+  <pre><code>y[k] = (1/N) · Σ x[k-i],    i = 0 ... N-1</code></pre>
+  <p>Průměrování snižuje náhodný šum, ale zároveň zpomaluje odezvu. Proto je vhodné pro pomalé veličiny nebo tam, kde je důležitější stabilita než okamžitá rychlá odezva.</p>
+
+  <h3>Technická opatření v návrhu MIS</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>Analogová část</h4>
+      <p>Krátké vedení od snímače, stíněné kabely, diferenciální vstupy, přístrojový zesilovač, anti-alias filtr, stabilní reference ADC, oddělení analogové a výkonové části.</p>
+    </div>
+    <div class="card">
+      <h4>Digitální a komunikační část</h4>
+      <p>Digitální přenos po sběrnici, kontrolní součty, opakování zpráv, galvanické oddělení sběrnice, správná topologie, terminace vedení, watchdog a diagnostika komunikace.</p>
+    </div>
+  </div>
+
+  <div class="note"><strong>Dobrá zkoušková věta:</strong> „Optimální MIS se nesnaží jen o co nejlepší snímač, ale o co nejlepší poměr užitečného signálu k rušivému signálu v celém řetězci.“</div>
+  <div class="danger"><strong>Chyták:</strong> Digitální filtr po A/D převodu nenahradí anti-alias filtr. Pokud vysokofrekvenční rušení aliasuje do měřeného pásma, v datech se už tváří jako legitimní nízkofrekvenční složka.</div>
+
+  <hr class="sec">
+
+  <h2 id="s5">Co určitě umět říct u státnic</h2>
+  <div class="def">U státnic je důležité umět nakreslit základní schéma MIS, vysvětlit roli jednotlivých bloků, zapsat model s rušením a popsat praktické metody potlačení rušení.</div>
+  <ul>
+    <li>MIS je celý informační řetězec od měřeného objektu po využití dat, ne pouze samotný snímač.</li>
+    <li>Základní bloky MIS jsou snímač, přenos dat, zpracování měřené informace, paměť s předpisem zpracování a výstupní zařízení.</li>
+    <li>Moderní MIS obsahuje HW prostředky, jako jsou senzory, převodníky, přenosové prvky a výpočetní jednotka, i SW prostředky, jako je sběr, archivace, zpracování, vizualizace a diagnostika.</li>
+    <li>Centralizovaný MIS je jednodušší, ale u dlouhých analogových vedení je méně odolný proti rušení.</li>
+    <li>Decentralizovaný MIS provádí část zpracování blízko snímače a často přenáší data digitálně, čímž zvyšuje odolnost a flexibilitu.</li>
+    <li>Ideální MIS by měl výstup <code>uₒ,id(t)</code>, reálný MIS má výstup <code>uₒ,re(t)</code> a chyba přenosu je <code>uε(t) = uₒ,re(t) - uₒ,id(t)</code>.</li>
+    <li>Rušení se může do řetězce přidat jako aditivní šum, impulzní porucha, síťové rušení, souhlasná složka nebo nesouhlasná složka.</li>
+    <li>Velikost chyby závisí na kvalitě měřicího systému, citlivosti na rušivé signály a velikosti samotného rušivého signálu.</li>
+    <li>Potlačení rušení se provádí návrhem systému, stíněním, správným zemněním, minimalizací smyček, diferenciálním měřením, galvanickým oddělením, filtrací a softwarovým zpracováním.</li>
+    <li>Diferenciální vstup potlačuje souhlasné rušení; kvalita potlačení se vyjadřuje parametrem <code>CMRR</code>.</li>
+    <li>Filtraci je nutné navrhnout podle spektra užitečného signálu a spektra rušení; ne každé rušení lze odstranit jednoduchou dolní propustí.</li>
+    <li>Anti-alias filtr musí být před A/D převodníkem, protože aliasované rušení už po vzorkování nelze spolehlivě odlišit od užitečného signálu.</li>
+    <li>Průměrování pomáhá proti náhodnému šumu, ale nepomáhá proti systematickým chybám a zpomaluje odezvu.</li>
+    <li>Správná odpověď by měla propojit teorii s praxí: dlouhá vedení, průmyslové rušení, 50 Hz, motory, stykače, spínané zdroje, zemní smyčky a EMC návrh.</li>
+  </ul>
+
+  <hr class="sec">
+  <div style="background:#1a4a8a;color:white;padding:18px 24px;border-radius:8px;margin-top:24px;">
+    <p style="color:white;font-size:13px;margin:0;text-align:center;">
+      <strong>Obecné vlastnosti měřicího informačního systému, základní schéma, model MIS s uvažováním rušení. Metody potlačení rušení.</strong> · Řídicí a informační systémy 2026<br>
+      Podklady: přednášky a skripta MS
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
