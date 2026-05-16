@@ -35,6 +35,7 @@ tr:nth-child(even) td { background: #f5f8ff; }
 code { background: #f0f4ff; padding: 1px 5px; border-radius: 3px; font-family: 'Courier New', monospace; font-size: 13px; color: #1a4a8a; }
 pre { background:#0f172a; color:#e5e7eb; padding:12px 16px; border-radius:8px; overflow-x:auto; font-size:13px; line-height:1.45; margin:14px 0; }
 pre code { background: transparent; color: inherit; padding:0; }
+.math { background: transparent; color: #1a1a1a; padding: 8px 4px; font-family: Georgia, 'Times New Roman', serif; font-size: 16px; text-align: center; margin: 12px 0; }
 .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 14px 0; justify-content: center; }
 .fbox { background: #f0f4ff; border: 1.5px solid #1a4a8a; border-radius: 6px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #1a4a8a; }
 .farr { font-size: 20px; color: #888; }
@@ -187,11 +188,11 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Matematický popis ideálního a reálného MIS</h3>
   <p>U MIS sledujeme převod vstupního měřeného signálu <code>uᵢ(t)</code> na výstupní signál <code>uₒ(t)</code>. Ideální systém by provedl požadovanou operaci bez zkreslení, bez zpoždění a bez rušení:</p>
-  <pre><code>uₒ,id(t) = OP_id{uᵢ(t)}</code></pre>
+  <p class="math">u<sub>o,id</sub>(t) = OP<sub>id</sub>{u<sub>i</sub>(t)}</p>
   <p>Reálný systém má neideální statické i dynamické vlastnosti a navíc je ovlivněn rušivými signály. Zjednodušeně lze psát:</p>
-  <pre><code>uₒ,re(t) = OP_re{uᵢ(t)} + vliv rušení + vliv vnitřních chyb systému</code></pre>
+  <p class="math">u<sub>o,re</sub>(t) = OP<sub>re</sub>{u<sub>i</sub>(t)} + \text{vliv rušení} + \text{vliv vnitřních chyb systému}</p>
   <p>Chyba přenosu se potom definuje jako rozdíl reálného a ideálního výstupu:</p>
-  <pre><code>uε(t) = uₒ,re(t) - uₒ,id(t)</code></pre>
+  <p class="math">u<sub>ε</sub>(t) = u<sub>o,re</sub>(t) - u<sub>o,id</sub>(t)</p>
 
   <div class="grid3">
     <div class="card"><h4>Statické vlastnosti</h4><p>Citlivost, rozsah, linearita, hystereze, prah citlivosti, aditivní a multiplikativní chyba.</p></div>
@@ -255,19 +256,18 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Matematický zápis ve frekvenční oblasti</h3>
   <p>Pro lineární popis lze uvažovat Fourierovy obrazy signálů. Pokud se rušení přičítá mezi bloky <code>G₁</code> a <code>G₂</code>, potom pro výstup přibližně platí:</p>
-  <pre><code>Uₒ,re(jω) = G₂(jω) · [G₁(jω) · Uᵢ(jω) + Uᵣ(jω)]</code></pre>
+  <p class="math">U<sub>o,re</sub>(jω) = G<sub>2</sub>(jω) &middot; [G<sub>1</sub>(jω) &middot; U<sub>i</sub>(jω) + U<sub>r</sub>(jω)]</p>
   <p>Ideální výstup by byl například:</p>
-  <pre><code>Uₒ,id(jω) = G_id(jω) · Uᵢ(jω)</code></pre>
+  <p class="math">U<sub>o,id</sub>(jω) = G<sub>id</sub>(jω) &middot; U<sub>i</sub>(jω)</p>
   <p>Chyba přenosu ve frekvenční oblasti je:</p>
-  <pre><code>Uε(jω) = Uₒ,re(jω) - Uₒ,id(jω)</code></pre>
+  <p class="math">U<sub>ε</sub>(jω) = U<sub>o,re</sub>(jω) - U<sub>o,id</sub>(jω)</p>
   <p>Z tohoto zápisu je vidět, že rušení vstupující před blok <code>G₂</code> je tímto blokem také přenášeno. Proto se u MIS řeší nejen velikost rušení, ale i místo, kde se do řetězce dostává.</p>
 
   <h3>Signál, šum a poměr signál/šum</h3>
   <p>V jednoduchém aditivním modelu je naměřený signál součtem užitečné složky a šumu:</p>
-  <pre><code>x_m(t) = x(t) + n(t)</code></pre>
+  <p class="math">x_m(t) = x(t) + n(t)</p>
   <p>Kvalitu přenosu lze vyjádřit poměrem signálu k šumu:</p>
-  <pre><code>SNR = P_signálu / P_šumu
-SNR_dB = 10 · log10(P_signálu / P_šumu)</code></pre>
+  <p class="math">SNR = \dfrac{P_{signálu}}{P_{šumu}}<br/>SNR_{dB} = 10 &middot; \log_{10}\left(\dfrac{P_{signálu}}{P_{šumu}}\right)</p>
 
   <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
     <svg width="100%" viewBox="0 0 760 280" role="img" aria-label="Časový průběh a spektrum signálu s rušením">
@@ -365,15 +365,15 @@ SNR_dB = 10 · log10(P_signálu / P_šumu)</code></pre>
     <tr><td>Digitální filtrace</td><td>Matematická úprava již vzorkovaných dat.</td><td>Klouzavý průměr, FIR/IIR filtry, potlačení náhodného šumu.</td><td>Zlepšuje stabilitu, ale může přidat zpoždění.</td></tr>
     <tr><td>Průměrování</td><td>Náhodné složky se při opakování částečně vyruší.</td><td>Stacionární měření, pomalé procesy, diagnostika trendů.</td><td>Nepomůže na systematickou chybu.</td></tr>
     <tr><td>Správné zemnění</td><td>Řízení návratových proudů a referenčních potenciálů.</td><td>Analogové obvody, více zdrojů, dlouhá vedení.</td><td>Špatné zemnění může být samo zdrojem rušení.</td></tr>
-    <tr><td>Minimalizace smyček</td><td>Menší plocha smyčky znamená menší indukované napětí.</td><td>Rychlé signály, výkonové spínání, dlouhé kabely.</td><td>Vztah <code>u_ind = -dΦ/dt</code> vysvětluje, proč vadí velké smyčky.</td></tr>
+    <tr><td>Minimalizace smyček</td><td>Menší plocha smyčky znamená menší indukované napětí.</td><td>Rychlé signály, výkonové spínání, dlouhé kabely.</td><td>Vztah <span class="math">u<sub>ind</sub> = -\dfrac{dΦ}{dt}</span> vysvětluje, proč vadí velké smyčky.</td></tr>
     <tr><td>Blokování napájení</td><td>Lokální kondenzátory dodají rychlé proudové špičky a sníží rušení napájení.</td><td>Digitální obvody, ADC, operační zesilovače, snímače.</td><td>Blokovací kondenzátor patří co nejblíže k napájecím pinům.</td></tr>
   </table>
 
   <h3>Filtrace ve frekvenční oblasti</h3>
   <p>Filtr se popisuje přenosovou funkcí <code>H(jω)</code>. Výstupní spektrum je dáno součinem vstupního spektra a přenosu filtru:</p>
-  <pre><code>Y(jω) = H(jω) · X(jω)</code></pre>
+  <p class="math">Y(jω) = H(jω) &middot; X(jω)</p>
   <p>Pro aditivní signál se šumem platí:</p>
-  <pre><code>Y(jω) = H(jω) · [S(jω) + N(jω)]</code></pre>
+  <p class="math">Y(jω) = H(jω) &middot; [S(jω) + N(jω)]</p>
   <p>Úkolem je zvolit <code>H(jω)</code> tak, aby bylo užitečné pásmo zachováno a rušivé složky potlačeny.</p>
 
   <div style="border:1px solid #c8d8f0;border-radius:8px;background:#fbfdff;padding:12px;margin:14px 0;">
