@@ -112,7 +112,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
         <strong>Obor:</strong> NMgr. Řídicí a informační systémy<br>
         <strong>Téma:</strong> Amplitudové analogové modulace, úhlové analogové modulace. Analýza modulovaného vysokofrekvenčního
 signálu v časové oblasti, frekvenční analýza a spektra modulovaného vysokofrekvenčního signálu, modulace (AM,
-DSB-SC, SSB-AM, QM, PM, FM). <br>
+DSB-SC, SSB-SC, QM, PM, FM). <br>
     </div>
 
     <!-- SEKCE 1 -->
@@ -185,7 +185,7 @@ DSB-SC, SSB-AM, QM, PM, FM). <br>
             <td><strong>100% energetická účinnost</strong>. Vyžaduje dražší <strong>multiplikativní detektor</strong> s přesnou fázovou synchronizací (Costasova smyčka).</td>
         </tr>
         <tr>
-            <td><strong>SSB-AM</strong></td>
+            <td><strong>SSB-SC</strong></td>
             <td><code>m(t) &plusmn; j m&#770;(t)</code></td>
             <td>Přenáší se jen JEDNO postranní pásmo.<br>Šířka: B</td>
             <td><strong>Úspora pásma na polovinu.</strong> Tvorba fázového posunu o 90&deg; vyžaduje matematickou <strong>Hilbertovu transformaci</strong> modulačního signálu.</td>
@@ -224,7 +224,7 @@ DSB-SC, SSB-AM, QM, PM, FM). <br>
         <div class="plot-caption">Spektra DSB-SC. Nosná fc je potlačena, výkon leží výhradně v postranních pásmech. Fázové spektrum se symetricky překlápí.</div>
     </div>
 
-    <h3>2.3 SSB-AM (LSSB a USSB)</h3>
+    <h3>2.3 SSB-SC (LSSB a USSB)</h3>
     <p>Využívá Hilbertovu transformaci k odříznutí jednoho postranního pásma. <span class="math"><i>g(t)</i> = <i>m(t)</i> &plusmn; j&middot;<i>m&#770;(t)</i></span>.</p>
     <div class="plot-container">
         <img id="spec_ssb" alt="SSB Spektra" />
@@ -288,7 +288,7 @@ DSB-SC, SSB-AM, QM, PM, FM). <br>
             <li><span class="highlight">Linearita modulací:</span> Amplitudové modulace (AM, DSB-SC, SSB, QM) jsou <strong>lineární</strong> – platí u nich princip superpozice, postranní pásma jsou pouhým obrazem informačního spektra. Úhlové modulace (FM, PM) jsou <strong>nelineární</strong> – superpozice neplatí a generují teoreticky nekonečně mnoho kombinačních pásem (popsatelných Besselovými funkcemi).</li>
             <li><span class="highlight">Rozdíl mezi AM a DSB-SC:</span> Obyčejná AM pořád vysílá tučnou nosnou vlnu, která neobsahuje data, čímž plýtvá energií, ale lze ji levně demodulovat diodovým detektorem obálky. U DSB-SC se nosná nevysílá, čímž vzniká 100% energetická efektivnost, ale k přijetí potřebujeme složitý <strong>multiplikativní detektor</strong> se synchronizací (Costasova smyčka).</li>
             <li><span class="highlight">Počet spektrálních čar AM:</span> Pokud moduluji prostou AM jedním harmonickým (sinusovým) signálem, ve spektru budou vždy přesně <strong>3 čáry</strong> (nosná, horní postranní, dolní postranní). Šířka pásma je dvojnásobkem modulační frekvence.</li>
-            <li><span class="highlight">Výhoda SSB-AM a Hilbertova transformace:</span> Ušetří přesně <strong>polovinu šířky frekvenčního pásma</strong> a polovinu energie. Generuje se matematickým přesným fázovým posunem celého spektra modulačního signálu o -90&deg; (Hilbertova transformace) a následným odečtením/přičtením.</li>
+            <li><span class="highlight">Výhoda SSB-SC a Hilbertova transformace:</span> Ušetří přesně <strong>polovinu šířky frekvenčního pásma</strong> a polovinu energie. Generuje se matematickým přesným fázovým posunem celého spektra modulačního signálu o -90&deg; (Hilbertova transformace) a následným odečtením/přičtením.</li>
             <li><span class="highlight">Kvadraturní modulace (QM):</span> Vyžaduje přísnou fázovou koherenci oscilátoru při příjmu (řeší fázový závěs PLL). Dva nezávislé signály nesené na jedné frekvenci rozlišíme díky tomu, že nosné vlny jsou na sebe kolmé (ortogonální) s fázovým rozdílem 90&deg; (tzv. I a Q složka). Bez ní by se obě složky do sebe nevratně smíchaly.</li>
             <li><span class="highlight">Rozdíl PM vs FM:</span> U fázové modulace (PM) řídíme přímo fázi signálu. U frekvenční modulace (FM) řídíme okamžitou frekvenci (fáze se získá jako matematický <strong>integrál</strong> modulačního signálu).</li>
             <li><span class="highlight">Vzorkování a Kvantizační šum (mezioborový přesah):</span> Fourierovu transformaci na počítači řešíme algoritmem <strong>FFT</strong>. Při vzorkování se bráníme aliasingu dolnopropustným antialiasingovým filtrem. Během A/D převodu vzniká kvantizační šum, jehož <strong>maximální absolutní chyba je vždy přesně polovina jednoho kvantizačního kroku</strong>!</li>
