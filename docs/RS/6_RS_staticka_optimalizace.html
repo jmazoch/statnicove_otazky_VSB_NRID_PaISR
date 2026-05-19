@@ -367,18 +367,62 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <p>KKT podmínky jsou rozšíření Lagrangeovy metody pro úlohy s nerovnostmi. Přidávají nejen stacionaritu a splnění omezení, ale také podmínku nezápornosti multiplikátorů a komplementaritu.</p>
 
-  <div class="eq">
-    <div class="label">Základní tvar KKT podmínek pro rovnosti a nerovnosti</div>
-    \[
-    \begin{aligned}
-      \nabla_x L(x,\lambda,\mu) &= 0 \\
-      h_i(x) &= 0 \\
-      g_j(x) &\le 0 \\
-      \mu_j &\ge 0 \\
-      \mu_j g_j(x) &= 0
-    \end{aligned}
-    \]
+<div class="eq">
+  <div class="label">Základní tvar KKT podmínek pro rovnosti a nerovnosti</div>
+  \[
+  \begin{aligned}
+    \nabla_x L(x,\lambda,\mu) &= 0 \\
+    h_i(x) &= 0 \\
+    g_j(x) &\le 0 \\
+    \mu_j &\ge 0 \\
+    \mu_j g_j(x) &= 0
+  \end{aligned}
+  \]
+
+  <div class="note">
+    <p>
+      KKT podmínky se používají pro optimalizační úlohy, kde hledáme minimum nebo maximum účelové funkce
+      při současném splnění rovnostních a nerovnostních omezení.
+    </p>
+
+    <ul>
+      <li>
+        <strong>\(\nabla_x L(x,\lambda,\mu)=0\)</strong>:
+        podmínka stacionarity. Říká, že v optimu už nelze zlepšit účelovou funkci vzhledem ke stavovým proměnným \(x\),
+        pokud započítáme vliv omezení.
+      </li>
+
+      <li>
+        <strong>\(h_i(x)=0\)</strong>:
+        rovnostní omezení. Musí být splněno přesně. Například podmínka typu „součet musí být roven dané hodnotě“.
+      </li>
+
+      <li>
+        <strong>\(g_j(x)\le 0\)</strong>:
+        nerovnostní omezení. Určuje povolenou oblast řešení. Pokud je \(g_j(x)<0\), řešení je uvnitř povolené oblasti.
+        Pokud je \(g_j(x)=0\), řešení leží na hranici omezení.
+      </li>
+
+      <li>
+        <strong>\(\mu_j\ge 0\)</strong>:
+        nezápornost Lagrangeova multiplikátoru pro nerovnostní omezení.
+        Multiplikátor \(\mu_j\) vyjadřuje, jak silně dané omezení ovlivňuje optimum.
+      </li>
+
+      <li>
+        <strong>\(\mu_j g_j(x)=0\)</strong>:
+        komplementární podmínka. Říká, že každé nerovnostní omezení je buď aktivní, nebo neaktivní.
+        Pokud je omezení neaktivní, tedy \(g_j(x)<0\), potom musí být \(\mu_j=0\).
+        Pokud je omezení aktivní, tedy \(g_j(x)=0\), potom může být \(\mu_j>0\).
+      </li>
+    </ul>
+
+    <p>
+      Jednoduše: KKT podmínky říkají, že hledané řešení musí být optimální, musí splňovat všechna omezení
+      a zároveň musí být jasné, která nerovnostní omezení řešení skutečně „tlačí“ na hranici.
+    </p>
   </div>
+</div>
 
   <div class="note">Komplementarita \(\mu_j g_j(x)=0\) říká elegantní věc: buď je omezení aktivní na hranici, nebo jeho multiplikátor nemá co dělat a je nulový. Je to takový matematický hlídač dveří.</div>
 
