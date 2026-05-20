@@ -14,10 +14,6 @@ Doporučuji si informace ověřovat také v přednáškách, skriptech, prezenta
 
 Repozitář bude postupně obsahovat vypracované otázky z jednotlivých předmětů ve formátu HTML, případně dalších podpůrných souborů.
 
-Lokální konfigurace pro Claude je uložená ve složce `.claude/` a není součástí verzování.
-
-Všechny HTML stránky používají společný navbar z `docs/shared/navbar-inject.js`, takže navigaci stačí upravit na jednom místě.
-
 ## Použití
 
 Jednotlivé otázky lze otevřít přímo v prohlížeči jako HTML soubory.
