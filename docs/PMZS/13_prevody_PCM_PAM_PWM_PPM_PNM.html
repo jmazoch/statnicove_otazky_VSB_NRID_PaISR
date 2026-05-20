@@ -52,6 +52,13 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 @media (max-width: 760px) { .podcast-toggle { position: fixed; right: 14px; bottom: 14px; z-index: 82; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 0; border-radius: 999px; background: #1a4a8a; color: #fff; font-family: Arial, sans-serif; font-size: 13px; font-weight: 800; box-shadow: 0 10px 28px rgba(0,0,0,0.22); cursor: pointer; } .podcast-wrap { display: none; left: 12px; right: 12px; bottom: 72px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; border-radius: 14px; padding: 8px 10px; } .podcast-wrap.is-open { display: flex; } .podcast-label { display: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
 </style>
 <link rel="stylesheet" href="../shared/navbar-styles.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 <body>
 <header class="topbar" id="topbar">
@@ -293,9 +300,9 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Počet úrovní a kvantizační krok</h3>
   <p>Je-li délka kódového slova <code>n</code> bitů, může PCM systém reprezentovat:</p>
-  <pre><code>M = 2^n</code></pre>
+  <div class="eq">\[ M = 2^n \]</div>
   <p>různých kvantizačních úrovní nebo kódových slov. Pro rovnoměrné kvantování lze kvantizační krok přibližně popsat vztahem:</p>
-  <pre><code>Δ = rozsah / (počet stavů - 1)</code></pre>
+  <div class="eq">\[ \Delta = \dfrac{\text{rozsah}}{(\text{počet stavů} - 1)} \]</div>
   <p>Čím větší je počet bitů, tím jemnější je rozlišení a tím menší je kvantizační chyba. Zároveň se ale zvyšuje datový tok a požadovaná šířka pásma.</p>
 
   <table>
@@ -448,9 +455,9 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <p>PAM je proto mezikrok mezi spojitým analogovým signálem a číslicovým signálem. Má už diskrétní časové okamžiky, ale amplituda impulsů ještě nemusí být omezena na konečný počet hodnot. Proto PAM sama o sobě neznamená digitalizaci ve smyslu binárního toku.</p>
 
   <p>Pro přirozené vzorkování lze princip vyjádřit jako násobení vstupního analogového signálu spínacím impulsním signálem:</p>
-  <pre><code>wS(t) = w(t) · s(t)</code></pre>
+  <div class="eq">\[ w_S(t) = w(t) \cdot s(t) \]</div>
   <p>kde <code>s(t)</code> je periodická posloupnost spínacích impulsů s periodou <code>T<sub>S</sub></code>. Vzorkovací frekvence je:</p>
-  <pre><code>fS = 1 / TS</code></pre>
+  <div class="eq">\[ f_S = \dfrac{1}{T_S} \]</div>
 
   <h3>Druhy vzorkování u PAM</h3>
   <table>
@@ -555,7 +562,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   </table>
 
   <p>Střední hodnota PWM signálu je při konstantní amplitudě úměrná střídě:</p>
-  <pre><code>UAVG ≈ D · UMAX</code></pre>
+  <div class="eq">\[ U_{AVG} \approx D \cdot U_{MAX} \]</div>
   <p>Právě tato vlastnost umožňuje pomocí PWM řídit výkon. Po průchodu dolnopropustným filtrem nebo díky setrvačnosti řízené soustavy se z impulsního signálu získá přibližná analogová hodnota.</p>
 
   <div class="flow">
@@ -625,7 +632,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   </div>
 
   <p>Matematicky lze princip vyjádřit úměrností:</p>
-  <pre><code>xPPM(t) ≈ wDIGITAL(t)</code></pre>
+  <div class="eq">\[ x_{PPM}(t) \approx w_{DIGITAL}(t) \]</div>
   <p>kde <code>x<sub>PPM</sub>(t)</code> je poloha nebo zpoždění impulsu od začátku periody a <code>w<sub>DIGITAL</sub>(t)</code> je převáděná digitální hodnota.</p>
 
   <table>
@@ -713,9 +720,9 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   </div>
 
   <p>Úměrnost mezi digitální hodnotou a počtem impulsů lze zapsat:</p>
-  <pre><code>NPNM(t) ≈ wDIGITAL(t)</code></pre>
+  <div class="eq">\[ N_{PNM}(t) \approx w_{DIGITAL}(t) \]</div>
   <p>Pokud je cílem získat analogovou hodnotu, lze ji chápat jako úměrnou počtu impulsů:</p>
-  <pre><code>WMAX_ANALOG(t) = APNM · NPNM(t)</code></pre>
+  <div class="eq">\[ W_{MAX\_ANALOG}(t) = A_{PNM} \cdot N_{PNM}(t) \]</div>
 
   <table>
     <tr>
@@ -802,7 +809,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Vzorkovací teorém</h3>
   <p>Nechť má analogový signál nejvyšší významnou frekvenční složku nebo šířku pásma <code>B</code>. Aby nedošlo k překrytí spekter po vzorkování, musí platit:</p>
-  <pre><code>fS ≥ 2 · B</code></pre>
+  <div class="eq">\[ f_S \ge 2 \cdot B \]</div>
   <p>V praktickém výkladu se často říká, že vzorkovací frekvence má být vyšší než dvojnásobek nejvyšší harmonické složky signálu. Přesná hraniční hodnota se označuje jako Nyquistova frekvence. V reálných systémech se používá určitá rezerva, protože skutečné filtry nejsou ideální a skutečné signály nebývají dokonale frekvenčně omezené.</p>
 
   <div class="grid2">
@@ -822,9 +829,9 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Kvantování a kvantizační chyba</h3>
   <p>Po vzorkování máme časovou posloupnost hodnot. Tyto hodnoty však stále mohou nabývat libovolné amplitudy. Kvantování znamená, že každá hodnota je zařazena k nejbližší povolené kvantizační hladině. Tím vzniká odchylka:</p>
-  <pre><code>eQ = skutečná hodnota vzorku − kvantovaná hodnota</code></pre>
+  <div class="eq">\[ e_Q = \text{skutečná hodnota vzorku} - \text{kvantovaná hodnota} \]</div>
   <p>U rovnoměrného kvantování je maximální velikost kvantizační chyby přibližně polovina kvantizačního kroku:</p>
-  <pre><code>|eQ|max ≤ Δ / 2</code></pre>
+  <div class="eq">\[ \lvert e_Q \rvert_{\max} \le \dfrac{\Delta}{2} \]</div>
 
   <table>
     <tr>

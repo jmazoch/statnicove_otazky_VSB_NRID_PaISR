@@ -40,6 +40,13 @@ pre code { background: transparent; color: inherit; padding:0; }
 .farr { font-size: 20px; color: #888; }
 hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 @media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }</style>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 <body>
 <div class="page">
@@ -48,14 +55,14 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · Podklady: přednášky a skripta MS</p>
 
   <div class="toc">
-    <h3>Obsah</h3>
-    <ol>
-      <li><a href="#s1">1. Ideální a reálný MIS</a></li>
+    \[
+    Y = \bar{y} \pm U
+    \]
       <li><a href="#s1-1">1.1 Chyba přenosu</a></li>
       <li><a href="#s2">2. Příčiny vzniku chyb a jejich rozdělení</a></li>
-      <li><a href="#s2-1">2.1 Podle působení</a></li>
-      <li><a href="#s2-2">2.2 Podle zdroje</a></li>
-      <li><a href="#s3">3. Chyby měření</a></li>
+    \[
+    	ext{kde: }\bar{y}\ \text{... nejlepší odhad (aritmetický průměr)},\quad U\ \text{... rozšířená nejistota},\quad k_R\ \text{... koef. pokrytí}
+    \]
       <li><a href="#s3-1">3.1 Absolutní chyba měření</a></li>
       <li><a href="#s3-2">3.2 Relativní chyba měření</a></li>
       <li><a href="#s4">4. Nejistoty měření</a></li>
@@ -87,13 +94,25 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Matematický popis ideálního a reálného systému</h3>
   <p>Ideální MIS realizuje požadovanou operaci bez zkreslení. Pokud je ideální operace označena <code>OP<sub>id</sub></code>, pak platí:</p>
-  <pre><code>uₒ,id = OP_id[uᵢ]</code></pre>
+  <div class="eq">
+    \[
+    u_{o,\mathrm{id}} = \mathrm{OP}_{\mathrm{id}}[u_i]
+    \]
+  </div>
 
   <p>Reálný MIS realizuje jen přibližnou operaci <code>OP<sub>re</sub></code> a navíc je ovlivněn rušivým signálem <code>uᵣ</code>. Reálný výstup lze zapsat:</p>
-  <pre><code>uₒ,re = OP_re[uᵢ] + f[uᵣ]</code></pre>
+  <div class="eq">
+    \[
+    u_{o,\mathrm{re}} = \mathrm{OP}_{\mathrm{re}}[u_i] + f[u_r]
+    \]
+  </div>
 
   <p>Pro zjednodušenou statickou lineární charakteristiku se ideální MIS často vyjadřuje vztahem:</p>
-  <pre><code>uₒ = C · x,      C = konst.</code></pre>
+  <div class="eq">
+    \[
+    u_o = C\cdot x,\quad C=\text{konst.}
+    \]
+  </div>
 
   <p>Ve skutečnosti má měřicí systém omezený rozsah, citlivost, rozlišovací schopnost, vlastní šum a konečnou dynamiku. Reálná charakteristika proto může být nelineární, posunutá, hysteretická nebo saturovaná.</p>
 
@@ -161,7 +180,11 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <div class="def">Chyba přenosu je rozdíl mezi reálným výstupem měřicího systému a ideálním výstupem, který by vznikl při bezchybném přenosu informace.</div>
 
   <p>V teorii MIS se chyba přenosu značí například <code>uε(t)</code>. Je dána rozdílem mezi reálnou výstupní veličinou <code>uₒ,re(t)</code> a ideální výstupní veličinou <code>uₒ,id(t)</code>:</p>
-  <pre><code>uε(t) = uₒ,re(t) − uₒ,id(t)</code></pre>
+  <div class="eq">
+    \[
+    u_\varepsilon(t) = u_{o,\mathrm{re}}(t) - u_{o,\mathrm{id}}(t)
+    \]
+  </div>
 
   <p>Chyba přenosu tedy nepopisuje jen chybu odečtení na stupnici, ale obecně rozdíl mezi tím, co by měl systém předat ideálně, a tím, co skutečně předá. Podle skript MS vzniká chyba přenosu zejména ze dvou hlavních důvodů: reálné systémy nejsou ideální dynamicky ani staticky a k užitečnému signálu se superponuje rušení.</p>
 
@@ -195,7 +218,11 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Rozklad chyby přenosu</h3>
   <p>V praktickém měřicím řetězci lze výslednou chybu přenosu chápat jako součet nebo kombinaci několika složek:</p>
-  <pre><code>uε(t) ≈ uε,stat(t) + uε,dyn(t) + uε,ruš(t) + uε,kvant(t) + uε,zprac(t)</code></pre>
+  <div class="eq">
+    \[
+    u_\varepsilon(t) \approx u_{\varepsilon,\mathrm{stat}}(t) + u_{\varepsilon,\mathrm{dyn}}(t) + u_{\varepsilon,\mathrm{ruš}}(t) + u_{\varepsilon,\mathrm{kvant}}(t) + u_{\varepsilon,\mathrm{zprac}}(t)
+    \]
+  </div>
 
   <table>
     <tr>
@@ -305,7 +332,11 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Obecný model vzniku chyby</h3>
   <p>Výsledek měření <code>y</code> lze zjednodušeně zapsat jako skutečnou hodnotu <code>x</code> doplněnou o systematické, náhodné a hrubé vlivy:</p>
-  <pre><code>y = x + e_s + e_n + e_h</code></pre>
+  <div class="eq">
+    \[
+    y = x + e_s + e_n + e_h
+    \]
+  </div>
 
   <ul>
     <li><code>e_s</code> – systematická složka, která má předvídatelný charakter a lze ji často korigovat,</li>
@@ -417,12 +448,23 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h3>Matematická představa</h3>
   <p>U opakovaných měření <code>y₁, y₂, …, yₙ</code> se náhodné chyby projeví rozptylem kolem průměru:</p>
-  <pre><code>ȳ = (1/n) · Σ yᵢ
-
-eᵢ = yᵢ − ȳ</code></pre>
+  <div class="eq">
+    \[
+    \bar{y} = \frac{1}{n}\sum_{i=1}^n y_i
+    \]
+  </div>
+  <div class="eq">
+    \[
+    e_i = y_i - \bar{y}
+    \]
+  </div>
 
   <p>Systematická chyba se projeví rozdílem mezi střední hodnotou měření a skutečnou nebo konvenčně pravou hodnotou:</p>
-  <pre><code>e_s ≈ ȳ − x_s</code></pre>
+  <div class="eq">
+    \[
+    e_s \approx \bar{y} - x_s
+    \]
+  </div>
 
   <div class="note">U státnic zdůrazni: systematickou chybu se snažíme poznat a korigovat, náhodnou chybu statisticky vyhodnotit a hrubou chybu odhalit jako neplatné měření.</div>
 
@@ -532,9 +574,21 @@ eᵢ = yᵢ − ȳ</code></pre>
   </ul>
 
   <h3>Vztah chyby a korekce</h3>
-  <pre><code>chyba:    Δx = x_m − x_s
-korekce:  K  = −Δx
-výsledek po korekci: x_k = x_m + K</code></pre>
+  <div class="eq">
+    \[
+    \Delta x = x_m - x_s
+    \]
+  </div>
+  <div class="eq">
+    \[
+    K = -\Delta x
+    \]
+  </div>
+  <div class="eq">
+    \[
+    x_k = x_m + K
+    \]
+  </div>
 
   <p>Pokud je například měřidlo systematicky posunuto o <code>+0,2 °C</code>, chyba je <code>+0,2 °C</code> a korekce je <code>−0,2 °C</code>.</p>
 
@@ -570,12 +624,15 @@ výsledek po korekci: x_k = x_m + K</code></pre>
 
   <p>Absolutní chyba má stejnou jednotku jako měřená veličina a zachovává znaménko. Kladná absolutní chyba znamená, že měření hodnotu nadhodnotilo; záporná chyba znamená podhodnocení.</p>
 
-  <pre><code>Δx = x_m − x_s
-
-kde:
+  <div class="eq">
+    \[
+    \Delta x = x_m - x_s
+    \]
+  </div>
+  <pre><code>kde:
 x_m ... naměřená hodnota
 x_s ... skutečná nebo konvenčně pravá hodnota
-Δx  ... absolutní chyba měření</code></pre>
+\Delta x  ... absolutní chyba měření</code></pre>
 
   
 <svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;background:#fff;border:1px solid #d8e3f5;border-radius:8px;margin:12px 0;">
@@ -601,17 +658,33 @@ x_s ... skutečná nebo konvenčně pravá hodnota
 
   <h3>Příklad</h3>
   <p>Je-li konvenčně pravá hodnota teploty <code>x_s = 100,0 °C</code> a měřidlo ukáže <code>x_m = 100,8 °C</code>, absolutní chyba je:</p>
-  <pre><code>Δx = 100,8 − 100,0 = +0,8 °C</code></pre>
+  <div class="eq">
+    \[
+    \Delta x = 100{,}8 - 100{,}0 = +0{,}8\,^{\circ}\mathrm{C}
+    \]
+  </div>
 
   <p>Korekce, kterou bychom přičetli k naměřené hodnotě, je opačná:</p>
-  <pre><code>K = −Δx = −0,8 °C</code></pre>
+  <div class="eq">
+    \[
+    K = -\Delta x = -0{,}8\,^{\circ}\mathrm{C}
+    \]
+  </div>
 
   <h3>Mezní chyba u měřidel</h3>
   <p>U analogových měřidel se často používá třída přesnosti vztažená k měřicímu rozsahu:</p>
-  <pre><code>Δ_max = (třída přesnosti / 100) · měřicí rozsah</code></pre>
+  <div class="eq">
+    \[
+    \Delta_{\max} = \left(\frac{\text{třída\ přesnosti}}{100}\right)\cdot\text{měřicí\ rozsah}
+    \]
+  </div>
 
   <p>U digitálních přístrojů se mezní chyba často skládá ze složky vztažené k měřené hodnotě a ze složky vztažené k rozsahu nebo k počtu digitů:</p>
-  <pre><code>Δ_max ≈ (δ₁/100) · |x_m| + digit · rozlišení</code></pre>
+  <div class="eq">
+    \[
+    \Delta_{\max} \approx \frac{\delta_1}{100}\,|x_m| + \text{digit}\cdot\text{rozlišení}
+    \]
+  </div>
 
   <div class="note">U absolutní chyby je důležité říct jednotku. Například <code>Δx = 0,2 V</code>, ne pouze <code>0,2</code>.</div>
 
@@ -622,9 +695,16 @@ x_s ... skutečná nebo konvenčně pravá hodnota
 
   <p>Relativní chyba umožňuje posoudit význam chyby vzhledem k velikosti měřené veličiny. Stejná absolutní chyba může být zanedbatelná u velké hodnoty, ale zásadní u malé hodnoty.</p>
 
-  <pre><code>δ = Δx / x_s
-
-δ[%] = (Δx / x_s) · 100 %</code></pre>
+  <div class="eq">
+    \[
+    \delta = \frac{\Delta x}{x_s}
+    \]
+  </div>
+  <div class="eq">
+    \[
+    \delta[\%] = \left(\frac{\Delta x}{x_s}\right)\cdot100\%
+    \]
+  </div>
 
   
 <svg viewBox="0 0 760 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;background:#fff;border:1px solid #d8e3f5;border-radius:8px;margin:12px 0;">
@@ -649,7 +729,11 @@ x_s ... skutečná nebo konvenčně pravá hodnota
 
   <h3>Příklad</h3>
   <p>Pokud je absolutní chyba <code>Δx = 0,8 °C</code> při měření teploty <code>x_s = 100,0 °C</code>, relativní chyba je:</p>
-  <pre><code>δ[%] = (0,8 / 100,0) · 100 % = 0,8 %</code></pre>
+  <div class="eq">
+    \[
+    \delta[\%] = \frac{0{,}8}{100{,}0}\cdot100\% = 0{,}8\%
+    \]
+  </div>
 
   <table>
     <tr>
@@ -717,12 +801,16 @@ x_s ... skutečná nebo konvenčně pravá hodnota
   </svg>
 
   <h3>Základní zápis úplného výsledku</h3>
-  <pre><code>Y = ȳ ± U
-
-kde:
-ȳ ... nejlepší odhad měřené veličiny, obvykle aritmetický průměr
-U ... rozšířená nejistota měření
-kR ... koeficient rozšíření / koeficient pokrytí</code></pre>
+  <div class="eq">
+    \\\[
+    Y = \bar{y} \pm U
+    \\\]
+  </div>
+  <div class="eq">
+    \\\[
+    	ext{kde: }\bar{y}\ \text{... nejlepší odhad (aritmetický průměr)},\quad U\ \text{... rozšířená nejistota},\quad k_R\ \text{... koef. pokrytí}
+    \\\]
+  </div>
 
   <p>Příklad zápisu: <code>T = (100,24 ± 0,42) °C, k_R = 2</code>. Znamená to, že nejlepší odhad teploty je <code>100,24 °C</code> a kolem něj uvádíme rozšířený interval nejistoty <code>±0,42 °C</code>. Při přibližně normálním rozdělení a <code>k_R = 2</code> se takový interval obvykle chápe jako přibližně 95% interval pokrytí.</p>
 
@@ -776,13 +864,25 @@ kR ... koeficient rozšíření / koeficient pokrytí</code></pre>
 
   <h3>Nejistota stanovená metodou A</h3>
   <p>Metoda A vychází ze statistického zpracování opakovaných měření. Příčiny kolísání nemusíme všechny znát jednotlivě; projeví se v rozptylu naměřených hodnot. Nejprve se určí aritmetický průměr:</p>
-  <pre><code>ȳ = (1/n) · Σ yᵢ</code></pre>
+  <div class="eq">
+    \[
+    \bar{y} = \frac{1}{n}\sum_{i=1}^n y_i
+    \]
+  </div>
 
   <p>Poté se určí výběrová směrodatná odchylka:</p>
-  <pre><code>s_y = √[ 1/(n − 1) · Σ(yᵢ − ȳ)² ]</code></pre>
+  <div class="eq">
+    \[
+    s_y = \sqrt{\frac{1}{n-1}\sum_{i=1}^n\bigl(y_i-\bar{y}\bigr)^2}
+    \]
+  </div>
 
   <p>Standardní nejistota průměru je:</p>
-  <pre><code>u_A = s_y / √n</code></pre>
+  <div class="eq">
+    \[
+    u_A = \frac{s_y}{\sqrt{n}}
+    \]
+  </div>
 
   <div class="note">Charakteristické pro metodu A je, že při rostoucím počtu opakovaných měření její hodnota obvykle klesá. Více opakování tedy zpřesňuje odhad náhodné složky.</div>
 
@@ -801,7 +901,11 @@ kR ... koeficient rozšíření / koeficient pokrytí</code></pre>
   </div>
 
   <p>Ve státnicovém dokumentu je zdůrazněno, že se jako zdroje standardní nejistoty metody B vybírají pouze ty zdroje, které jsou relevantní a mohou ovlivnit výsledek měření vzhledem k očekávané přesnosti. Pro jeden zdroj se často vychází ze známé maximální odchylky <code>z_j,max</code>:</p>
-  <pre><code>u_B,zj = z_j,max / k</code></pre>
+  <div class="eq">
+    \[
+    u_{B,j} = \frac{z_{j,\max}}{k}
+    \]
+  </div>
 
   <p>Zde <code>k</code> převádí mezní nebo maximální odchylku na standardní nejistotu. Jeho hodnota závisí na předpokládaném rozdělení daného zdroje nejistoty. Pokud víme jen to, že hodnota leží někde v intervalu <code>±z_j,max</code> a všechny hodnoty v intervalu považujeme za stejně pravděpodobné, použije se rovnoměrné rozdělení a přibližně <code>k = √3 ≈ 1,73</code>.</p>
 
@@ -834,18 +938,35 @@ kR ... koeficient rozšíření / koeficient pokrytí</code></pre>
   <p>V praxi většinou nevystačíme pouze s metodou A nebo pouze s metodou B. Opakovaná měření zachytí náhodné kolísání, ale nezachytí například nejistotu kalibrace, rozlišení měřidla nebo vliv prostředí. Proto je potřeba stanovit výsledný efekt kombinovaných nejistot obou metod.</p>
 
   <p>Pokud předpokládáme, že složky nejistoty stanovené metodou A a metodou B jsou nezávislé, použije se geometrický součet:</p>
-  <pre><code>u_C = √(u_A² + u_B²)</code></pre>
+  <div class="eq">
+    \\\[
+    u_C = \sqrt{u_A^2 + u_B^2}
+    \\\]
+  </div>
 
   <p>Obecněji pro více nezávislých složek:</p>
-  <pre><code>u_C(y) = √[ u_1²(y) + u_2²(y) + ... + u_m²(y) ]
-
-nebo zkráceně:
-u_C(y) = √[ Σ u_i²(y) ]</code></pre>
+  <div class="eq">
+    \\\[
+    u_C(y) = \sqrt{u_1^2(y) + u_2^2(y) + \dots + u_m^2(y)}
+    \\\]
+  </div>
+  <div class="eq">
+    \\\[
+    u_C(y) = \sqrt{\sum_{i=1}^m u_i^2(y)}
+    \\\]
+  </div>
 
   <p>Jestliže se nejistoty přenášejí přes výpočtový vztah, používají se citlivostní koeficienty. Ty vyjadřují, jak silně se změna vstupní veličiny projeví ve výsledku:</p>
-  <pre><code>u_C²(y) = Σ ( A_j² · u²(x_j) )
-
-A_j = ∂f/∂x_j</code></pre>
+  <div class="eq">
+    \\\[
+    u_C^2(y) = \sum_j A_j^2\,u^2(x_j)
+    \\\]
+  </div>
+  <div class="eq">
+    \\\[
+    A_j = \frac{\partial f}{\partial x_j}
+    \\\]
+  </div>
 
   <div class="note"><strong>Proč se sčítají čtverce?</strong> Nezávislé složky nejistoty se nesčítají prostým součtem, protože jejich znaménko a okamžitý směr působení se mohou různě kombinovat. Sčítají se rozptyly, tedy druhé mocniny standardních nejistot. Až na konci se provede odmocnina.</div>
 
@@ -868,7 +989,11 @@ A_j = ∂f/∂x_j</code></pre>
   <div class="danger"><strong>Hlavní důvod rozšíření:</strong> kombinovanou nejistotu rozšiřujeme proto, že samotná standardní nejistota vytváří příliš úzký interval pokrytí. Běžná technická a metrologická praxe chce interval s vyšší pravděpodobností pokrytí, typicky okolo <strong>95 %</strong>. Proto se z <code>u_C</code> vytvoří rozšířená nejistota <code>U</code>.</div>
 
   <p>Rozšířená nejistota se určí:</p>
-  <pre><code>U = k_R · u_C</code></pre>
+  <div class="eq">
+    \\\[
+    U = k_R\cdot u_C
+    \\\]
+  </div>
 
   <p>Koeficient <code>k_R</code> se nazývá koeficient rozšíření nebo koeficient pokrytí. Určuje, kolikrát se standardní interval zvětší, aby odpovídal požadované pravděpodobnosti pokrytí. U přibližně normálního rozdělení platí orientačně:</p>
 
@@ -935,7 +1060,11 @@ A_j = ∂f/∂x_j</code></pre>
   <h3>Kdy nestačí automaticky vzít <code>k_R = 2</code>?</h3>
   <p>Hodnota <code>k_R = 2</code> je běžná technická volba pro přibližně normální rozdělení a dostatečně spolehlivý odhad nejistoty. Není to ale univerzální konstanta. Pokud je málo opakovaných měření, některá složka významně dominuje, nebo je potřeba přesnější metrologický postup, určuje se koeficient pokrytí podle efektivního počtu stupňů volnosti.</p>
 
-  <pre><code>ν_eff = u_C⁴ / Σ( u_i⁴ / ν_i )</code></pre>
+  <div class="eq">
+    \\\[
+    \nu_{\mathrm{eff}} = \frac{u_C^{4}}{\sum_i \dfrac{u_i^{4}}{\nu_i}}
+    \\\]
+  </div>
 
   <p>Tento vztah je Welchova–Satterthwaiteova aproximace. U statistické složky z opakovaných měření se typicky uvažuje <code>ν = n − 1</code>. Čím méně měření máme, tím nejistější je odhad směrodatné odchylky a tím opatrněji se musí volit koeficient pokrytí.</p>
 
@@ -944,28 +1073,47 @@ A_j = ∂f/∂x_j</code></pre>
   <h3>Krátký výpočetní příklad</h3>
   <p>Představme si měření teploty. Opakovaná měření dala standardní nejistotu metodou A <code>u_A = 0,10 °C</code>. Z kalibrace, rozlišení přístroje a vlivu prostředí byla určena výsledná nejistota metodou B <code>u_B = 0,18 °C</code>.</p>
 
-  <pre><code>u_C = √(u_A² + u_B²)
-u_C = √(0,10² + 0,18²)
-u_C = √(0,0100 + 0,0324)
-u_C = 0,206 °C</code></pre>
+  <div class="eq">
+    \\\[
+    u_C = \sqrt{u_A^2 + u_B^2}
+    \\\]
+  </div>
+  <div class="eq">
+    \\\[
+    u_C = \sqrt{0{,}10^2 + 0{,}18^2} = \sqrt{0{,}0100 + 0{,}0324} = 0{,}206\,^{\circ}\mathrm{C}
+    \\\]
+  </div>
 
   <p>Tato hodnota <code>0,206 °C</code> je pouze kombinovaná standardní nejistota. Pokud chceme uvést úplný výsledek měření s přibližně 95% pokrytím, použijeme například <code>k_R = 2</code>:</p>
 
-  <pre><code>U = k_R · u_C
-U = 2 · 0,206
-U = 0,412 °C ≈ 0,42 °C</code></pre>
+  <div class="eq">
+    \\\[
+    U = k_R\cdot u_C
+    \\\]
+  </div>
+  <div class="eq">
+    \\\[
+    U = 2\cdot 0{,}206 = 0{,}412\,^{\circ}\mathrm{C} \approx 0{,}42\,^{\circ}\mathrm{C}
+    \\\]
+  </div>
 
   <p>Pokud nejlepší odhad vyšel <code>ȳ = 100,24 °C</code>, úplný výsledek zapíšeme například:</p>
-  <pre><code>T = (100,24 ± 0,42) °C, k_R = 2, přibližně 95% pokrytí</code></pre>
+  <div class="eq">
+    \\\[
+    T = (100{,}24 \pm 0{,}42)\,^{\circ}\mathrm{C},\quad k_R = 2\quad(\text{přibl. }95\%\text{ pokrytí})
+    \\\]
+  </div>
 
   <div class="note">Interpretace příkladu: Hodnota <code>0,206 °C</code> říká, jak velká je výsledná standardní nejistota. Hodnota <code>0,42 °C</code> je interval, který uvedeme k výsledku, protože chceme vyšší pravděpodobnost pokrytí než přibližně 68 %.</div>
 
   <h3>Zaokrouhlování výsledku</h3>
   <p>Nejistota se obvykle uvádí na jednu až dvě platné číslice a nejlepší odhad výsledku se zaokrouhlí na stejný řád jako nejistota. Důležité je nezaokrouhlovat příliš brzy: mezivýpočty necháme s více číslicemi a zaokrouhlíme až konečný výsledek.</p>
 
-  <pre><code>mezivýpočet: u_C = 0,206 °C
-rozšíření:   U = 0,412 °C
-zápis:       T = (100,24 ± 0,42) °C</code></pre>
+  <div class="eq">
+    \\\[
+    u_C = 0{,}206\,^{\circ}\mathrm{C},\quad U = 0{,}412\,^{\circ}\mathrm{C},\quad T = (100{,}24 \pm 0{,}42)\,^{\circ}\mathrm{C}
+    \\\]
+  </div>
 
   <div class="danger">Častá chyba: napsat pouze <code>100,24 ± 0,21 °C</code> a myslet si, že jde o běžný 95% interval. Nejde — <code>0,21 °C</code> je zde jen kombinovaná standardní nejistota. Pro 95% pokrytí je potřeba použít rozšířenou nejistotu, např. <code>U ≈ 0,42 °C</code>.</div>
 
