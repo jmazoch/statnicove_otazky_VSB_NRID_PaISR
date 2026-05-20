@@ -55,10 +55,11 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 .mini { font-size: 13px; color: #444; }
 @media (max-width: 760px) { .page { padding: 26px 22px; } .grid2, .grid3 { grid-template-columns: 1fr; } }
 @media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } .toc { break-inside: avoid; } }
-  .podcast-wrap { margin: 0 0 22px; display: flex; align-items: center; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
-.podcast-label { font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; color: #1a4a8a; }
-.podcast-player { width: min(520px, calc(100vw - 170px)); height: 38px; }
-@media (max-width: 760px) { .podcast-player { width: 100%; } }
+  .podcast-wrap { position: fixed; left: calc(50% + 472px); top: 50%; transform: translateY(-50%); z-index: 80; width: 58px; height: 360px; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(255,253,248,0.96); border: 1px solid rgba(31,36,31,0.16); border-radius: 999px; box-shadow: 0 12px 34px rgba(0,0,0,0.18); }
+.podcast-label { font-family: Arial, sans-serif; font-size: 12px; font-weight: 800; color: #1a4a8a; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 0.04em; }
+.podcast-player { width: 270px; height: 36px; transform: rotate(90deg); transform-origin: center; flex: 0 0 auto; }
+@media (max-width: 1120px) { .podcast-wrap { left: auto; right: 8px; } }
+@media (max-width: 760px) { .podcast-wrap { left: 12px; right: 12px; bottom: 12px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; flex-direction: row; border-radius: 14px; padding: 8px 10px; } .podcast-label { writing-mode: horizontal-tb; transform: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
 </style>
   <link rel="stylesheet" href="../shared/navbar-styles.css">
   <script>
@@ -133,7 +134,7 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <h1>Dynamická optimalizace</h1>
   <p class="subtitle">Vypracovaná státnicová otázka · Řídicí systémy · Podklady: Otázky státnice RS</p>
 
-<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="metadata" src="../podcast/7_Dynamick%C3%A1_optimalizace.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
+<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="none" data-src="../podcast/7_Dynamick%C3%A1_optimalizace.m4a" onplay="if(!this.src){this.src=this.dataset.src;this.load();this.play();}">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
 
   <div class="toc">
     <h3>Obsah</h3>
@@ -296,18 +297,18 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <div class="source">
     <h4>Text 1:1 z podkladů</h4>
     <p>Dynamické optimalizační metody:</p>
-    <p>Přímé metody:</p>
+    <h5>Přímé metody:</h5>
     <p>Spojitý problém optimálního řízení (OCP) je převeden na problém nelineárního programování (NLP) pomocí diskretizace veličin v čase. Tímto přístupem je možno pro nalezení řešení problému dynamické optimalizace použít metody pro řešení úloh statické optimalizace.</p>
-    <p>Metoda střelby</p>
+    <p><strong>Metoda střelby</strong></p>
     <p>metoda předpokládá diskretizaci řízení a stavových veličin na časovém intervalu.</p>
     <p>Jedna iterace algoritmu představuje jeden „výstřel“ (shot), kdy se pro danou kombinaci hodnot řízení simuluje průchod systémem a sleduje se výsledný stav. Algoritmus následně upravuje hodnoty řízení tak, aby byla lépe splněna účelová funkce a omezující podmínky, dokud není dosaženo požadované přesnosti</p>
-    <p>Metoda přímé transkripce</p>
+    <p><strong>Metoda přímé transkripce</strong></p>
     <p>přímá transkripce diskretizuje stavy i řízení přímo v uzlech časové mřížky</p>
     <p>Na rozdíl od metody střelby neintegruje systém dopředu, ale pracuje s hodnotami stavů a řízení explicitně v každém uzlu.</p>
     <p>• Omezení: Rovnice dynamiky (diferenciální rovnice) jsou zde nahrazeny algebraickými omezeními (např. pomocí Eulerova schématu).</p>
     <p>• Výsledek: Vzniká velká, ale strukturovaná NLP úloha, kterou lze řešit standardními sw řešiči (např. metodami SQP nebo interior-point)</p>
     <p>Výsledkem je velká, ale strukturovaná NLP úloha, kde účelová funkce odpovídá diskrétní sumě hodnot v jednotlivých uzlech. Tato metoda je velmi robustní a umožňuje explicitně zahrnout stavová i řídicí omezení.</p>
-    <p>Metoda přímé kolokace</p>
+    <p><strong>Metoda přímé kolokace</strong></p>
     <p>aproximuje průběh stavů a řízení v každém časovém intervalu pomocí polynomů</p>
     <p>Splnění diferenciálních rovnic není vyžadováno v každém bodě, ale pouze v tzv. kolokačních bodech, kde musí být derivace aproximačního polynomu rovna pravé straně stavové rovnice</p>
     <p>Protože je převod dynamické úlohy na NLP matematicky náročný, využívají se v praxi specializované sw nástroje (např. DYNOPT, OptimTraj, ICLOCS2 pro Matlab), které tento převod a následné řešení pomocí solverů (např. SQP nebo interior-point) provádějí automaticky</p>
@@ -332,12 +333,12 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
   <h2 id="s7">7. Nepřímé metody</h2>
   <div class="source">
     <h4>Text 1:1 z podkladů</h4>
-    <p>Nepřímé metody</p>
+    <h5>Nepřímé metody</h5>
     <p>Hlavní myšlenkou je převod úlohy optimálního řízení (OCP) na okrajový problém (boundary value problem - BvP).<br>Tyto metody nevyřeší problém přímo, ale odvodí nutné podmínky optimality, čímž původní úlohu optimálního řízení (OCP) transformují na řešení okrajového problému (BVP)</p>
-    <p>Variační počet</p>
+    <p><strong>Variační počet</strong></p>
     <p>původní přístup hledání extrémů funkcionálů, kde neznámou není jedno číslo, ale celá funkce</p>
     <p>Využití a omezení: Tento přístup je vhodný zejména pro mechanické systémy, kde řízení odpovídá derivaci stavu (např. zrychlení). Velkou nevýhodou však je, že neumí přirozeně pracovat s omezeními na řízení (např. limity výkonu motoru) a vyžaduje hladkost funkcí</p>
-    <p>Pontrjaginův princip maxima (PMP)<br>modernější rozšíření variačního počtu, které dokáže řešit obecné řízené dynamické systémy (omezené i neomezené) .</p>
+    <p><strong>Pontrjaginův princip maxima (PMP)</strong><br>modernější rozšíření variačního počtu, které dokáže řešit obecné řízené dynamické systémy (omezené i neomezené) .</p>
     <p>Metoda definuje funkci zvanou Hamiltonián , která kombinuje Lagrangeův člen účelové funkce () a dynamiku systému () pomocí tzv. sdružených (costate) kostavů . Tyto stavy fungují podobně jako Lagrangeovy multiplikátory u statické optimalizace</p>
     <p>Hamiltonovy kanonické rovnice: Řešení musí splňovat soustavu diferenciálních rovnic pro stavy (x.) a sdružené stavy (p.)</p>
     <p>Podmínka minima: Optimální řízení je takové, které v každém okamžiku minimalizuje Hamiltonián vzhledem k množině přípustných řízení.</p>
