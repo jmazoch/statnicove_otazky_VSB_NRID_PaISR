@@ -57,7 +57,11 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 .two-col li { break-inside: avoid; }
 @media (max-width: 760px) { .page { padding: 26px 22px; } .grid2, .grid3 { grid-template-columns: 1fr; } .two-col { columns: 1; } }
 @media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } .toc, .fig, .eq { break-inside: avoid; } }
-  </style>
+  .podcast-wrap { margin: 0 0 22px; display: flex; align-items: center; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+.podcast-label { font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; color: #1a4a8a; }
+.podcast-player { width: min(520px, calc(100vw - 170px)); height: 38px; }
+@media (max-width: 760px) { .podcast-player { width: 100%; } }
+</style>
   <link rel="stylesheet" href="../shared/navbar-styles.css">
   <script>
     window.MathJax = {
@@ -130,6 +134,8 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h1>3. Stavová regulace</h1>
   <p class="subtitle">Vypracovaná státnicová otázka · Řídicí systémy · stavová zpětná vazba, pozorovatel, řiditelnost, pozorovatelnost a umístění pólů</p>
+
+<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="metadata" src="../podcast/3_Stavov%C3%A1_regulace.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
 
   <div class="toc">
     <h3>Obsah</h3>

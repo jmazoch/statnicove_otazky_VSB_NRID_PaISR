@@ -44,7 +44,11 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 .fig img { max-width: 100%; height: auto; border: 1px solid #c8d8f0; border-radius: 8px; background: #fff; }
 .figcap { font-size: 13px; color: #555; margin-top: 6px; font-style: italic; text-align: center; }
 
-@media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }</style>
+@media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }.podcast-wrap { margin: 0 0 22px; display: flex; align-items: center; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+.podcast-label { font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; color: #1a4a8a; }
+.podcast-player { width: min(520px, calc(100vw - 170px)); height: 38px; }
+@media (max-width: 760px) { .podcast-player { width: 100%; } }
+</style>
 <link rel="stylesheet" href="../shared/navbar-styles.css">
 </head>
 <body>
@@ -113,6 +117,8 @@ hr.sec { border: none; border-top: 2px solid #e8eef8; margin: 36px 0; }
 
   <h1>Metody převodu analogového a digitálního signálu</h1>
   <p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · Podklady: přednášky a skripta PMZS</p>
+
+<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="metadata" src="../podcast/13-Metody%20p%C5%99evodu%20analogov%C3%A9%20a%20digit%C3%A1ln%C3%ADho%20sign%C3%A1lu.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
 
   <div class="toc">
     <h3>Obsah</h3>

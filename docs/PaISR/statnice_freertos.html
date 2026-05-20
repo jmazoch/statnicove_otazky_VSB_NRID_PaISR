@@ -177,6 +177,10 @@
     .diagram-wrap svg, .diagram-wrap img { max-width: 100%; }
   }
   @media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }
+.podcast-wrap { margin: 0 0 22px; display: flex; align-items: center; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+.podcast-label { font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; color: #1a4a8a; }
+.podcast-player { width: min(520px, calc(100vw - 170px)); height: 38px; }
+@media (max-width: 760px) { .podcast-player { width: 100%; } }
 </style>
 </head>
 <body>
@@ -246,6 +250,8 @@
 
 <h1>FreeRTOS</h1>
 <p class="subtitle">Vypracovaná státnicová otázka · NMgr. Řídicí a informační systémy 2026 · Podklady: <a href="https://homel.vsb.cz/~sta048/mcu/presentation/posrc/">Programování v operačních systémech reálného času</a></p>
+
+<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="metadata" src="../podcast/freertos.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
 
 <div class="toc">
   <h3>Obsah</h3>

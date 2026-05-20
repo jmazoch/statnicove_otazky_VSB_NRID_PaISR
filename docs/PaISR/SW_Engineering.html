@@ -214,7 +214,11 @@
                         .page { margin: 16px auto 24px; padding: 24px 20px; }
                         .grid2 { grid-template-columns: 1fr; }
                 }
-    </style>
+    .podcast-wrap { margin: 0 0 22px; display: flex; align-items: center; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+.podcast-label { font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; color: #1a4a8a; }
+.podcast-player { width: min(520px, calc(100vw - 170px)); height: 38px; }
+@media (max-width: 760px) { .podcast-player { width: 100%; } }
+</style>
 </head>
 <body>
 
@@ -285,6 +289,8 @@
 
 <h1>Softwarové inženýrství</h1>
 <p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · PaISR</p>
+
+<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="metadata" src="../podcast/Softwarov%C3%A9%20in%C5%BEen%C3%BDrstv%C3%AD.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
 
 <h2>1. Úvod do softwarového inženýrství</h2>
 <div class="def">

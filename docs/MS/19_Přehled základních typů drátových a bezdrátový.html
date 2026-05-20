@@ -52,6 +52,10 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
 .highlight { font-weight: bold; color: #c53030; }
 .badge-dom { display: inline-block; padding: 3px 8px; background: #e74c3c; color: white; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
 .badge-rec { display: inline-block; padding: 3px 8px; background: #3498db; color: white; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+.podcast-wrap { margin: 0 0 22px; display: flex; align-items: center; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+.podcast-label { font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; color: #1a4a8a; }
+.podcast-player { width: min(520px, calc(100vw - 170px)); height: 38px; }
+@media (max-width: 760px) { .podcast-player { width: 100%; } }
 </style>
 <link rel="stylesheet" href="../shared/navbar-styles.css">
 </head>
@@ -121,6 +125,8 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
 <div class="page">
 <h1>19. Přehled základních typů drátových a bezdrátových sběrnic v MIS</h1>
 <p class="subtitle">Vypracovaná státnicová otázka · Řídicí a informační systémy 2026 · Podklady: přednášky a skripta MŘ a PMZS</p>
+
+<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="metadata" src="../podcast/19.%20P%C5%99ehled%20z%C3%A1kladn%C3%ADch%20typ%C5%AF%20dr%C3%A1tov%C3%BDch%20a%20bezdr%C3%A1tov%C3%BDch%20sb%C4%9Brnic%20pou%C5%BE%C3%ADvan%C3%BDch%20v%20MIS%20a%20jejich%20z%C3%A1kladn%C3%AD%20parametry.%20Topologie%20sb%C4%9Brnicov%C3%BDch%20syst%C3%A9m%C5%AF%20pro%20p%C5%99enos%20dat..m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
 
 <div class="def">
     Znalost principů sériových sběrnic, napěťových úrovní, mechanismů pro řešení kolizí a topologií je klíčová pro pochopení struktury a funkce moderních Měřicích a Informačních Systémů (MIS).
