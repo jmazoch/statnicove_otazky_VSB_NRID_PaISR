@@ -177,11 +177,11 @@
     .diagram-wrap svg, .diagram-wrap img { max-width: 100%; }
   }
   @media print { body { background:#fff; } .page { box-shadow:none; padding: 24px 36px; } }
-.podcast-wrap { position: fixed; left: calc(50% + 472px); top: 50%; transform: translateY(-50%); z-index: 80; width: 58px; height: 360px; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(255,253,248,0.96); border: 1px solid rgba(31,36,31,0.16); border-radius: 999px; box-shadow: 0 12px 34px rgba(0,0,0,0.18); }
-.podcast-label { font-family: Arial, sans-serif; font-size: 12px; font-weight: 800; color: #1a4a8a; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 0.04em; }
-.podcast-player { width: 270px; height: 36px; transform: rotate(90deg); transform-origin: center; flex: 0 0 auto; }
+.podcast-wrap { position: fixed; left: calc(50% + 472px); top: 50%; transform: translateY(-50%); z-index: 80; width: 58px; height: 520px; margin: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,253,248,0.96); border: 1px solid rgba(31,36,31,0.16); border-radius: 999px; box-shadow: 0 12px 34px rgba(0,0,0,0.18); }
+.podcast-label { display: none; }
+.podcast-player { width: 480px; height: 38px; transform: rotate(90deg); transform-origin: center; flex: 0 0 auto; }
 @media (max-width: 1120px) { .podcast-wrap { left: auto; right: 8px; } }
-@media (max-width: 760px) { .podcast-wrap { left: 12px; right: 12px; bottom: 12px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; flex-direction: row; border-radius: 14px; padding: 8px 10px; } .podcast-label { writing-mode: horizontal-tb; transform: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
+@media (max-width: 760px) { .podcast-wrap { left: 12px; right: 12px; bottom: 12px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; border-radius: 14px; padding: 8px 10px; } .podcast-label { display: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
 </style>
 </head>
 <body>
