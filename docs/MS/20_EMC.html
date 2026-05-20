@@ -177,9 +177,10 @@
         }
     .podcast-wrap { position: fixed; left: calc(50% + 472px); top: 50%; transform: translateY(-50%); z-index: 80; width: 58px; height: 520px; margin: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,253,248,0.96); border: 1px solid rgba(31,36,31,0.16); border-radius: 999px; box-shadow: 0 12px 34px rgba(0,0,0,0.18); }
 .podcast-label { display: none; }
+.podcast-toggle { display: none; }
 .podcast-player { width: 480px; height: 38px; transform: rotate(90deg); transform-origin: center; flex: 0 0 auto; }
 @media (max-width: 1120px) { .podcast-wrap { left: auto; right: 8px; } }
-@media (max-width: 760px) { .podcast-wrap { left: 12px; right: 12px; bottom: 12px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; border-radius: 14px; padding: 8px 10px; } .podcast-label { display: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
+@media (max-width: 760px) { .podcast-toggle { position: fixed; right: 14px; bottom: 14px; z-index: 82; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 0; border-radius: 999px; background: #1a4a8a; color: #fff; font-family: Arial, sans-serif; font-size: 13px; font-weight: 800; box-shadow: 0 10px 28px rgba(0,0,0,0.22); cursor: pointer; } .podcast-wrap { display: none; left: 12px; right: 12px; bottom: 72px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; border-radius: 14px; padding: 8px 10px; } .podcast-wrap.is-open { display: flex; } .podcast-label { display: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
 </style>
 </head>
 <body>
@@ -244,7 +245,7 @@
 </header>
 <div class="page">
     <h1>20. EMC a její vliv na kvalitu měřicího signálu</h1>
-<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="none" src="../podcast/20.%20EMC.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
+<button class="podcast-toggle" type="button" aria-label="Podcast" onclick="var p=this.nextElementSibling;if(p){p.classList.toggle('is-open');this.textContent=p.classList.contains('is-open')?'X':'▶';}">▶</button><div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="none" src="../podcast/20.%20EMC.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
     <p><strong>Obor:</strong> NMgr. Řídicí a informační systémy 2026</p>
     <p><strong>Zdroje:</strong> Učební text EMC v elektronice (Ing. Radovan Hájovský, Ph.D.)</p>
 

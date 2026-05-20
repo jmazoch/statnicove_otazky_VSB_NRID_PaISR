@@ -122,9 +122,10 @@ a { color: inherit; }
 .mm-button:hover { background: #123765; }
 .podcast-wrap { position: fixed; left: calc(50% + 472px); top: 50%; transform: translateY(-50%); z-index: 80; width: 58px; height: 520px; margin: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,253,248,0.96); border: 1px solid rgba(31,36,31,0.16); border-radius: 999px; box-shadow: 0 12px 34px rgba(0,0,0,0.18); }
 .podcast-label { display: none; }
+.podcast-toggle { display: none; }
 .podcast-player { width: 480px; height: 38px; transform: rotate(90deg); transform-origin: center; flex: 0 0 auto; }
 @media (max-width: 1120px) { .podcast-wrap { left: auto; right: 8px; } }
-@media (max-width: 760px) { .podcast-wrap { left: 12px; right: 12px; bottom: 12px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; border-radius: 14px; padding: 8px 10px; } .podcast-label { display: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
+@media (max-width: 760px) { .podcast-toggle { position: fixed; right: 14px; bottom: 14px; z-index: 82; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 0; border-radius: 999px; background: #1a4a8a; color: #fff; font-family: Arial, sans-serif; font-size: 13px; font-weight: 800; box-shadow: 0 10px 28px rgba(0,0,0,0.22); cursor: pointer; } .podcast-wrap { display: none; left: 12px; right: 12px; bottom: 72px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; border-radius: 14px; padding: 8px 10px; } .podcast-wrap.is-open { display: flex; } .podcast-label { display: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
 .mm-button { border: 0; cursor: pointer; }
 .mm-modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: stretch; justify-content: center; background: rgba(15, 23, 18, 0.58); padding: 28px; }
 .mm-modal.is-open { display: flex; }
@@ -223,7 +224,7 @@ a { color: inherit; }
 NMgr. Řídicí a informační systémy 2026 · Podklady: přednášky RS + materiály 1–7</p>
 
 <div class="mm-button-wrap"><button class="mm-button mm-open" type="button" title="Mluvene minimum" onclick="event.preventDefault();var m=document.getElementById('mmModal');if(m){m.classList.add('is-open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}return false;">MM</button></div>
-<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="none" src="../podcast/01-Synt%C3%A9za%20spojit%C3%BDch%20regula%C4%8Dn%C3%ADch%20obvod%C5%AF.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
+<button class="podcast-toggle" type="button" aria-label="Podcast" onclick="var p=this.nextElementSibling;if(p){p.classList.toggle('is-open');this.textContent=p.classList.contains('is-open')?'X':'▶';}">▶</button><div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="none" src="../podcast/01-Synt%C3%A9za%20spojit%C3%BDch%20regula%C4%8Dn%C3%ADch%20obvod%C5%AF.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
 
 <div class="toc">
   <h3>Obsah</h3>

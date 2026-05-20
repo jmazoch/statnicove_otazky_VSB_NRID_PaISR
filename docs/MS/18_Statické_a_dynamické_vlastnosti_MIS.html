@@ -112,9 +112,10 @@ p { margin: 8px 0 10px; text-align: justify; }
 @media print { body { background: #fff; } .page { box-shadow: none; padding: 24px 36px; } }
 .podcast-wrap { position: fixed; left: calc(50% + 472px); top: 50%; transform: translateY(-50%); z-index: 80; width: 58px; height: 520px; margin: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,253,248,0.96); border: 1px solid rgba(31,36,31,0.16); border-radius: 999px; box-shadow: 0 12px 34px rgba(0,0,0,0.18); }
 .podcast-label { display: none; }
+.podcast-toggle { display: none; }
 .podcast-player { width: 480px; height: 38px; transform: rotate(90deg); transform-origin: center; flex: 0 0 auto; }
 @media (max-width: 1120px) { .podcast-wrap { left: auto; right: 8px; } }
-@media (max-width: 760px) { .podcast-wrap { left: 12px; right: 12px; bottom: 12px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; border-radius: 14px; padding: 8px 10px; } .podcast-label { display: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
+@media (max-width: 760px) { .podcast-toggle { position: fixed; right: 14px; bottom: 14px; z-index: 82; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 0; border-radius: 999px; background: #1a4a8a; color: #fff; font-family: Arial, sans-serif; font-size: 13px; font-weight: 800; box-shadow: 0 10px 28px rgba(0,0,0,0.22); cursor: pointer; } .podcast-wrap { display: none; left: 12px; right: 12px; bottom: 72px; top: auto; transform: none; width: auto; height: auto; min-height: 54px; border-radius: 14px; padding: 8px 10px; } .podcast-wrap.is-open { display: flex; } .podcast-label { display: none; } .podcast-player { width: 100%; max-width: 520px; transform: none; } }
 </style>
 </head>
 <body>
@@ -188,7 +189,7 @@ p { margin: 8px 0 10px; text-align: justify; }
     <h1>18. Statické a dynamické vlastnosti měřicího informačního systému. Metody měření vlastností.</h1>
     <p class="subtitle">Vypracovaná státnicová otázka · NMgr. Řídicí a informační systémy 2026 · Zdroj: Skripta MS Kapitoly 3 a 4</p>
 
-<div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="none" src="../podcast/18.%20Statick%C3%A9%20a%20dynamick%C3%A9%20vlastnosti%20m%C4%9B%C5%99ic%C3%ADho%20informa%C4%8Dn%C3%ADho%20syst%C3%A9mu.%20Metody%20m%C4%9B%C5%99en%C3%AD%20statick%C3%BDch%20a%20dynamick%C3%BDch%20vlastnost%C3%AD%20MIS..m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
+<button class="podcast-toggle" type="button" aria-label="Podcast" onclick="var p=this.nextElementSibling;if(p){p.classList.toggle('is-open');this.textContent=p.classList.contains('is-open')?'X':'▶';}">▶</button><div class="podcast-wrap"><span class="podcast-label">Podcast</span><audio class="podcast-player" controls preload="none" src="../podcast/18.%20Statick%C3%A9%20a%20dynamick%C3%A9%20vlastnosti%20m%C4%9B%C5%99ic%C3%ADho%20informa%C4%8Dn%C3%ADho%20syst%C3%A9mu.%20Metody%20m%C4%9B%C5%99en%C3%AD%20statick%C3%BDch%20a%20dynamick%C3%BDch%20vlastnost%C3%AD%20MIS..m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
     
     <div class="info-box">
         Znalost statických a dynamických vlastností, stejně jako jejich matematického popisu (včetně linearizace a optimalizace), tvoří absolutní základ pro návrh spolehlivých Měřicích a informačních systémů (MIS).
