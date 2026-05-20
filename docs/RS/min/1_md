@@ -1,0 +1,303 @@
+# RS1 — Syntéza spojitých regulačních obvodů — mluvené minimum (5 min)
+
+## Základ regulační smyčky
+
+Máme dva základní způsoby řízení systému:
+
+- otevřená smyčka = ovládání
+- uzavřená smyčka = regulace se zpětnou vazbou
+
+V praxi používáme hlavně zpětnovazební regulaci, protože systém dokáže reagovat na chyby a poruchy.
+
+Regulační smyčka se skládá z:
+
+- žádané hodnoty \(w\)
+- regulační odchylky \(e\)
+- regulátoru
+- řízené soustavy
+- akční veličiny \(u\)
+- výstupní veličiny \(y\)
+- senzoru
+- poruch a šumu
+
+Regulační odchylka je:
+
+\[
+e = w - y
+\]
+
+---
+
+# Citlivostní funkce S a T
+
+Důležitý vztah:
+
+\[
+S + T = 1
+\]
+
+- \(T\) = servo problém  
+→ jak dobře systém sleduje žádanou hodnotu
+
+- \(S\) = regulator problém  
+→ jak dobře potlačuje poruchy a chyby
+
+Musíme dělat kompromis:
+
+- rychlý systém bývá citlivější na šum
+- pomalý systém lépe filtruje poruchy, ale hůře reaguje
+
+---
+
+# PID regulátor
+
+Nejpoužívanější regulátor je PID.
+
+Má tři složky:
+
+## P složka
+
+Reaguje na aktuální chybu.
+
+Čím větší chyba:
+→ tím větší zásah.
+
+Zrychluje reakci systému.
+
+---
+
+## I složka
+
+Integruje chybu v čase.
+
+Odstraňuje trvalou regulační odchylku.
+
+Dívá se na minulost systému.
+
+---
+
+## D složka
+
+Reaguje na rychlost změny chyby.
+
+Predikuje budoucí chování systému.
+
+Pomáhá tlumit překmity.
+
+---
+
+# Ideální PID
+
+\[
+G_R(s)=K_R\left(1+\frac{1}{T_Is}+T_Ds\right)
+\]
+
+- \(K_R\) = zesílení
+- \(T_I\) = integrační konstanta
+- \(T_D\) = derivační konstanta
+
+---
+
+# Reálný PID
+
+Ideální derivace zesiluje vysokofrekvenční šum.
+
+Proto se používá filtrovaná derivace:
+
+\[
+G_R(s)=K_R\left(
+1+\frac{1}{T_Is}+
+\frac{T_Ds}{1+\frac{T_D}{N}s}
+\right)
+\]
+
+Filtr prvního řádu omezuje zesilování šumu.
+
+---
+
+# Přenosy regulačního obvodu
+
+Máme:
+
+## Otevřenou smyčku
+
+\[
+G_0 = G_R G_S
+\]
+
+kde:
+
+- \(G_R\) = regulátor
+- \(G_S\) = soustava
+
+---
+
+## Uzavřenou smyčku
+
+\[
+T(s)=\frac{G_0}{1+G_0}
+\]
+
+---
+
+## Citlivostní funkci
+
+\[
+S(s)=\frac{1}{1+G_0}
+\]
+
+---
+
+# Kvalita regulace
+
+## Časová oblast
+
+Používá se přechodová charakteristika.
+
+Je to odezva systému na jednotkový skok.
+
+Sledujeme:
+
+- překmit
+- dobu náběhu
+- dobu ustálení
+- trvalou regulační odchylku
+
+---
+
+# Integrální kritéria
+
+Hodnotí regulační odchylku v čase.
+
+## IAE
+
+\[
+IAE = \int |e(t)|dt
+\]
+
+Absolutní chyba.
+
+---
+
+## ISE
+
+\[
+ISE = \int e^2(t)dt
+\]
+
+Silně penalizuje velké chyby.
+
+---
+
+## ITAE
+
+\[
+ITAE = \int t|e(t)|dt
+\]
+
+Penalizuje dlouho trvající chyby.
+
+---
+
+# Frekvenční stabilita
+
+Používáme:
+
+- Bodeho diagram
+- Nyquistův diagram
+
+Kritický bod:
+
+\[
+-1 + j0
+\]
+
+---
+
+# Fázová bezpečnost
+
+Určuje:
+
+→ kolik fáze ještě můžeme ztratit do nestability.
+
+Určuje se při:
+
+\[
+|L(j\omega)| = 1
+\]
+
+tedy při 0 dB.
+
+Typicky:
+
+- 30° až 60°
+
+---
+
+# Amplitudová bezpečnost
+
+Určuje:
+
+→ kolikrát můžeme zvýšit zesílení do nestability.
+
+Určuje se při:
+
+\[
+\varphi = -180^\circ
+\]
+
+Typicky chceme:
+
+- alespoň 6 dB
+
+---
+
+# Metody syntézy regulátorů
+
+## Ziegler–Nichols
+
+Empirická metoda ladění PID.
+
+Vychází z:
+
+- kritického zesílení
+- nebo přechodové charakteristiky
+
+Je rychlá, ale agresivní a má větší překmity.
+
+---
+
+## Metoda optimálního modulu
+
+Snaží se o:
+
+- rychlou odezvu
+- malé překmity
+- dobré frekvenční vlastnosti
+
+Často používaná v praxi.
+
+---
+
+## Standardní frekvenční charakteristika
+
+Regulátor se navrhuje tak, aby otevřená smyčka měla požadovaný průběh frekvenční charakteristiky.
+
+---
+
+# Shrnutí
+
+Cílem regulace je:
+
+- stabilita
+- rychlá odezva
+- malé překmity
+- potlačení poruch
+
+Nejpoužívanější je PID regulátor.
+
+Kvalitu hodnotíme:
+
+- v časové oblasti
+- ve frekvenční oblasti
+- pomocí integračních kritérií.

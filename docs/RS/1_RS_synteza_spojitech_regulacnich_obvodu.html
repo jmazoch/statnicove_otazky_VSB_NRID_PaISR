@@ -116,7 +116,41 @@ a { color: inherit; }
     background: rgba(37,83,59,0.04); }
   .page { padding: 24px 20px 40px; }
 }
-@media print { body { background: #fff; } .page { box-shadow: none; padding: 24px 36px; } }</style>
+@media print { body { background: #fff; } .page { box-shadow: none; padding: 24px 36px; } }
+.mm-button-wrap { margin: 0 0 22px; display: flex; align-items: center; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+.mm-button { display: inline-flex; align-items: center; justify-content: center; min-width: 58px; padding: 9px 16px; border-radius: 999px; background: #1a4a8a; color: #fff; text-decoration: none; font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; box-shadow: 0 3px 12px rgba(26,74,138,0.22); }
+.mm-button:hover { background: #123765; }
+.podcast-player { width: min(460px, calc(100vw - 170px)); height: 38px; }
+@media (max-width: 760px) { .podcast-player { width: 100%; } }
+.mm-button { border: 0; cursor: pointer; }
+.mm-modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: stretch; justify-content: center; background: rgba(15, 23, 18, 0.58); padding: 28px; }
+.mm-modal.is-open { display: flex; }
+.mm-dialog { width: min(940px, 100%); max-height: calc(100vh - 56px); background: #fffdf8; border-radius: 10px; box-shadow: 0 22px 70px rgba(0,0,0,0.35); overflow: hidden; display: flex; flex-direction: column; }
+.mm-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 18px; border-bottom: 1px solid rgba(31,36,31,0.12); background: #f6f1e8; }
+.mm-modal-title { font-family: Arial, sans-serif; font-size: 15px; font-weight: 800; color: #173627; }
+.mm-modal-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.mm-tts, .mm-close { border: 0; border-radius: 8px; padding: 8px 12px; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; }
+.mm-tts { background: #25533b; color: #fff; }
+.mm-tts:hover { background: #1d422f; }
+.mm-tts.mm-stop { background: #7a2e2e; }
+.mm-tts.mm-stop:hover { background: #632424; }
+.mm-close { background: #e7ded0; color: #173627; min-width: 40px; }
+.mm-close:hover { background: #d7cab8; }
+.mm-tts-status { font-family: Arial, sans-serif; font-size: 12px; color: #5f665c; padding-left: 4px; }
+.mm-preview { padding: 24px 34px 34px; overflow: auto; font-family: Georgia, serif; font-size: 16px; line-height: 1.72; color: #1f241f; }
+.mm-preview h1 { font-size: 27px; line-height: 1.2; margin: 0 0 20px; color: #173627; border-bottom: 3px solid #25533b; padding-bottom: 12px; }
+.mm-preview h2 { font-size: 20px; margin: 30px 0 10px; color: #25533b; border-left: 4px solid #25533b; padding-left: 12px; }
+.mm-preview h3 { font-size: 17px; margin: 22px 0 8px; color: #2a2a2a; }
+.mm-preview p { margin: 9px 0 12px; text-align: left; }
+.mm-preview ul { margin: 8px 0 14px 26px; padding: 0; }
+.mm-preview li { margin: 5px 0; }
+.mm-preview hr { border: none; border-top: 2px solid #e8ded0; margin: 30px 0; }
+.mm-preview .mm-math-block { background: #f8f0ff; border-left: 4px solid #6a1a8a; padding: 12px 18px; border-radius: 0 6px 6px 0; overflow-x: auto; white-space: pre-wrap; }
+.mm-preview table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+.mm-preview th { background: #25533b; color: #fff; padding: 8px 12px; text-align: left; }
+.mm-preview td { border-bottom: 1px solid #e0e0e0; padding: 8px 12px; vertical-align: top; }
+.mm-preview tr:nth-child(even) td { background: #f6f1e8; }
+@media (max-width: 760px) { .mm-modal { padding: 12px; } .mm-dialog { max-height: calc(100vh - 24px); } .mm-modal-head { align-items: flex-start; flex-direction: column; } .mm-preview { padding: 20px 18px 28px; } }</style>
 <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 </head>
 <body>
@@ -132,6 +166,7 @@ a { color: inherit; }
     <nav class="nav-links" id="site-nav">
       <a href="../index.html">Main</a>
       <a href="../index.html#otazky">Otázky</a>
+      <a href="#mm-preview" class="mm-open" title="Mluvene minimum" onclick="event.preventDefault();var m=document.getElementById('mmModal');if(m){m.classList.add('is-open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}return false;">MM</a>
       <div class="nav-item" id="nav-rs">
         <a href="../index.html#rs">RS (1–7) <span class="nav-chevron">▼</span></a>
         <div class="nav-dropdown">
@@ -183,6 +218,8 @@ a { color: inherit; }
 <h1>RS Otázka 1 – Syntéza spojitých regulačních obvodů</h1>
 <p class="subtitle">Striktní formulace návrhového problému · PID regulátor · Přenosy smyčky · Ukazatele kvality · Metody syntézy: standardní frekv. char., optimální modul, Ziegler-Nichols, integrální kritéria<br>
 NMgr. Řídicí a informační systémy 2026 · Podklady: přednášky RS + materiály 1–7</p>
+
+<div class="mm-button-wrap"><button class="mm-button mm-open" type="button" title="Mluvene minimum" onclick="event.preventDefault();var m=document.getElementById('mmModal');if(m){m.classList.add('is-open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}return false;">MM</button><audio class="podcast-player" controls preload="metadata" src="../../podcast/01-Synt%C3%A9za%20spojit%C3%BDch%20regula%C4%8Dn%C3%ADch%20obvod%C5%AF.m4a">Váš prohlížeč nepodporuje audio přehrávač.</audio></div>
 
 <div class="toc">
   <h3>Obsah</h3>
@@ -690,6 +727,479 @@ NMgr. Řídicí a informační systémy 2026 · Podklady: přednášky RS + mate
 </div>
 
 </div>
+<div class="mm-modal" id="mmModal" aria-hidden="true">
+  <div class="mm-dialog" role="dialog" aria-modal="true" aria-labelledby="mmModalTitle">
+    <div class="mm-modal-head">
+      <div class="mm-modal-title" id="mmModalTitle">MM preview</div>
+      <div class="mm-modal-actions">
+        <button class="mm-tts" type="button" id="mmTtsPlay">Play</button>
+        <button class="mm-tts mm-stop" type="button" id="mmTtsStop">Stop</button>
+        <span class="mm-tts-status" id="mmTtsStatus">Čtečka připravena</span>
+        <button class="mm-close" type="button" id="mmClose" aria-label="Zavřít" onclick="var m=document.getElementById('mmModal');if(window.speechSynthesis){speechSynthesis.cancel();}if(m){m.classList.remove('is-open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';}return false;">X</button>
+      </div>
+    </div>
+    <div class="mm-preview" id="mmPreview"><h1>RS1 — Synt&#233;za spojit&#253;ch regulačn&#237;ch obvodů — mluven&#233; minimum (5 min)</h1><h2>Z&#225;klad regulačn&#237; smyčky</h2><p>M&#225;me dva z&#225;kladn&#237; způsoby ř&#237;zen&#237; syst&#233;mu:</p><ul><li>otevřen&#225; smyčka = ovl&#225;d&#225;n&#237;</li><li>uzavřen&#225; smyčka = regulace se zpětnou vazbou</li></ul><p>V praxi použ&#237;v&#225;me hlavně zpětnovazebn&#237; regulaci, protože syst&#233;m dok&#225;že reagovat na chyby a poruchy.</p><p>Regulačn&#237; smyčka se skl&#225;d&#225; z:</p><ul><li>ž&#225;dan&#233; hodnoty \(w\)</li><li>regulačn&#237; odchylky \(e\)</li><li>regul&#225;toru</li><li>ř&#237;zen&#233; soustavy</li><li>akčn&#237; veličiny \(u\)</li><li>v&#253;stupn&#237; veličiny \(y\)</li><li>senzoru</li><li>poruch a šumu</li></ul><p>Regulačn&#237; odchylka je:</p><div class="mm-math-block">e = w - y</div><hr><h1>Citlivostn&#237; funkce S a T</h1><p>Důležit&#253; vztah:</p><div class="mm-math-block">S + T = 1</div><ul><li>\(T\) = servo probl&#233;m  </li></ul><p>→ jak dobře syst&#233;m sleduje ž&#225;danou hodnotu</p><ul><li>\(S\) = regulator probl&#233;m  </li></ul><p>→ jak dobře potlačuje poruchy a chyby</p><p>Mus&#237;me dělat kompromis:</p><ul><li>rychl&#253; syst&#233;m b&#253;v&#225; citlivějš&#237; na šum</li><li>pomal&#253; syst&#233;m l&#233;pe filtruje poruchy, ale hůře reaguje</li></ul><hr><h1>PID regul&#225;tor</h1><p>Nejpouž&#237;vanějš&#237; regul&#225;tor je PID.</p><p>M&#225; tři složky:</p><h2>P složka</h2><p>Reaguje na aktu&#225;ln&#237; chybu.</p><p>Č&#237;m větš&#237; chyba: → t&#237;m větš&#237; z&#225;sah.</p><p>Zrychluje reakci syst&#233;mu.</p><hr><h2>I složka</h2><p>Integruje chybu v čase.</p><p>Odstraňuje trvalou regulačn&#237; odchylku.</p><p>D&#237;v&#225; se na minulost syst&#233;mu.</p><hr><h2>D složka</h2><p>Reaguje na rychlost změny chyby.</p><p>Predikuje budouc&#237; chov&#225;n&#237; syst&#233;mu.</p><p>Pom&#225;h&#225; tlumit překmity.</p><hr><h1>Ide&#225;ln&#237; PID</h1><div class="mm-math-block">G_R(s)=K_R\left(1+\frac{1}{T_Is}+T_Ds\right)</div><ul><li>\(K_R\) = zes&#237;len&#237;</li><li>\(T_I\) = integračn&#237; konstanta</li><li>\(T_D\) = derivačn&#237; konstanta</li></ul><hr><h1>Re&#225;ln&#253; PID</h1><p>Ide&#225;ln&#237; derivace zesiluje vysokofrekvenčn&#237; šum.</p><p>Proto se použ&#237;v&#225; filtrovan&#225; derivace:</p><div class="mm-math-block">G_R(s)=K_R\left(
+1+\frac{1}{T_Is}+
+\frac{T_Ds}{1+\frac{T_D}{N}s}
+\right)</div><p>Filtr prvn&#237;ho ř&#225;du omezuje zesilov&#225;n&#237; šumu.</p><hr><h1>Přenosy regulačn&#237;ho obvodu</h1><p>M&#225;me:</p><h2>Otevřenou smyčku</h2><div class="mm-math-block">G_0 = G_R G_S</div><p>kde:</p><ul><li>\(G_R\) = regul&#225;tor</li><li>\(G_S\) = soustava</li></ul><hr><h2>Uzavřenou smyčku</h2><div class="mm-math-block">T(s)=\frac{G_0}{1+G_0}</div><hr><h2>Citlivostn&#237; funkci</h2><div class="mm-math-block">S(s)=\frac{1}{1+G_0}</div><hr><h1>Kvalita regulace</h1><h2>Časov&#225; oblast</h2><p>Použ&#237;v&#225; se přechodov&#225; charakteristika.</p><p>Je to odezva syst&#233;mu na jednotkov&#253; skok.</p><p>Sledujeme:</p><ul><li>překmit</li><li>dobu n&#225;běhu</li><li>dobu ust&#225;len&#237;</li><li>trvalou regulačn&#237; odchylku</li></ul><hr><h1>Integr&#225;ln&#237; krit&#233;ria</h1><p>Hodnot&#237; regulačn&#237; odchylku v čase.</p><h2>IAE</h2><div class="mm-math-block">IAE = \int |e(t)|dt</div><p>Absolutn&#237; chyba.</p><hr><h2>ISE</h2><div class="mm-math-block">ISE = \int e^2(t)dt</div><p>Silně penalizuje velk&#233; chyby.</p><hr><h2>ITAE</h2><div class="mm-math-block">ITAE = \int t|e(t)|dt</div><p>Penalizuje dlouho trvaj&#237;c&#237; chyby.</p><hr><h1>Frekvenčn&#237; stabilita</h1><p>Použ&#237;v&#225;me:</p><ul><li>Bodeho diagram</li><li>Nyquistův diagram</li></ul><p>Kritick&#253; bod:</p><div class="mm-math-block">-1 + j0</div><hr><h1>F&#225;zov&#225; bezpečnost</h1><p>Určuje:</p><p>→ kolik f&#225;ze ještě můžeme ztratit do nestability.</p><p>Určuje se při:</p><div class="mm-math-block">|L(j\omega)| = 1</div><p>tedy při 0 dB.</p><p>Typicky:</p><ul><li>30&#176; až 60&#176;</li></ul><hr><h1>Amplitudov&#225; bezpečnost</h1><p>Určuje:</p><p>→ kolikr&#225;t můžeme zv&#253;šit zes&#237;len&#237; do nestability.</p><p>Určuje se při:</p><div class="mm-math-block">\varphi = -180^\circ</div><p>Typicky chceme:</p><ul><li>alespoň 6 dB</li></ul><hr><h1>Metody synt&#233;zy regul&#225;torů</h1><h2>Ziegler–Nichols</h2><p>Empirick&#225; metoda laděn&#237; PID.</p><p>Vych&#225;z&#237; z:</p><ul><li>kritick&#233;ho zes&#237;len&#237;</li><li>nebo přechodov&#233; charakteristiky</li></ul><p>Je rychl&#225;, ale agresivn&#237; a m&#225; větš&#237; překmity.</p><hr><h2>Metoda optim&#225;ln&#237;ho modulu</h2><p>Snaž&#237; se o:</p><ul><li>rychlou odezvu</li><li>mal&#233; překmity</li><li>dobr&#233; frekvenčn&#237; vlastnosti</li></ul><p>Často použ&#237;van&#225; v praxi.</p><hr><h2>Standardn&#237; frekvenčn&#237; charakteristika</h2><p>Regul&#225;tor se navrhuje tak, aby otevřen&#225; smyčka měla požadovan&#253; průběh frekvenčn&#237; charakteristiky.</p><hr><h1>Shrnut&#237;</h1><p>C&#237;lem regulace je:</p><ul><li>stabilita</li><li>rychl&#225; odezva</li><li>mal&#233; překmity</li><li>potlačen&#237; poruch</li></ul><p>Nejpouž&#237;vanějš&#237; je PID regul&#225;tor.</p><p>Kvalitu hodnot&#237;me:</p><ul><li>v časov&#233; oblasti</li><li>ve frekvenčn&#237; oblasti</li><li>pomoc&#237; integračn&#237;ch krit&#233;ri&#237;.</li></ul></div>
+  </div>
+</div>
+<script type="text/plain" id="mmMdSource">
+# RS1 — Syntéza spojitých regulačních obvodů — mluvené minimum (5 min)
+
+## Základ regulační smyčky
+
+Máme dva základní způsoby řízení systému:
+
+- otevřená smyčka = ovládání
+- uzavřená smyčka = regulace se zpětnou vazbou
+
+V praxi používáme hlavně zpětnovazební regulaci, protože systém dokáže reagovat na chyby a poruchy.
+
+Regulační smyčka se skládá z:
+
+- žádané hodnoty \(w\)
+- regulační odchylky \(e\)
+- regulátoru
+- řízené soustavy
+- akční veličiny \(u\)
+- výstupní veličiny \(y\)
+- senzoru
+- poruch a šumu
+
+Regulační odchylka je:
+
+\[
+e = w - y
+\]
+
+---
+
+# Citlivostní funkce S a T
+
+Důležitý vztah:
+
+\[
+S + T = 1
+\]
+
+- \(T\) = servo problém  
+→ jak dobře systém sleduje žádanou hodnotu
+
+- \(S\) = regulator problém  
+→ jak dobře potlačuje poruchy a chyby
+
+Musíme dělat kompromis:
+
+- rychlý systém bývá citlivější na šum
+- pomalý systém lépe filtruje poruchy, ale hůře reaguje
+
+---
+
+# PID regulátor
+
+Nejpoužívanější regulátor je PID.
+
+Má tři složky:
+
+## P složka
+
+Reaguje na aktuální chybu.
+
+Čím větší chyba:
+→ tím větší zásah.
+
+Zrychluje reakci systému.
+
+---
+
+## I složka
+
+Integruje chybu v čase.
+
+Odstraňuje trvalou regulační odchylku.
+
+Dívá se na minulost systému.
+
+---
+
+## D složka
+
+Reaguje na rychlost změny chyby.
+
+Predikuje budoucí chování systému.
+
+Pomáhá tlumit překmity.
+
+---
+
+# Ideální PID
+
+\[
+G_R(s)=K_R\left(1+\frac{1}{T_Is}+T_Ds\right)
+\]
+
+- \(K_R\) = zesílení
+- \(T_I\) = integrační konstanta
+- \(T_D\) = derivační konstanta
+
+---
+
+# Reálný PID
+
+Ideální derivace zesiluje vysokofrekvenční šum.
+
+Proto se používá filtrovaná derivace:
+
+\[
+G_R(s)=K_R\left(
+1+\frac{1}{T_Is}+
+\frac{T_Ds}{1+\frac{T_D}{N}s}
+\right)
+\]
+
+Filtr prvního řádu omezuje zesilování šumu.
+
+---
+
+# Přenosy regulačního obvodu
+
+Máme:
+
+## Otevřenou smyčku
+
+\[
+G_0 = G_R G_S
+\]
+
+kde:
+
+- \(G_R\) = regulátor
+- \(G_S\) = soustava
+
+---
+
+## Uzavřenou smyčku
+
+\[
+T(s)=\frac{G_0}{1+G_0}
+\]
+
+---
+
+## Citlivostní funkci
+
+\[
+S(s)=\frac{1}{1+G_0}
+\]
+
+---
+
+# Kvalita regulace
+
+## Časová oblast
+
+Používá se přechodová charakteristika.
+
+Je to odezva systému na jednotkový skok.
+
+Sledujeme:
+
+- překmit
+- dobu náběhu
+- dobu ustálení
+- trvalou regulační odchylku
+
+---
+
+# Integrální kritéria
+
+Hodnotí regulační odchylku v čase.
+
+## IAE
+
+\[
+IAE = \int |e(t)|dt
+\]
+
+Absolutní chyba.
+
+---
+
+## ISE
+
+\[
+ISE = \int e^2(t)dt
+\]
+
+Silně penalizuje velké chyby.
+
+---
+
+## ITAE
+
+\[
+ITAE = \int t|e(t)|dt
+\]
+
+Penalizuje dlouho trvající chyby.
+
+---
+
+# Frekvenční stabilita
+
+Používáme:
+
+- Bodeho diagram
+- Nyquistův diagram
+
+Kritický bod:
+
+\[
+-1 + j0
+\]
+
+---
+
+# Fázová bezpečnost
+
+Určuje:
+
+→ kolik fáze ještě můžeme ztratit do nestability.
+
+Určuje se při:
+
+\[
+|L(j\omega)| = 1
+\]
+
+tedy při 0 dB.
+
+Typicky:
+
+- 30° až 60°
+
+---
+
+# Amplitudová bezpečnost
+
+Určuje:
+
+→ kolikrát můžeme zvýšit zesílení do nestability.
+
+Určuje se při:
+
+\[
+\varphi = -180^\circ
+\]
+
+Typicky chceme:
+
+- alespoň 6 dB
+
+---
+
+# Metody syntézy regulátorů
+
+## Ziegler–Nichols
+
+Empirická metoda ladění PID.
+
+Vychází z:
+
+- kritického zesílení
+- nebo přechodové charakteristiky
+
+Je rychlá, ale agresivní a má větší překmity.
+
+---
+
+## Metoda optimálního modulu
+
+Snaží se o:
+
+- rychlou odezvu
+- malé překmity
+- dobré frekvenční vlastnosti
+
+Často používaná v praxi.
+
+---
+
+## Standardní frekvenční charakteristika
+
+Regulátor se navrhuje tak, aby otevřená smyčka měla požadovaný průběh frekvenční charakteristiky.
+
+---
+
+# Shrnutí
+
+Cílem regulace je:
+
+- stabilita
+- rychlá odezva
+- malé překmity
+- potlačení poruch
+
+Nejpoužívanější je PID regulátor.
+
+Kvalitu hodnotíme:
+
+- v časové oblasti
+- ve frekvenční oblasti
+- pomocí integračních kritérií.
+</script><script>
+(function() {
+  const modal = document.getElementById('mmModal');
+  const preview = document.getElementById('mmPreview');
+  const source = document.getElementById('mmMdSource');
+  const closeBtn = document.getElementById('mmClose');
+  const playBtn = document.getElementById('mmTtsPlay');
+  const stopBtn = document.getElementById('mmTtsStop');
+  const status = document.getElementById('mmTtsStatus');
+  if (!modal || !preview || !source) return;
+
+  const mdSource = source.textContent.trim();
+  let rendered = true;
+  let queue = [];
+  let index = 0;
+  let active = false;
+
+  function esc(s) { return s.replace(/[&<>]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch])); }
+  function inlineMd(s) {
+    return esc(s)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/:contentReference\[[^\]]+\]\{[^}]+\}/g, '');
+  }
+  function renderTable(lines) {
+    const rows = lines.map(line => line.trim().replace(/^\||\|$/g, '').split('|').map(c => inlineMd(c.trim())));
+    const head = rows[0] || [];
+    const body = rows.slice(2);
+    return '<table><thead><tr>' + head.map(c => '<th>' + c + '</th>').join('') + '</tr></thead><tbody>' +
+      body.map(r => '<tr>' + r.map(c => '<td>' + c + '</td>').join('') + '</tr>').join('') + '</tbody></table>';
+  }
+  function renderMarkdown(md) {
+    const lines = md.replace(/\r\n/g, '\n').split('\n');
+    let html = '', i = 0;
+    while (i < lines.length) {
+      let line = lines[i];
+      if (!line.trim()) { i++; continue; }
+      if (/^---+$/.test(line.trim())) { html += '<hr>'; i++; continue; }
+      if (/^\[\s*$/.test(line.trim())) {
+        const math = [];
+        i++;
+        while (i < lines.length && !/^\]\s*$/.test(lines[i].trim())) { math.push(lines[i]); i++; }
+        i++;
+        html += '<div class="mm-math-block">' + esc(math.join('\n')) + '</div>';
+        continue;
+      }
+      if (/^\|/.test(line.trim()) && i + 1 < lines.length && /^\|?\s*:?-{3,}/.test(lines[i + 1].trim())) {
+        const tbl = [];
+        while (i < lines.length && /^\|/.test(lines[i].trim())) { tbl.push(lines[i]); i++; }
+        html += renderTable(tbl);
+        continue;
+      }
+      const h = line.match(/^(#{1,3})\s+(.+)$/);
+      if (h) { html += '<h' + h[1].length + '>' + inlineMd(h[2]) + '</h' + h[1].length + '>'; i++; continue; }
+      if (/^-\s+/.test(line)) {
+        html += '<ul>';
+        while (i < lines.length && /^-\s+/.test(lines[i])) { html += '<li>' + inlineMd(lines[i].replace(/^-\s+/, '')) + '</li>'; i++; }
+        html += '</ul>';
+        continue;
+      }
+      const para = [];
+      while (i < lines.length && lines[i].trim() && !/^(#{1,3})\s+/.test(lines[i]) && !/^-\s+/.test(lines[i]) && !/^---+$/.test(lines[i].trim()) && !/^\|/.test(lines[i].trim()) && !/^\[\s*$/.test(lines[i].trim())) {
+        para.push(lines[i].trim()); i++;
+      }
+      html += '<p>' + inlineMd(para.join(' ')) + '</p>';
+    }
+    return html;
+  }
+
+  function openModal(event) {
+    if (event) event.preventDefault();
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    stopSpeech();
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  function textForSpeech(markdown) {
+    return markdown
+      .replace(/:contentReference\[[^\]]+\]\{[^}]+\}/g, '')
+      .replace(/\\\[[\s\S]*?\\\]/g, ' ')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/^---+$/gm, '. ')
+      .replace(/^\s*[-*]\s+/gm, '')
+      .replace(/\|/g, ' ')
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/`([^`]+)`/g, '$1')
+      .replace(/\\\((.*?)\\\)/g, '$1')
+      .replace(/\\[a-zA-Z]+/g, ' ')
+      .replace(/[{}_^]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+  function splitSpeechText(text) {
+    const sentences = text.match(/[^.!?]+[.!?]+|\S.+$/g) || [text];
+    const chunks = [];
+    let chunk = '';
+    sentences.forEach(sentence => {
+      const next = (chunk + ' ' + sentence).trim();
+      if (next.length > 1600 && chunk) { chunks.push(chunk.trim()); chunk = sentence; }
+      else { chunk = next; }
+    });
+    if (chunk.trim()) chunks.push(chunk.trim());
+    return chunks;
+  }
+  function pickCzechVoice() {
+    const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+    return voices.find(voice => voice.lang && voice.lang.toLowerCase().startsWith('cs')) || null;
+  }
+  function speakNext() {
+    if (!active || index >= queue.length) { active = false; status.textContent = 'Dočteno'; return; }
+    const utterance = new SpeechSynthesisUtterance(queue[index]);
+    utterance.lang = 'cs-CZ';
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    const voice = pickCzechVoice();
+    if (voice) utterance.voice = voice;
+    utterance.onstart = () => { status.textContent = 'Čtu část ' + (index + 1) + '/' + queue.length; };
+    utterance.onend = () => { index += 1; speakNext(); };
+    utterance.onerror = () => { active = false; status.textContent = 'Čtení se nepodařilo'; };
+    speechSynthesis.speak(utterance);
+  }
+  function startSpeech() {
+    if (!('speechSynthesis' in window)) { status.textContent = 'Prohlížeč nepodporuje čtení nahlas'; return; }
+    speechSynthesis.cancel();
+    queue = splitSpeechText(textForSpeech(mdSource));
+    index = 0;
+    active = true;
+    status.textContent = 'Připravuji čtení';
+    speakNext();
+  }
+  function stopSpeech() {
+    active = false;
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    if (status) status.textContent = 'Zastaveno';
+  }
+
+  document.addEventListener('click', event => {
+    const opener = event.target.closest('.mm-open');
+    if (opener) openModal(event);
+  });
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
+  playBtn.addEventListener('click', startSpeech);
+  stopBtn.addEventListener('click', stopSpeech);
+  if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = pickCzechVoice;
+})();
+</script>
 <script defer src="../shared/navbar-inject.js"></script>
 </body>
 </html>
