@@ -22,6 +22,13 @@
     link.href = rootHref('shared/navbar-styles.css');
     document.head.appendChild(link);
   }
+  // countdown styles
+  if (!document.querySelector('link[href*="navbar-countdown.css"]')) {
+    var cdLink = document.createElement('link');
+    cdLink.rel = 'stylesheet';
+    cdLink.href = rootHref('shared/navbar-countdown.css');
+    document.head.appendChild(cdLink);
+  }
 
   var navbarHtml = [
     '<header class="topbar" id="topbar">',
@@ -138,5 +145,12 @@
     script.defer = true;
     script.src = rootHref('shared/nav-links.js');
     document.head.appendChild(script);
+  }
+  // countdown script
+  if (!document.querySelector('script[src*="navbar-countdown.js"]')) {
+    var cdScript = document.createElement('script');
+    cdScript.defer = true;
+    cdScript.src = rootHref('shared/navbar-countdown.js');
+    document.head.appendChild(cdScript);
   }
 })();
