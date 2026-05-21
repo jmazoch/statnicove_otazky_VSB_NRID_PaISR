@@ -662,6 +662,21 @@ ul.checklist li::before { content: '✓'; color: #1a4a8a; font-weight: bold; pos
     </div>
 
     <div class="card">
+        <h3>Bluetooth Low Energy (BLE)</h3>
+        <p>BLE je varianta Bluetoothu optimalizovaná pro velmi nízkou spotřebu energie; běžně se používá v senzorech, nositelných zařízeních, beaconech a drobné IoT elektronice.</p>
+        <ul>
+            <li><strong>Frekvence a kanály:</strong> 2.4 GHz; 40 kanálů (0–39) — kanály 37, 38, 39 jsou advertising kanály, ostatní slouží pro data.</li>
+            <li><strong>GAP / GATT:</strong> GAP definuje způsoby objevování a připojování; GATT (ATT) definuje služby a charakteristiky používané pro výměnu dat mezi zařízením a klientem.</li>
+            <li><strong>Advertising a scan:</strong> Peripheral reklamuje své služby (ADV), Central může skenovat (SCAN) a na reklamu odpovědět scan response; typy reklam: ADV_IND, ADV_NONCONN_IND, ADV_SCAN_IND apod.</li>
+            <li><strong>Role a režimy:</strong> Central (master) × Peripheral (slave); existují i Broadcaster/Observer pro bezpřipojový provoz.</li>
+            <li><strong>Připojení a parametry:</strong> Conn interval, Slave latency a Supervision timeout určují latenci, spotřebu a spolehlivost spojení.</li>
+            <li><strong>PHY a verze:</strong> LE 1M, LE 2M a LE Coded (Long Range) — rozšíření v Bluetooth 5 pro vyšší rychlost nebo větší dosah.</li>
+            <li><strong>Bezpečnost:</strong> Párování a bonding; LE Secure Connections (ECDH) poskytuje silnější ochranu proti odposlechu a útokům MITM.</li>
+            <li><strong>Aplikace:</strong> Senzory (tep, teplota), ovladače, beacony (iBeacon, Eddystone), příslušenství pro mobilní telefony a zařízení s bateriovým provozem.</li>
+        </ul>
+    </div>
+
+    <div class="card">
         <h3>ZigBee (IEEE 802.15.4)</h3>
         <p>Sítě zaměřené na nízkou spotřebu, malou přenosovou rychlost a spolehlivost u chytrých budov a IoT. Výhodou je samoorganizující se <strong>Mesh topologie</strong>, kde každý trvale napájený uzel funguje jako router.</p>
     </div>

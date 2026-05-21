@@ -253,14 +253,52 @@
     <div class="toc">
         <h3>Obsah</h3>
         <ul>
-            <li><a href="#sec-uvod">1. EMC a její vliv na kvalitu měřicího signálu</a></li>
-            <li><a href="#sec-vazby">2. Způsoby přenosových vazeb rušivých signálů</a></li>
-            <li><a href="#sec-omezeni">3. Základní způsoby omezení rušivých signálů</a></li>
-            <li><a href="#sec-ferit">3.1 Feritová perla</a></li>
-            <li><a href="#sec-tvs">3.2 TVS dioda</a></li>
-            <li><a href="#sec-esd">3.3 ESD ochrana</a></li>
-            <li><a href="#sec-zaver">4. Co určitě umět říct u státnic (Zlaté hřebíky)</a></li>
+            <li><a href="#sec-bio">1. EMC v biologických systémech</a></li>
+            <li><a href="#sec-uvod">2. EMC a její vliv na kvalitu měřicího signálu</a></li>
+            <li><a href="#sec-vazby">3. Způsoby přenosových vazeb rušivých signálů</a></li>
+            <li><a href="#sec-omezeni">4. Základní způsoby omezení rušivých signálů</a></li>
+            <li><a href="#sec-ferit">4.1 Feritová perla</a></li>
+            <li><a href="#sec-tvs">4.2 TVS dioda</a></li>
+            <li><a href="#sec-esd">4.3 ESD ochrana</a></li>
+            <li><a href="#sec-zaver">5. Co určitě umět říct u státnic (Zlaté hřebíky)</a></li>
         </ul>
+    </div>
+
+    <!-- ===== Sekce: EMC v biologických systémech (přesunuto na první místo) ===== -->
+    <h2 id="sec-bio">EMC v biologických systémech</h2>
+    <div class="def">
+        Elektromagnetická pole mohou ovlivňovat živé tkáně i implantovaná zařízení. Z hlediska EMC rozlišujeme objekty, které jsou <strong>ovlivněny</strong>
+        (např. implantáty, kardiostimulátory, nervová aktivita, biosenzory) a zařízení, která sama mohou <strong>vytvářet rušení</strong>
+        (vysílače, napájecí měniče, spínané zdroje). U zdravotnických a nositelných zařízení je klíčové minimalizovat emise, zvýšit imunitu (stínění, filtrace)
+        a správně navrhnout napájení a uzemnění tak, aby se zabránilo nežádoucím indukovaným proudům nebo poruchám funkce.
+    </div>
+
+    <div class="img-container" role="img" aria-label="Diagram rozdělení EMC na biologické systémy a zařízení">
+        <svg width="720" height="240" viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M0,0 L8,4 L0,8 z" fill="#7f8c8d" />
+                </marker>
+            </defs>
+            <rect x="12" y="12" width="696" height="216" rx="10" fill="#fff" stroke="#eef2f6"/>
+            <g>
+                <circle cx="360" cy="64" r="44" fill="#fff7e6" stroke="#f1c40f" stroke-width="2"/>
+                <text x="360" y="70" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#8a5a12" font-weight="700" text-anchor="middle">EMC</text>
+            </g>
+            <rect x="56" y="128" width="264" height="76" rx="10" fill="#e8f6ff" stroke="#93c5ff"/>
+            <text x="188" y="154" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#1b4f72" font-weight="700" text-anchor="middle">Biologické systémy</text>
+            <text x="188" y="172" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#235a78" text-anchor="middle">(implantáty, nervová aktivita, senzory)</text>
+
+            <rect x="400" y="128" width="264" height="76" rx="10" fill="#fff7f0" stroke="#ffb4a2"/>
+            <text x="532" y="154" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#7a2b1f" font-weight="700" text-anchor="middle">Zařízení ovlivňující EMC</text>
+            <text x="532" y="172" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#8a3a2a" text-anchor="middle">(vysílače, měniče, spínací zdroje)</text>
+
+            <line x1="320" y1="64" x2="200" y2="128" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow)" />
+            <line x1="400" y1="64" x2="520" y2="128" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrow)" />
+
+            <text x="360" y="212" font-family="Arial, Helvetica, sans-serif" font-size="12" fill="#555" text-anchor="middle">Rozdělení EMC: vlevo objekty ovlivněné, vpravo zdroje rušení</text>
+        </svg>
+        <div class="caption">Schéma: rozdělení oblasti EMC na biologické systémy a zařízení, která EMC ovlivňují.</div>
     </div>
 
     <!-- SEKCE 1 -->
@@ -447,8 +485,5 @@
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
     <script defer src="../shared/navbar-inject.js"></script>
-</div>
-</body>
-</html>
 
-přikládám obrázky:
+    
